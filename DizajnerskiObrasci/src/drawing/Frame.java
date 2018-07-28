@@ -126,6 +126,12 @@ public class Frame extends JFrame{
 			}
 		});
 		
+		tglbtnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.select(e);
+			}
+		});
+		
 		GroupLayout gl_panelNorth = new GroupLayout(panelNorth);
 		gl_panelNorth.setHorizontalGroup(
 			gl_panelNorth.createParallelGroup(Alignment.LEADING)
@@ -201,8 +207,8 @@ public class Frame extends JFrame{
 		panelNorth.setLayout(gl_panelNorth);
 		
 		panelView = new JPanel();
-		panelView.setBackground(Color.WHITE);
-		panelView.addMouseListener(new MouseAdapter() {
+		view.setBackground(Color.WHITE);//panelView
+		view.addMouseListener(new MouseAdapter() {//panelView
 			public void mousePressed(MouseEvent e) {
 				controller.panelClick(e);
 			}
@@ -212,7 +218,7 @@ public class Frame extends JFrame{
 		gbc_panelView.fill = GridBagConstraints.BOTH;
 		gbc_panelView.gridx = 0;
 		gbc_panelView.gridy = 1;
-		getContentPane().add(panelView, gbc_panelView);
+		getContentPane().add(view, gbc_panelView);//panelView
 		
 		panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();

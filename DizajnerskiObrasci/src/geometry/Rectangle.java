@@ -77,7 +77,7 @@ public class Rectangle extends Square {
 				.selected(g);
 	}
 	
-	public void drawSelf(Graphics g) {
+	public void drawColor(Graphics g) {
 		g.setColor(getEdgeColor());
 		g.drawRect(upLeft.getX(), upLeft.getY(), getPageLength(), height);
 		g.setColor(getInsideColor());

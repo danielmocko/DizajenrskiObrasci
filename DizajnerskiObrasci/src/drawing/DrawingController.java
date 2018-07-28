@@ -47,8 +47,6 @@ public class DrawingController {
 	 */
 	public void panelClick(MouseEvent e) {
 		if(frame.getTglbtnPoint().isSelected()) {
-			//try {
-
 
 			x = e.getX();//8
 			y = e.getY();//79
@@ -57,15 +55,6 @@ public class DrawingController {
 			t.setEdgeColor(frame.getBtnEdgeColor().getBackground());
 			
 			model.add(t);
-			t.drawColor(frame.getPanelView().getGraphics());
-			
-			refresh();
-
-
-			//}
-			//catch(Exception arg0) {
-			//	System.out.println(arg0.getMessage());
-			//}
 		}
 		else if(frame.getTglbtnLine().isSelected()) {
 
@@ -73,8 +62,6 @@ public class DrawingController {
 				Point1_x=e.getX();
 				Point1_y=e.getY();
 				t1= new Point(Point1_x,Point1_y);
-				
-				
 				click++;
 			}
 			else if(click==1) {
@@ -85,10 +72,7 @@ public class DrawingController {
 				Line l = new Line(t1,t2);
 				l.setEdgeColor(frame.getBtnEdgeColor().getBackground());
 				model.add(l);
-				l.drawColor(frame.getPanelView().getGraphics());
-				click=0;
-				refresh();
-				//JOptionPane.showMessageDialog(null,"T2:"+ t2.toString());
+				click=0;	
 			}
 		}
 		else if(frame.getTglbtnCircle().isSelected()) {
@@ -103,7 +87,7 @@ public class DrawingController {
 			if(dlgCircle.isAccept()) {
 				circle = dlgCircle.getCircle();
 				
-				circle.drawColor(frame.getPanelView().getGraphics());
+				model.add(circle);
 			}
 		}
 		else if(frame.getTglbtnSquare().isSelected()) {
@@ -117,7 +101,8 @@ public class DrawingController {
 			dlgSquare.setVisible(true);
 			if(dlgSquare.isAccept()) {
 				square = dlgSquare.getSquareDialog();
-				square.drawColor(frame.getPanelView().getGraphics());
+				
+				model.add(square);
 			}
 		}
 		else if(frame.getTglbtnRectangle().isSelected()) {
@@ -131,7 +116,7 @@ public class DrawingController {
 			dlgRectangle.setVisible(true);
 			if(dlgRectangle.isAccept()) {
 				rectangle = dlgRectangle.getDlgRectangle();
-				rectangle.drawSelf(frame.getPanelView().getGraphics());
+				model.add(rectangle);
 				
 			}
 		}
@@ -150,9 +135,10 @@ public class DrawingController {
 			frame.getBtnInsideColor().setBackground(insideColor);
 		}
 	}
-
-	public void refresh() {
-		frame.getView().repaint();
+	
+	public void select(ActionEvent e) {
+		
 	}
+
 
 }
