@@ -6,6 +6,7 @@ import java.util.ListIterator;
 
 import javax.swing.JPanel;
 
+
 import geometry.Shape;
 
 public class DrawingView extends JPanel {
@@ -13,12 +14,12 @@ public class DrawingView extends JPanel {
 	private Frame frame;
 	
 	public DrawingView() {
-		setBackground(Color.WHITE);
+		//setBackground(Color.WHITE);
 	}
 	
 	public void paint(Graphics g) {
 		super.paint(g);
-		ListIterator<Shape>itShapes = model.getShapes().listIterator();
+		ListIterator<Shape>itShapes = model.shapes.listIterator();
 		while(itShapes.hasNext()) {
 			Shape s =(Shape) itShapes.next();
 			s.drawColor(g);

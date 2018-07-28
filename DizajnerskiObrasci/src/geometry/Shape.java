@@ -6,7 +6,7 @@ import java.awt.Color;
 
 public abstract class Shape implements Comparable {
 	private String color = "black";
-	private Color edgeColor = Color.BLACK;
+	private Color edgeColor;
 	private boolean selected;
 	
 	public Shape() {
