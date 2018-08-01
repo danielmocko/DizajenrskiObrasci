@@ -22,6 +22,10 @@ public class DrawingModel {
 	public void add(Shape o) {
 		shapes.add(o);
 	}
+	
+	public void remove(Shape o) {
+		shapes.remove(o);
+	}
 
 	public ArrayList<Shape> getSelctedObject() {
 		return selctedObject;
@@ -29,6 +33,15 @@ public class DrawingModel {
 
 	public void setSelctedObject(ArrayList<Shape> selctedObject) {
 		this.selctedObject = selctedObject;
+	}
+	
+	public int numberSelectedObject() {
+		int counter=0;
+		for(int i=0;i<shapes.size();i++) {
+			if(shapes.get(i).isSelected())
+				counter++;
+		}
+		return counter;
 	}
 	
 	

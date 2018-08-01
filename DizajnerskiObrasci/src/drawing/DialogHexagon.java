@@ -64,7 +64,7 @@ public class DialogHexagon extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 
-		JLabel lblCircle = new JLabel("Circle");
+		JLabel lblCircle = new JLabel("Hexagon");
 		lblCircle.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
 		JLabel lblCenter = new JLabel("Center :");

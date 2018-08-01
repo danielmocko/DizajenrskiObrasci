@@ -13,6 +13,7 @@ public class PaintApplication {
 		Frame frame = new Frame();
 		
 		
+		
 		//DrawingView view = new DrawingView();
 		DrawingController controller = new DrawingController(model,frame);
 		//DrawingController controller = new DrawingController(model,view,frame);

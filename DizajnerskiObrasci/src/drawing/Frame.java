@@ -81,8 +81,10 @@ public class Frame extends JFrame{
 		tglbtnSelect = new JToggleButton("Sel");
 		
 		tglbtnModify = new JToggleButton("Mod");
+		tglbtnModify.setEnabled(false);
 		
 		tglbtnDelete = new JToggleButton("Del");
+		tglbtnDelete.setEnabled(false);
 		
 		btnGoToBack = new JButton("GTB");
 		
@@ -126,7 +128,11 @@ public class Frame extends JFrame{
 			}
 		});
 		
-		
+		tglbtnModify.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				controller.modify(event);
+			}
+		});
 		
 		GroupLayout gl_panelNorth = new GroupLayout(panelNorth);
 		gl_panelNorth.setHorizontalGroup(

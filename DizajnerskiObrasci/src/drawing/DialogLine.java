@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 import geometry.*;
 
 
-public class DialogLinija extends JDialog {
+public class DialogLine extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JLabel lblStartX;
@@ -50,7 +50,7 @@ public class DialogLinija extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DialogLinija dialog = new DialogLinija();
+			DialogLine dialog = new DialogLine();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -61,7 +61,7 @@ public class DialogLinija extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DialogLinija() {
+	public DialogLine() {
 		setModal(true);
 		setMinimumSize(new Dimension(430, 340));
 		setBounds(100, 100, 456, 380);
