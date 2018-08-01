@@ -9,26 +9,26 @@ import geometry.Point;
 public class Circle extends SurfaceShape implements Moveable {
 	private Point center;
 	private int r;
-	
+
 	public Circle() {
-		
+
 	}
-	
+
 	public Circle(Point center,int r) {
 		this.center=center;
 		this.r=r;
 	}
-	
+
 	public Circle(Point center,int r,Color edgeColor,Color insideColor) {
 		this(center,r);
 		setEdgeColor(edgeColor);
 		setInsideColor(insideColor);
 	}
-	
+
 	public String toString() {
 		return "Center="+this.center+", r="+r;
 	}
-	
+
 	public int compareTo(Object o) {
 		if(o instanceof Circle) {
 			Circle help = (Circle)o;
@@ -37,7 +37,7 @@ public class Circle extends SurfaceShape implements Moveable {
 		else
 			return 0;
 	}
-	
+
 	public boolean equals(Object obj) {
 		if( obj instanceof Circle) {
 			Circle help =(Circle)obj;
@@ -49,10 +49,10 @@ public class Circle extends SurfaceShape implements Moveable {
 		else
 			return false;
 	}
-	
+
 	public void moveFor(int x, int y) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void moveTo(int x, int y) {
@@ -62,12 +62,12 @@ public class Circle extends SurfaceShape implements Moveable {
 	@Override
 	public void fill(Graphics g) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void drawSelf(Graphics g) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void drawColor(Graphics g) {
@@ -86,11 +86,14 @@ public class Circle extends SurfaceShape implements Moveable {
 	}
 	@Override
 	public boolean contains(int x, int y) {
-		// TODO Auto-generated method stub
-		return false;
+		Point clickPlace = new Point(x,y);
+		if(clickPlace.distance(center) <=r)
+			return true;
+		else
+			return false;
 	}
-	
-	
+
+
 	public Point getCenter() {
 		return center;
 	}
@@ -103,9 +106,9 @@ public class Circle extends SurfaceShape implements Moveable {
 	public void setR(int r) {
 		this.r = r;
 	}
-	
-	
-	
-	
+
+
+
+
 
 }

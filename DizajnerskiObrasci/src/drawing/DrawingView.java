@@ -12,17 +12,27 @@ import geometry.Shape;
 public class DrawingView extends JPanel {
 	private DrawingModel model;
 	private Frame frame;
-	
+	private ListIterator<Shape> itShapes;
+
 	public DrawingView() {
 		//setBackground(Color.WHITE);
 	}
-	
+
 	public void paint(Graphics g) {
 		super.paint(g);
-		ListIterator<Shape>itShapes = model.shapes.listIterator();
-		while(itShapes.hasNext()) {
-			Shape s =(Shape) itShapes.next();
-			s.drawColor(g);
+		if(!model.getShapes().isEmpty()) {
+			itShapes = model.shapes.listIterator();
+			while(itShapes.hasNext()) {
+				Shape s =(Shape) itShapes.next();
+				s.drawColor(g);
+			}
+		}
+		if(!model.getSelctedObject().isEmpty()) {
+			itShapes=model.getSelctedObject().listIterator();
+			while(itShapes.hasNext()) {
+				Shape selected = (Shape) itShapes.next();
+				selected.selected(g);
+			}
 		}
 		repaint();
 	}
@@ -42,6 +52,6 @@ public class DrawingView extends JPanel {
 	public void setFrame(Frame frame) {
 		this.frame = frame;
 	}
-	
-	
+
+
 }

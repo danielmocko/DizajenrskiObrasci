@@ -126,11 +126,7 @@ public class Frame extends JFrame{
 			}
 		});
 		
-		tglbtnSelect.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				controller.select(e);
-			}
-		});
+		
 		
 		GroupLayout gl_panelNorth = new GroupLayout(panelNorth);
 		gl_panelNorth.setHorizontalGroup(
@@ -227,6 +223,16 @@ public class Frame extends JFrame{
 		gbc_panel.gridy = 2;
 		getContentPane().add(panel, gbc_panel);
 		
+		
+		buttonGroup.add(getTglbtnHexagon());
+		buttonGroup.add(getTglbtnCircle());
+		buttonGroup.add(getTglbtnRectangle());
+		buttonGroup.add(getTglbtnSquare());
+		buttonGroup.add(getTglbtnLine());
+		buttonGroup.add(getTglbtnPoint());
+		buttonGroup.add(getTglbtnDelete());
+		buttonGroup.add(getTglbtnModify());
+		buttonGroup.add(getTglbtnSelect());
 		
 	}
 
