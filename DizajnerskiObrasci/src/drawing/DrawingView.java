@@ -27,13 +27,7 @@ public class DrawingView extends JPanel {
 				s.drawColor(g);
 			}
 		}
-		if(!model.getSelctedObject().isEmpty()) {
-			itShapes=model.getSelctedObject().listIterator();
-			while(itShapes.hasNext()) {
-				Shape selected = (Shape) itShapes.next();
-				selected.selected(g);
-			}
-		}
+
 		repaint();
 	}
 

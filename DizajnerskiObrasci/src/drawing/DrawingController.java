@@ -184,14 +184,26 @@ public class DrawingController {
 					if(!shape.isSelected()) {
 						selected=true;
 						shape.setSelected(true);
-						enableButton();
+						if(model.numberSelectedObject()>1) {
+							frame.getTglbtnModify().setEnabled(false);
+						}
+						else {
+							enableButton();
+						}
 						return;
 					}else {
 						for(int i=0;i<model.getShapes().size();i++) {
 							if(model.getShapes().get(i).equals(shape)) {
 								shape.setSelected(false);
-								if(model.numberSelectedObject()==0) {
+								int count =model.numberSelectedObject(); 
+								if(count==0) {
 									disableButton();
+								}
+								else if(count>1) {
+									frame.getTglbtnModify().setEnabled(false);
+								}
+								else if(count==1) {
+									frame.getTglbtnModify().setEnabled(true);
 								}
 								return;
 							}	
@@ -206,7 +218,6 @@ public class DrawingController {
 				}
 				disableButton();
 			}
-
 		}
 	}
 
@@ -345,36 +356,56 @@ public class DrawingController {
 		}
 	}
 
+	public void delete(MouseEvent event) {
+		int result = JOptionPane.showConfirmDialog(null,
+				"Da li ste sigurni da želite da obriše objekat ?", "Izaberi",
+				JOptionPane.YES_NO_OPTION);
 
-	public void edgeColor(ActionEvent e) {
-		edgeColor=JColorChooser.showDialog(null, "Edge color", edgeColor);
-		if(edgeColor!=null) {
-			frame.getBtnEdgeColor().setBackground(edgeColor);
+		if(result == JOptionPane.YES_OPTION) {
+			for(int i=model.getShapes().size()-1;i>=0;i--) {
+				if(model.getShapes().get(i).isSelected()) {
+					model.removeByUndex(i);
+				}
+			}
+			disableButton();
+		}
+		else {
+			disableButton();
+			//shape.setSelected(false);
 		}
 	}
 
-	public void insideColor(ActionEvent e) {
-		insideColor=JColorChooser.showDialog(null, "Inside Color", insideColor);
-		if(insideColor!=null) {
-			frame.getBtnInsideColor().setBackground(insideColor);
-		}
+
+
+public void edgeColor(ActionEvent e) {
+	edgeColor=JColorChooser.showDialog(null, "Edge color", edgeColor);
+	if(edgeColor!=null) {
+		frame.getBtnEdgeColor().setBackground(edgeColor);
 	}
+}
 
-	public void enableButton() {
-		frame.getTglbtnModify().setEnabled(true);
-		frame.getTglbtnDelete().setEnabled(true);
+public void insideColor(ActionEvent e) {
+	insideColor=JColorChooser.showDialog(null, "Inside Color", insideColor);
+	if(insideColor!=null) {
+		frame.getBtnInsideColor().setBackground(insideColor);
 	}
+}
 
-	public void disableButton() {
-		frame.getTglbtnModify().setSelected(false);
-		frame.getTglbtnModify().setEnabled(false);
+public void enableButton() {
+	frame.getTglbtnModify().setEnabled(true);
+	frame.getTglbtnDelete().setEnabled(true);
+}
 
-		frame.getTglbtnDelete().setSelected(false);
-		frame.getTglbtnDelete().setEnabled(false);
+public void disableButton() {
+	frame.getTglbtnModify().setSelected(false);
+	frame.getTglbtnModify().setEnabled(false);
 
-		frame.getTglbtnSelect().setSelected(true);
-	}
+	frame.getTglbtnDelete().setSelected(false);
+	frame.getTglbtnDelete().setEnabled(false);
 
-	
+	frame.getTglbtnSelect().setSelected(true);
+}
+
+
 
 }

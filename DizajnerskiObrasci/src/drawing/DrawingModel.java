@@ -9,7 +9,6 @@ import geometry.Shape;
 
 public class DrawingModel {
 	ArrayList<Shape> shapes = new ArrayList<Shape>();
-	ArrayList<Shape> selctedObject = new ArrayList<Shape>();
 
 	public ArrayList<Shape> getShapes() {
 		return shapes;
@@ -26,14 +25,6 @@ public class DrawingModel {
 	public void remove(Shape o) {
 		shapes.remove(o);
 	}
-
-	public ArrayList<Shape> getSelctedObject() {
-		return selctedObject;
-	}
-
-	public void setSelctedObject(ArrayList<Shape> selctedObject) {
-		this.selctedObject = selctedObject;
-	}
 	
 	public int numberSelectedObject() {
 		int counter=0;
@@ -44,7 +35,9 @@ public class DrawingModel {
 		return counter;
 	}
 	
-	
+	public void removeByUndex(int index) {
+		shapes.remove(index);
+	}
 	
 	
 }

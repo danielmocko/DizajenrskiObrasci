@@ -134,6 +134,12 @@ public class Frame extends JFrame{
 			}
 		});
 		
+		tglbtnDelete.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				controller.delete(event);
+			}
+		});
+		
 		GroupLayout gl_panelNorth = new GroupLayout(panelNorth);
 		gl_panelNorth.setHorizontalGroup(
 			gl_panelNorth.createParallelGroup(Alignment.LEADING)
