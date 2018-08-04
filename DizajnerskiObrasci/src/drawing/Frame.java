@@ -7,6 +7,9 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import com.sun.jmx.mbeanserver.SunJmxMBeanServer;
+
 import javax.swing.JToggleButton;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -21,7 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 
-public class Frame extends JFrame{
+public class Frame extends JFrame implements Observer{
 	private DrawingView view = new DrawingView();
 	private DrawingController controller ;
 	
@@ -247,6 +250,22 @@ public class Frame extends JFrame{
 		buttonGroup.add(getTglbtnSelect());
 		
 	}
+	
+	public void update(int numberSelectedObjects) {
+		if(numberSelectedObjects==0) {
+			getTglbtnModify().setEnabled(false);
+			getTglbtnDelete().setEnabled(false);
+		}
+		else if(numberSelectedObjects==1) {
+			getTglbtnModify().setEnabled(true);
+			getTglbtnDelete().setEnabled(true);
+		}
+		else {
+			getTglbtnModify().setEnabled(false);
+			getTglbtnDelete().setEnabled(true);
+		}
+	}
+	
 
 	public DrawingView getView() {
 		return view;
@@ -431,6 +450,8 @@ public class Frame extends JFrame{
 	public void setPanelView(JPanel panelView) {
 		this.panelView = panelView;
 	}
+
+	
 	
 	
 }

@@ -2,12 +2,14 @@ package drawing;
 
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
 import geometry.Shape;
 
-public class DrawingModel {
+public class DrawingModel implements Observable {
+	Observer observer= new Frame();
 	ArrayList<Shape> shapes = new ArrayList<Shape>();
 
 	public ArrayList<Shape> getShapes() {
@@ -18,12 +20,21 @@ public class DrawingModel {
 		this.shapes = shapes;
 	}
 	
+	
+	public void notifyObserver() {
+		int numberSelectedObjects = numberSelectedObject();
+		
+		observer.update(numberSelectedObjects);
+	}
+	
 	public void add(Shape o) {
 		shapes.add(o);
+		notifyObserver();
 	}
 	
 	public void remove(Shape o) {
 		shapes.remove(o);
+		notifyObserver();
 	}
 	
 	public int numberSelectedObject() {
@@ -38,6 +49,8 @@ public class DrawingModel {
 	public void removeByUndex(int index) {
 		shapes.remove(index);
 	}
+
+	
 	
 	
 }

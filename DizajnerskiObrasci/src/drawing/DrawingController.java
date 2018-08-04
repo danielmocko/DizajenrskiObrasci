@@ -191,7 +191,11 @@ public class DrawingController {
 							enableButton();
 						}
 						return;
-					}else {
+						
+						
+					}
+					/*
+					else {
 						for(int i=0;i<model.getShapes().size();i++) {
 							if(model.getShapes().get(i).equals(shape)) {
 								shape.setSelected(false);
@@ -208,7 +212,7 @@ public class DrawingController {
 								return;
 							}	
 						}
-					}
+					}*/
 				}
 			}
 
