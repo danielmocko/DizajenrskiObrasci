@@ -174,59 +174,28 @@ public class DrawingController {
 			x=e.getX();
 			y=e.getY();
 			selected = false;
-			ListIterator<Shape> itShape = model.getShapes().listIterator(model.getShapes().size());
-
-			while(itShape.hasPrevious()) {
-				Shape shape = (Shape) itShape.previous();
-
-
-				if(shape.contains(x, y)) {
-					if(!shape.isSelected()) {
+			
+			for(int i=model.getShapes().size()-1;i>=0;i--)
+			{
+				if(model.getShapes().get(i).contains(x, y)) {
+					if(!model.getShapes().get(i).isSelected()) {
 						selected=true;
-						shape.setSelected(true);
-						if(model.numberSelectedObject()>1) {
-							frame.getTglbtnModify().setEnabled(false);
-						}
-						else {
-							enableButton();
-						}
+						model.selectObject(i);
 						return;
-						
-						
 					}
-					/*
-					else {
-						for(int i=0;i<model.getShapes().size();i++) {
-							if(model.getShapes().get(i).equals(shape)) {
-								shape.setSelected(false);
-								int count =model.numberSelectedObject(); 
-								if(count==0) {
-									disableButton();
-								}
-								else if(count>1) {
-									frame.getTglbtnModify().setEnabled(false);
-								}
-								else if(count==1) {
-									frame.getTglbtnModify().setEnabled(true);
-								}
-								return;
-							}	
-						}
-					}*/
 				}
 			}
 
 			if(selected ==false) {
 				for(int i=0;i<model.getShapes().size();i++) {
-					model.getShapes().get(i).setSelected(false);
+					model.diselectObject(i);
 				}
-				disableButton();
 			}
 		}
 	}
 
-	public void modify(MouseEvent event) {
-		if(frame.getTglbtnModify().isSelected()) {
+	public void modify(ActionEvent e) {
+		if(frame.getBtnModify().isSelected()) {
 			ListIterator it1 = model.getShapes().listIterator(model.getShapes().size());
 
 			while(it1.hasPrevious()) {
@@ -360,7 +329,7 @@ public class DrawingController {
 		}
 	}
 
-	public void delete(MouseEvent event) {
+	public void delete(ActionEvent e) {
 		int result = JOptionPane.showConfirmDialog(null,
 				"Da li ste sigurni da želite da obriše objekat ?", "Izaberi",
 				JOptionPane.YES_NO_OPTION);
@@ -368,7 +337,7 @@ public class DrawingController {
 		if(result == JOptionPane.YES_OPTION) {
 			for(int i=model.getShapes().size()-1;i>=0;i--) {
 				if(model.getShapes().get(i).isSelected()) {
-					model.removeByUndex(i);
+					model.removeByIndex(i);
 				}
 			}
 			disableButton();
@@ -381,34 +350,34 @@ public class DrawingController {
 
 
 
-public void edgeColor(ActionEvent e) {
-	edgeColor=JColorChooser.showDialog(null, "Edge color", edgeColor);
-	if(edgeColor!=null) {
-		frame.getBtnEdgeColor().setBackground(edgeColor);
+	public void edgeColor(ActionEvent e) {
+		edgeColor=JColorChooser.showDialog(null, "Edge color", edgeColor);
+		if(edgeColor!=null) {
+			frame.getBtnEdgeColor().setBackground(edgeColor);
+		}
 	}
-}
 
-public void insideColor(ActionEvent e) {
-	insideColor=JColorChooser.showDialog(null, "Inside Color", insideColor);
-	if(insideColor!=null) {
-		frame.getBtnInsideColor().setBackground(insideColor);
+	public void insideColor(ActionEvent e) {
+		insideColor=JColorChooser.showDialog(null, "Inside Color", insideColor);
+		if(insideColor!=null) {
+			frame.getBtnInsideColor().setBackground(insideColor);
+		}
 	}
-}
 
-public void enableButton() {
-	frame.getTglbtnModify().setEnabled(true);
-	frame.getTglbtnDelete().setEnabled(true);
-}
+	public void enableButton() {
+		frame.getBtnModify().setEnabled(true);
+		frame.getBtnDelete().setEnabled(true);
+	}
 
-public void disableButton() {
-	frame.getTglbtnModify().setSelected(false);
-	frame.getTglbtnModify().setEnabled(false);
+	public void disableButton() {
+		frame.getBtnModify().setSelected(false);
+		frame.getBtnModify().setEnabled(false);
 
-	frame.getTglbtnDelete().setSelected(false);
-	frame.getTglbtnDelete().setEnabled(false);
+		frame.getBtnDelete().setSelected(false);
+		frame.getBtnModify().setEnabled(false);
 
-	frame.getTglbtnSelect().setSelected(true);
-}
+		frame.getTglbtnSelect().setSelected(true);
+	}
 
 
 

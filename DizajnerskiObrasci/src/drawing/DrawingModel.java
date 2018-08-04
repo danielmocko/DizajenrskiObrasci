@@ -12,15 +12,18 @@ public class DrawingModel implements Observable {
 	Observer observer= new Frame();
 	ArrayList<Shape> shapes = new ArrayList<Shape>();
 
-	public ArrayList<Shape> getShapes() {
-		return shapes;
+	
+	
+	public void selectObject(int index){
+		shapes.get(index).setSelected(true);
+		notifyObserver();
+	}
+	
+	public void diselectObject(int index) {
+		shapes.get(index).setSelected(false);
+		notifyObserver();
 	}
 
-	public void setShapes(ArrayList<Shape> shapes) {
-		this.shapes = shapes;
-	}
-	
-	
 	public void notifyObserver() {
 		int numberSelectedObjects = numberSelectedObject();
 		
@@ -29,12 +32,10 @@ public class DrawingModel implements Observable {
 	
 	public void add(Shape o) {
 		shapes.add(o);
-		notifyObserver();
 	}
 	
 	public void remove(Shape o) {
 		shapes.remove(o);
-		notifyObserver();
 	}
 	
 	public int numberSelectedObject() {
@@ -46,11 +47,15 @@ public class DrawingModel implements Observable {
 		return counter;
 	}
 	
-	public void removeByUndex(int index) {
+	public void removeByIndex(int index) {
 		shapes.remove(index);
 	}
+	
+	public ArrayList<Shape> getShapes() {
+		return shapes;
+	}
 
-	
-	
-	
+	public void setShapes(ArrayList<Shape> shapes) {
+		this.shapes = shapes;
+	}
 }

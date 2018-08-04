@@ -34,8 +34,6 @@ public class Frame extends JFrame implements Observer{
 	private JButton btnUndo;
 	private JButton btnRedo;
 	private JToggleButton tglbtnSelect;
-	private JToggleButton tglbtnModify;
-	private JToggleButton tglbtnDelete;
 	private JButton btnGoToBack;
 	private JButton btnGoToFront;
 	private JButton btnBringToBack;
@@ -51,6 +49,8 @@ public class Frame extends JFrame implements Observer{
 	private JPanel panel;
 	private JPanel panelView;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JButton btnDelete;
+	private JButton btnModify;
 	
 	
 	
@@ -83,12 +83,6 @@ public class Frame extends JFrame implements Observer{
 		
 		tglbtnSelect = new JToggleButton("Sel");
 		
-		tglbtnModify = new JToggleButton("Mod");
-		tglbtnModify.setEnabled(false);
-		
-		tglbtnDelete = new JToggleButton("Del");
-		tglbtnDelete.setEnabled(false);
-		
 		btnGoToBack = new JButton("GTB");
 		
 		btnGoToFront = new JButton("GTF");
@@ -96,6 +90,12 @@ public class Frame extends JFrame implements Observer{
 		btnBringToBack = new JButton("BTB");
 		
 		btnBringToFront = new JButton("BTF");
+		
+		btnModify = new JButton("Mod");
+		btnModify.setEnabled(false);
+		
+		btnDelete = new JButton("Del");
+		btnDelete.setEnabled(false);
 		
 		tglbtnPoint = new JToggleButton("Pt");
 		buttonGroup.add(tglbtnPoint);
@@ -131,15 +131,15 @@ public class Frame extends JFrame implements Observer{
 			}
 		});
 		
-		tglbtnModify.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent event) {
-				controller.modify(event);
+		btnModify.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.modify(e);
 			}
 		});
 		
-		tglbtnDelete.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent event) {
-				controller.delete(event);
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.delete(e);
 			}
 		});
 		
@@ -160,9 +160,9 @@ public class Frame extends JFrame implements Observer{
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(tglbtnSelect)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnModify)
+					.addComponent(btnModify)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnDelete)
+					.addComponent(btnDelete)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnGoToBack)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -190,30 +190,30 @@ public class Frame extends JFrame implements Observer{
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		gl_panelNorth.setVerticalGroup(
-			gl_panelNorth.createParallelGroup(Alignment.TRAILING)
-				.addGroup(gl_panelNorth.createSequentialGroup()
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGroup(gl_panelNorth.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnSave)
-						.addComponent(btnOpen)
-						.addComponent(btnLoad)
-						.addComponent(btnUndo)
-						.addComponent(btnRedo)
-						.addComponent(tglbtnSelect)
-						.addComponent(tglbtnModify)
-						.addComponent(tglbtnDelete)
-						.addComponent(btnGoToBack)
-						.addComponent(btnGoToFront)
-						.addComponent(btnBringToBack)
-						.addComponent(btnBringToFront)
-						.addComponent(tglbtnPoint)
-						.addComponent(tglbtnLine)
-						.addComponent(tglbtnSquare)
-						.addComponent(tglbtnRectangle)
-						.addComponent(tglbtnCircle)
-						.addComponent(tglbtnHexagon)
-						.addComponent(btnEdgeColor)
-						.addComponent(btnInsideColor)))
+				gl_panelNorth.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panelNorth.createSequentialGroup()
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addGroup(gl_panelNorth.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnSave)
+							.addComponent(btnOpen)
+							.addComponent(btnLoad)
+							.addComponent(btnUndo)
+							.addComponent(btnRedo)
+							.addComponent(tglbtnSelect)
+							.addComponent(btnGoToBack)
+							.addComponent(btnGoToFront)
+							.addComponent(btnBringToBack)
+							.addComponent(btnBringToFront)
+							.addComponent(tglbtnPoint)
+							.addComponent(tglbtnLine)
+							.addComponent(tglbtnSquare)
+							.addComponent(tglbtnRectangle)
+							.addComponent(tglbtnCircle)
+							.addComponent(tglbtnHexagon)
+							.addComponent(btnEdgeColor)
+							.addComponent(btnInsideColor)
+							.addComponent(btnModify)
+							.addComponent(btnDelete)))
 		);
 		panelNorth.setLayout(gl_panelNorth);
 		
@@ -245,24 +245,22 @@ public class Frame extends JFrame implements Observer{
 		buttonGroup.add(getTglbtnSquare());
 		buttonGroup.add(getTglbtnLine());
 		buttonGroup.add(getTglbtnPoint());
-		buttonGroup.add(getTglbtnDelete());
-		buttonGroup.add(getTglbtnModify());
 		buttonGroup.add(getTglbtnSelect());
 		
 	}
 	
 	public void update(int numberSelectedObjects) {
 		if(numberSelectedObjects==0) {
-			getTglbtnModify().setEnabled(false);
-			getTglbtnDelete().setEnabled(false);
+			btnModify.setEnabled(false);
+			btnDelete.setEnabled(false);
 		}
 		else if(numberSelectedObjects==1) {
-			getTglbtnModify().setEnabled(true);
-			getTglbtnDelete().setEnabled(true);
+			btnModify.setEnabled(true);
+			btnDelete.setEnabled(true);
 		}
 		else {
-			getTglbtnModify().setEnabled(false);
-			getTglbtnDelete().setEnabled(true);
+			btnModify.setEnabled(false);
+			btnDelete.setEnabled(true);
 		}
 	}
 	
@@ -329,22 +327,6 @@ public class Frame extends JFrame implements Observer{
 
 	public void setTglbtnSelect(JToggleButton tglbtnSelect) {
 		this.tglbtnSelect = tglbtnSelect;
-	}
-
-	public JToggleButton getTglbtnModify() {
-		return tglbtnModify;
-	}
-
-	public void setTglbtnModify(JToggleButton tglbtnModify) {
-		this.tglbtnModify = tglbtnModify;
-	}
-
-	public JToggleButton getTglbtnDelete() {
-		return tglbtnDelete;
-	}
-
-	public void setTglbtnDelete(JToggleButton tglbtnDelete) {
-		this.tglbtnDelete = tglbtnDelete;
 	}
 
 	public JButton getBtnGoToBack() {
@@ -451,7 +433,19 @@ public class Frame extends JFrame implements Observer{
 		this.panelView = panelView;
 	}
 
-	
-	
-	
+	public JButton getBtnDelete() {
+		return btnDelete;
+	}
+
+	public void setBtnDelete(JButton btnDelete) {
+		this.btnDelete = btnDelete;
+	}
+
+	public JButton getBtnModify() {
+		return btnModify;
+	}
+
+	public void setBtnModify(JButton btnModify) {
+		this.btnModify = btnModify;
+	}
 }
