@@ -34,8 +34,8 @@ public class Frame extends JFrame implements Observer{
 	private JButton btnUndo;
 	private JButton btnRedo;
 	private JToggleButton tglbtnSelect;
-	private JButton btnGoToBack;
-	private JButton btnGoToFront;
+	private JButton btnToBack;
+	private JButton btnToFront;
 	private JButton btnBringToBack;
 	private JButton btnBringToFront;
 	private JToggleButton tglbtnPoint;
@@ -83,19 +83,19 @@ public class Frame extends JFrame implements Observer{
 		
 		tglbtnSelect = new JToggleButton("Sel");
 		
-		btnGoToBack = new JButton("GTB");
+		btnToBack = new JButton("TB");
 		
-		btnGoToFront = new JButton("GTF");
+		btnToFront = new JButton("TF");
 		
 		btnBringToBack = new JButton("BTB");
 		
 		btnBringToFront = new JButton("BTF");
 		
 		btnModify = new JButton("Mod");
-		btnModify.setEnabled(false);
+		//btnModify.setEnabled(false);
 		
 		btnDelete = new JButton("Del");
-		btnDelete.setEnabled(false);
+		//btnDelete.setEnabled(false);
 		
 		tglbtnPoint = new JToggleButton("Pt");
 		buttonGroup.add(tglbtnPoint);
@@ -143,6 +143,30 @@ public class Frame extends JFrame implements Observer{
 			}
 		});
 		
+		btnToFront.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.toFront(e);
+			}
+		});
+		
+		btnToBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.toBack(e);
+			}
+		});
+		
+		btnBringToBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.bringToBack(e);
+			}
+		});
+		
+		btnBringToFront.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.bringToFront(e);
+			}
+		});
+		
 		GroupLayout gl_panelNorth = new GroupLayout(panelNorth);
 		gl_panelNorth.setHorizontalGroup(
 			gl_panelNorth.createParallelGroup(Alignment.LEADING)
@@ -164,9 +188,9 @@ public class Frame extends JFrame implements Observer{
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnDelete)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnGoToBack)
+					.addComponent(btnToBack)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnGoToFront)
+					.addComponent(btnToFront)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnBringToBack)
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -200,8 +224,8 @@ public class Frame extends JFrame implements Observer{
 							.addComponent(btnUndo)
 							.addComponent(btnRedo)
 							.addComponent(tglbtnSelect)
-							.addComponent(btnGoToBack)
-							.addComponent(btnGoToFront)
+							.addComponent(btnToBack)
+							.addComponent(btnToFront)
 							.addComponent(btnBringToBack)
 							.addComponent(btnBringToFront)
 							.addComponent(tglbtnPoint)
@@ -330,19 +354,19 @@ public class Frame extends JFrame implements Observer{
 	}
 
 	public JButton getBtnGoToBack() {
-		return btnGoToBack;
+		return btnToBack;
 	}
 
 	public void setBtnGoToBack(JButton btnGoToBack) {
-		this.btnGoToBack = btnGoToBack;
+		this.btnToBack = btnGoToBack;
 	}
 
 	public JButton getBtnGoToFront() {
-		return btnGoToFront;
+		return btnToFront;
 	}
 
 	public void setBtnGoToFront(JButton btnGoToFront) {
-		this.btnGoToFront = btnGoToFront;
+		this.btnToFront = btnGoToFront;
 	}
 
 	public JButton getBtnBringToBack() {

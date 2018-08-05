@@ -16,12 +16,12 @@ public class DrawingModel implements Observable {
 	
 	public void selectObject(int index){
 		shapes.get(index).setSelected(true);
-		notifyObserver();
+		//notifyObserver();
 	}
 	
 	public void diselectObject(int index) {
 		shapes.get(index).setSelected(false);
-		notifyObserver();
+		//notifyObserver();
 	}
 
 	public void notifyObserver() {
@@ -57,5 +57,10 @@ public class DrawingModel implements Observable {
 
 	public void setShapes(ArrayList<Shape> shapes) {
 		this.shapes = shapes;
+	}
+	
+	public void change(int i, Shape shape) {
+		shapes.remove(i);
+		shapes.add(i, shape);
 	}
 }
