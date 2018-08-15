@@ -6,8 +6,10 @@ import java.awt.Graphics;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.ListIterator;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 
@@ -54,7 +56,7 @@ public class DrawingController {
 			Point t = new Point(x,y,Color.BLACK);
 
 			t.setEdgeColor(frame.getBtnEdgeColor().getBackground());
-
+			model.addToLogList("Added --> "+t);
 			model.add(t);
 		}
 		else if(frame.getTglbtnLine().isSelected()) {
@@ -74,7 +76,9 @@ public class DrawingController {
 				l.setEdgeColor(frame.getBtnEdgeColor().getBackground());
 				model.add(l);
 				click=0;	
+				model.addToLogList("Added --> "+l);
 			}
+
 		}
 		else if(frame.getTglbtnCircle().isSelected()) {
 			x=e.getX();
@@ -96,6 +100,7 @@ public class DrawingController {
 			if(dlgCircle.isAccept()) {
 				circle = dlgCircle.getCircle();
 				model.add(circle);
+				model.addToLogList("Added --> "+circle);
 			}
 		}
 		else if(frame.getTglbtnSquare().isSelected()) {
@@ -115,7 +120,7 @@ public class DrawingController {
 			dlgSquare.setVisible(true);
 			if(dlgSquare.isAccept()) {
 				square = dlgSquare.getSquareDialog();
-
+				model.addToLogList("Added --> "+square);
 				model.add(square);
 			}
 		}
@@ -137,6 +142,7 @@ public class DrawingController {
 			dlgRectangle.setVisible(true);
 			if(dlgRectangle.isAccept()) {
 				rectangle = dlgRectangle.getDlgRectangle();
+				model.addToLogList("Added --> "+rectangle);
 				model.add(rectangle);
 
 			}
@@ -158,7 +164,7 @@ public class DrawingController {
 			dlgHexagon.setVisible(true);
 			if(dlgHexagon.isAccept()) {
 				hexagon = dlgHexagon.getHexagon();
-
+				model.addToLogList("Added --> "+hexagon);
 				model.add(hexagon);
 			}
 		}
@@ -173,23 +179,39 @@ public class DrawingController {
 				if(model.getShapes().get(i).contains(x, y)) {
 					if(!model.getShapes().get(i).isSelected()) {
 						selected=true;
+						model.addToLogList("Selected --> "+model.getShapes().get(i));
 						model.selectObject(i);
+						fillDLM();
 						return;
 					}else {
 						model.diselectObject(i);
+						model.addToLogList("Diselected --> "+model.getShapes().get(i));
+						fillDLM();
 						return;
 					}
 				}
+				
 			}
 
 			if(selected ==false) {
-				for(int i=0;i<model.getShapes().size();i++) {
-					model.diselectObject(i);
+				if(model.numberSelectedObject()>1) {
+					for(int i=0;i<model.getShapes().size();i++) {
+						model.diselectObject(i);
+					}
+					model.addToLogList("Diselected --> All selected objects");
 				}
+				else if(model.numberSelectedObject()==1) {
+					for(int i=0;i<model.getShapes().size();i++) {
+						if(model.getShapes().get(i).isSelected()) {
+							model.diselectObject(i);
+							model.addToLogList("Diselected --> "+model.getShapes().get(i));
+						}
+					}
+				}
+
 			}
-			
-			
 		}
+		fillDLM();
 	}
 
 	public void modify(ActionEvent e) {
@@ -211,9 +233,9 @@ public class DrawingController {
 						this.point.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.point);
-					} else {
-						return;
-					}
+						model.addToLogList("Modifyed --> *OldState: "+point+", *NewState: "+this.point);
+					} 
+					fillDLM();
 					return;
 				}else if(shape instanceof Line) {
 					Line line=(Line)shape;
@@ -230,10 +252,9 @@ public class DrawingController {
 						this.line.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.line);
+						model.addToLogList("Modifyed --> *OldState: "+line+", *NewState: "+this.line);
 					}
-					else {
-						return;
-					}
+					fillDLM();
 					return;
 				}else if(shape instanceof Circle) {
 					Circle circle=(Circle)shape;
@@ -250,9 +271,10 @@ public class DrawingController {
 						this.circle.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.circle);
-					}else {
-						return;	
+						model.addToLogList("Modifyed --> *OldState: "+circle+", *NewState: "+this.circle);
 					}
+					fillDLM();
+					return;
 				}
 				else if(shape instanceof Rectangle) {
 					Rectangle rectangle = (Rectangle) shape;
@@ -270,10 +292,9 @@ public class DrawingController {
 						this.rectangle.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.rectangle);
+						model.addToLogList("Modifyed --> *OldState: "+rectangle+", *NewState: "+this.rectangle);
 					}
-					else {
-						rectangle.setSelected(false);
-					}
+					fillDLM();
 					return;
 				}
 				else if(shape instanceof Square) {
@@ -292,9 +313,9 @@ public class DrawingController {
 						this.square.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.square);
-					}else {
-						return;
+						model.addToLogList("Modifyed --> *OldState: "+square+", *NewState: "+this.square);
 					}
+					fillDLM();
 					return;
 				}
 				else if(shape instanceof HexagonAdapter) {
@@ -313,33 +334,46 @@ public class DrawingController {
 						this.hexagon.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.hexagon);
-					}else {
-
-						return;
+						model.addToLogList("Modifyed --> *OldState: "+hexagonAdapter+", *NewState: "+this.hexagon);
 					}
+					fillDLM();
 					return;
 				}
 			}
 		}
+		
 	}
 
 	public void delete(ActionEvent e) {
-		int result = JOptionPane.showConfirmDialog(null,
-				"Da li ste sigurni da želite da obriše objekat ?", "Izaberi",
-				JOptionPane.YES_NO_OPTION);
-
-		if(result == JOptionPane.YES_OPTION) {
-			for(int i=model.getShapes().size()-1;i>=0;i--) {
-				if(model.getShapes().get(i).isSelected()) {
-					model.removeByIndex(i);
+		int result;
+		if(model.numberSelectedObject()==1) {
+			result = JOptionPane.showConfirmDialog(null,
+					"Do you want to delete selected object ?", "Choose",
+					JOptionPane.YES_NO_OPTION);
+			if(result == JOptionPane.YES_OPTION) {
+				for(int i=model.getShapes().size()-1;i>=0;i--) {
+					if(model.getShapes().get(i).isSelected()) {
+						model.addToLogList("Deleted -->"+model.getShapes().get(i));
+						model.removeByIndex(i);
+					}
 				}
 			}
-			disableButton();
 		}
-		else {
-			disableButton();
-			//shape.setSelected(false);
+		else if(model.numberSelectedObject()>1){
+			result = JOptionPane.showConfirmDialog(null,
+					"Do you want to delete all selected objects ?", "Choose",
+					JOptionPane.YES_NO_OPTION);
+			
+			if(result == JOptionPane.YES_OPTION) {
+				for(int i=model.getShapes().size()-1;i>=0;i--) {
+					if(model.getShapes().get(i).isSelected()) {
+						model.addToLogList("Deleted -->"+model.getShapes().get(i));
+						model.removeByIndex(i);
+					}
+				}
+			}
 		}
+		fillDLM();
 	}
 
 	public void toFront(ActionEvent e) {
@@ -352,6 +386,8 @@ public class DrawingController {
 						Shape next = model.getShapes().get(i+1);
 						model.change(i,next);
 						model.change(i+1, current);
+						model.addToLogList("Moved one position to front --->"+current);
+						fillDLM();
 						return;
 					}
 				}
@@ -359,7 +395,7 @@ public class DrawingController {
 		}
 		
 	}
-	
+
 	public void toBack(ActionEvent e) {
 		int length = model.getShapes().size();
 		if(length>1) {
@@ -370,13 +406,16 @@ public class DrawingController {
 						Shape next = model.getShapes().get(i-1);
 						model.change(i,next);
 						model.change(i-1, current);
+						model.addToLogList("Moved one position to back --->"+current);
+						fillDLM();
 						return;
 					}
 				}
 			}
 		}
+		
 	}
-	
+
 	public void bringToBack(ActionEvent e) {
 		int length = model.getShapes().size();
 		if(length>1) {
@@ -384,18 +423,22 @@ public class DrawingController {
 				if(model.getShapes().get(i).isSelected()) {
 					if( i != 0) {
 						Shape current = model.getShapes().get(i);
-	
+
 						for(int j=i-1;j>=0;j--) {
 							Shape start = model.getShapes().get(j);
 							model.change(j+1,start);
 						}
 						model.change(0, current);
+						model.addToLogList("Bringed to back --->"+current);
+						fillDLM();
+						return;
 					}
 				}
 			}
 		}
+		
 	}
-	
+
 	public void bringToFront(ActionEvent e) {
 		int length = model.getShapes().size();
 		if(length>1) {
@@ -408,12 +451,14 @@ public class DrawingController {
 							model.change(j-1,start);
 						}
 						model.change(length-1, current);
+						model.addToLogList("Bringed to front --->"+current);
+						fillDLM();
 						return;
-						
 					}
 				}	
 			}
 		}
+		
 	}
 
 	public void edgeColor(ActionEvent e) {
@@ -429,19 +474,12 @@ public class DrawingController {
 			frame.getBtnInsideColor().setBackground(insideColor);
 		}
 	}
-
-	public void enableButton() {
-		frame.getBtnModify().setEnabled(true);
-		frame.getBtnDelete().setEnabled(true);
+	
+	public void fillDLM() {
+		frame.getDlmList().clear();
+		for(int i=model.getLogList().size()-1;i>=0;i--) {
+			frame.getDlmList().addElement(model.getLogList().get(i));
+		}
 	}
 
-	public void disableButton() {
-		frame.getBtnModify().setSelected(false);
-		frame.getBtnModify().setEnabled(false);
-
-		frame.getBtnDelete().setSelected(false);
-		frame.getBtnModify().setEnabled(false);
-
-		frame.getTglbtnSelect().setSelected(true);
-	}
 }

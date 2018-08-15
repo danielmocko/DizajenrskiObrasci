@@ -48,7 +48,7 @@ public class Rectangle extends Square {
 	}
 	
 	public String toString() {
-		return "Up left point="+getUpLeft()+", width="+getPageLength()+", height="+getHeight();
+		return "Rectangle: upLeftPoint: ("+getUpLeft().getX()+","+getUpLeft().getY()+"), width="+getPageLength()+", height="+getHeight()+", borderColor= "+toHexString(getEdgeColor())+", areaColor= "+toHexString(getInsideColor());
 	}
 	
 	public int bulk() {

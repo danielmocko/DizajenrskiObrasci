@@ -23,6 +23,7 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultListModel;
 
 public class Frame extends JFrame implements Observer{
 	private DrawingView view = new DrawingView();
@@ -46,22 +47,26 @@ public class Frame extends JFrame implements Observer{
 	private JToggleButton tglbtnHexagon;
 	private JButton btnEdgeColor;
 	private JButton btnInsideColor;
-	private JPanel panel;
+	private JPanel panelNort;
 	private JPanel panelView;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JButton btnDelete;
 	private JButton btnModify;
 	
+	private DefaultListModel<String> dlmList = new DefaultListModel<String>();
+	
 	private int numberSelectedObjects=0;
+	private JScrollPane scrollPane;
+	private JList<String> logList;
 	
 	
 	
 	public Frame() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{1034, 0};
-		gridBagLayout.rowHeights = new int[]{53, 288, 0, 0};
+		gridBagLayout.rowHeights = new int[]{55, 288, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		getContentPane().setLayout(gridBagLayout);
 		
 		JPanel panelNorth = new JPanel();
@@ -257,12 +262,19 @@ public class Frame extends JFrame implements Observer{
 		gbc_panelView.gridy = 1;
 		getContentPane().add(view, gbc_panelView);//panelView
 		
-		panel = new JPanel();
-		GridBagConstraints gbc_panel = new GridBagConstraints();
-		gbc_panel.fill = GridBagConstraints.BOTH;
-		gbc_panel.gridx = 0;
-		gbc_panel.gridy = 2;
-		getContentPane().add(panel, gbc_panel);
+		scrollPane = new JScrollPane();
+		logList = new JList<String>(dlmList);
+		
+		//panelNort = new JPanel();
+		//panelNort.setBackground(Color.WHITE);
+		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
+		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
+		gbc_scrollPane.fill = GridBagConstraints.BOTH;
+		gbc_scrollPane.gridx = 0;
+		gbc_scrollPane.gridy = 2;
+		getContentPane().add(scrollPane, gbc_scrollPane);
+		scrollPane.setViewportView(logList);
+		
 		
 		
 		buttonGroup.add(getTglbtnHexagon());
@@ -272,6 +284,8 @@ public class Frame extends JFrame implements Observer{
 		buttonGroup.add(getTglbtnLine());
 		buttonGroup.add(getTglbtnPoint());
 		buttonGroup.add(getTglbtnSelect());
+		
+		
 		
 		setButton();
 	}
@@ -286,18 +300,29 @@ public class Frame extends JFrame implements Observer{
 		if(this.numberSelectedObjects==0) {
 			this.btnModify.setEnabled(false);
 			this.btnDelete.setEnabled(false);
+			this.btnBringToBack.setEnabled(false);
+			this.btnBringToFront.setEnabled(false);
+			this.btnToFront.setEnabled(false);
+			this.btnToBack.setEnabled(false);
 		}
 		else if(this.numberSelectedObjects==1) {
 			this.btnModify.setEnabled(true);
 			this.btnDelete.setEnabled(true);
+			this.btnBringToBack.setEnabled(true);
+			this.btnBringToFront.setEnabled(true);
+			this.btnToFront.setEnabled(true);
+			this.btnToBack.setEnabled(true);
 		}
 		else {
-			btnModify.setEnabled(false);
-			btnDelete.setEnabled(true);
+			this.btnModify.setEnabled(false);
+			this.btnDelete.setEnabled(true);
+			this.btnBringToBack.setEnabled(false);
+			this.btnBringToFront.setEnabled(false);
+			this.btnToFront.setEnabled(false);
+			this.btnToBack.setEnabled(false);
 		}
 	}
 	
-
 	public DrawingView getView() {
 		return view;
 	}
@@ -481,4 +506,15 @@ public class Frame extends JFrame implements Observer{
 	public void setBtnModify(JButton btnModify) {
 		this.btnModify = btnModify;
 	}
+
+	public DefaultListModel<String> getDlmList() {
+		return dlmList;
+	}
+
+	public void setDlmList(DefaultListModel<String> dlmList) {
+		this.dlmList = dlmList;
+	}
+	
+	
+	
 }

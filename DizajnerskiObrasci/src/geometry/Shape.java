@@ -5,16 +5,11 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 public abstract class Shape implements Comparable {
-	private String color = "black";
 	private Color edgeColor;
 	private boolean selected;
 	
 	public Shape() {
 		
-	}
-	
-	public Shape(String color) {
-		this.color=color;
 	}
 	
 	public Shape(Color edgeColor) {
@@ -29,35 +24,12 @@ public abstract class Shape implements Comparable {
 	
 	public abstract boolean contains(int x, int y);
 	
-	/*
-	public static Color findColor(String color) {
-		if(color.equalsIgnoreCase("black")) {
-			return Color.BLACK;
+	public static String toHexString(Color color) {
+		String hexColour = Integer.toHexString(color.getRGB() & 0xffffff);
+		if (hexColour.length() < 6) {
+		    hexColour = "000000".substring(0, 6 - hexColour.length()) + hexColour;
 		}
-		else if(color.equalsIgnoreCase("blue")) {
-			return Color.BLUE;
-		}
-		else if(color.equalsIgnoreCase("red")) {
-			return Color.RED;
-		}
-		else if(color.equalsIgnoreCase("green")) {
-			return Color.GREEN;
-		}
-		else if(color.equalsIgnoreCase("yellow")) {
-			return Color.YELLOW;
-		}
-		else {
-			return Color.BLACK;
-		}
-	}
-	*/
-
-	public String getColor() {
-		return color;
-	}
-
-	public void setColor(String color) {
-		this.color = color;
+		return "#" + hexColour;
 	}
 
 	public Color getEdgeColor() {

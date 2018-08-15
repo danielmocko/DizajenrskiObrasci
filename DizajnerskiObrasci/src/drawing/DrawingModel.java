@@ -2,15 +2,19 @@ package drawing;
 
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
+
 import geometry.Shape;
 
 public class DrawingModel implements Observable {
 	private ArrayList<Observer> observers;
-	
-	ArrayList<Shape> shapes = new ArrayList<Shape>();
+	private ArrayList<String> logList;
+	private ArrayList<Shape> shapes;
 
 	public DrawingModel() {
 		observers = new ArrayList<Observer>();
+		shapes = new ArrayList<Shape>();
+		logList= new ArrayList<String>();
 	}
 	
 	public void selectObject(int index){
@@ -21,7 +25,7 @@ public class DrawingModel implements Observable {
 	public void diselectObject(int index) {
 		shapes.get(index).setSelected(false);
 		notifyObserver();
-	}
+	} 
 
 	public void notifyObserver() {
 		int numberSelectedObjects = numberSelectedObject();
@@ -64,9 +68,32 @@ public class DrawingModel implements Observable {
 		shapes.remove(i);
 		shapes.add(i, shape);
 	}
+	
+	public void addToLogList(String string) {
+		logList.add(string);
+	}
 
 	@Override
 	public void addObserver(Observer addObserver) {
 		observers.add(addObserver);
 	}
+
+	public ArrayList<Observer> getObservers() {
+		return observers;
+	}
+
+	public void setObservers(ArrayList<Observer> observers) {
+		this.observers = observers;
+	}
+
+	public ArrayList<String> getLogList() {
+		return logList;
+	}
+
+	public void setLogList(ArrayList<String> logList) {
+		this.logList = logList;
+	}
+	
+	
+	
 }

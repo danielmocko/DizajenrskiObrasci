@@ -3,8 +3,6 @@ package geometry;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.swing.JOptionPane;
-
 import hexagon.Hexagon;
 
 public class HexagonAdapter extends SurfaceShape {
@@ -46,6 +44,10 @@ public class HexagonAdapter extends SurfaceShape {
 		}
 		else
 			return false;
+	}
+	
+	public String toString() {
+		return "Hexagon: center: ("+hexagon.getX()+","+hexagon.getY()+"), radius="+hexagon.getR()+", borderColor= "+toHexString(hexagon.getBorderColor())+", areaColor= "+toHexString(hexagon.getAreaColor());
 	}
 
 	public boolean contains(int x, int y) {

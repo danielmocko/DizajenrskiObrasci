@@ -29,7 +29,7 @@ public class Square extends SurfaceShape implements Moveable{
 	}
 	
 	public String toString() {
-		return "Up left point:"+upLeft+", page length:"+pageLength;
+		return "Square: upLeftPoint: ("+upLeft.getX()+","+upLeft.getY()+"), pageLength="+pageLength+", borderColor= "+toHexString(getEdgeColor())+", areaColor="+toHexString(getInsideColor());
 	}
 	
 	public boolean equals(Object obj) {

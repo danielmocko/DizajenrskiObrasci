@@ -15,10 +15,6 @@ public class Point extends Shape implements Moveable{
 		this.x=x;
 		this.y=y;
 	}
-	public Point(int x, int y, String color) {
-		this(x, y);
-		setColor(color);;
-	}
 	
 	public Point(int x, int y,Color color) {
 		this(x,y);
@@ -26,7 +22,7 @@ public class Point extends Shape implements Moveable{
 	}
 	
 	public String toString() {
-		return "(" + this.x + "," + this.y + ")";
+		return "Point: (" + this.x + "," + this.y + ")"+", color= "+toHexString(getEdgeColor());
 	}
 	
 	public boolean equals(Object obj) {

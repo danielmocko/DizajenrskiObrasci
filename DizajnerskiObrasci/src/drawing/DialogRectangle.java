@@ -100,7 +100,7 @@ public class DialogRectangle extends JDialog {
 		txtWidth = new JTextField();
 		txtWidth.setColumns(10);
 
-		JLabel lblWeight = new JLabel("Weight");
+		JLabel lblWeight = new JLabel("Width");
 		lblWeight.setFont(new Font("Tahoma", Font.PLAIN, 12));
 
 		GroupLayout gl_contentPanel = new GroupLayout(contentPanel);

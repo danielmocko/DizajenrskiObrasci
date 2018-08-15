@@ -1,6 +1,7 @@
 package drawing;
 
 import javax.swing.JFrame;
+import java.awt.GridBagLayout;
 
 
 public class PaintApplication {
@@ -9,6 +10,8 @@ public class PaintApplication {
 	public static void main(String[] args) {
 		
 		Frame frame = new Frame();
+		GridBagLayout gridBagLayout = (GridBagLayout) frame.getContentPane().getLayout();
+		gridBagLayout.rowHeights = new int[]{0, 338, 154};
 		DrawingModel model = new DrawingModel();
 		
 		DrawingController controller = new DrawingController(model,frame);

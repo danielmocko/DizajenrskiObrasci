@@ -21,7 +21,7 @@ public class DrawingView extends JPanel {
 	public void paint(Graphics g) {
 		super.paint(g);
 		if(!model.getShapes().isEmpty()) {
-			itShapes = model.shapes.listIterator();
+			itShapes = model.getShapes().listIterator();
 			while(itShapes.hasNext()) {
 				Shape s =(Shape) itShapes.next();
 				s.drawColor(g);
