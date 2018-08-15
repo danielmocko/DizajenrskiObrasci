@@ -2,32 +2,33 @@ package drawing;
 
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-
 import geometry.Shape;
 
 public class DrawingModel implements Observable {
-	Observer observer= new Frame();
+	private ArrayList<Observer> observers;
+	
 	ArrayList<Shape> shapes = new ArrayList<Shape>();
 
-	
+	public DrawingModel() {
+		observers = new ArrayList<Observer>();
+	}
 	
 	public void selectObject(int index){
 		shapes.get(index).setSelected(true);
-		//notifyObserver();
+		notifyObserver();
 	}
 	
 	public void diselectObject(int index) {
 		shapes.get(index).setSelected(false);
-		//notifyObserver();
+		notifyObserver();
 	}
 
 	public void notifyObserver() {
 		int numberSelectedObjects = numberSelectedObject();
 		
-		observer.update(numberSelectedObjects);
+		for(Observer observer:observers) {
+			observer.update(numberSelectedObjects);
+		}
 	}
 	
 	public void add(Shape o) {
@@ -62,5 +63,10 @@ public class DrawingModel implements Observable {
 	public void change(int i, Shape shape) {
 		shapes.remove(i);
 		shapes.add(i, shape);
+	}
+
+	@Override
+	public void addObserver(Observer addObserver) {
+		observers.add(addObserver);
 	}
 }

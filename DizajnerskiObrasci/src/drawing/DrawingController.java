@@ -175,6 +175,9 @@ public class DrawingController {
 						selected=true;
 						model.selectObject(i);
 						return;
+					}else {
+						model.diselectObject(i);
+						return;
 					}
 				}
 			}
@@ -184,6 +187,8 @@ public class DrawingController {
 					model.diselectObject(i);
 				}
 			}
+			
+			
 		}
 	}
 
@@ -207,8 +212,7 @@ public class DrawingController {
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.point);
 					} else {
-						point.setSelected(false);
-						disableButton();
+						return;
 					}
 					return;
 				}else if(shape instanceof Line) {
@@ -228,9 +232,9 @@ public class DrawingController {
 						model.add(this.line);
 					}
 					else {
-						line.setSelected(false);
-						disableButton();
+						return;
 					}
+					return;
 				}else if(shape instanceof Circle) {
 					Circle circle=(Circle)shape;
 					dlgCircle = new DialogCircle();
@@ -247,8 +251,7 @@ public class DrawingController {
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.circle);
 					}else {
-						circle.setSelected(false);
-						disableButton();
+						return;	
 					}
 				}
 				else if(shape instanceof Rectangle) {
@@ -270,8 +273,8 @@ public class DrawingController {
 					}
 					else {
 						rectangle.setSelected(false);
-						disableButton();
 					}
+					return;
 				}
 				else if(shape instanceof Square) {
 					Square square = (Square)shape;
@@ -290,9 +293,9 @@ public class DrawingController {
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.square);
 					}else {
-						square.setSelected(false);
-						disableButton();
+						return;
 					}
+					return;
 				}
 				else if(shape instanceof HexagonAdapter) {
 					HexagonAdapter hexagonAdapter = (HexagonAdapter)shape;
@@ -311,10 +314,10 @@ public class DrawingController {
 						frame.getTglbtnSelect().setSelected(true);
 						model.add(this.hexagon);
 					}else {
-						hexagonAdapter.setSelected(false);
-						//frame.getTglbtnSelect().setSelected(true);
-						disableButton();
+
+						return;
 					}
+					return;
 				}
 			}
 		}

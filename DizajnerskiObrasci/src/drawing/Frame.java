@@ -52,6 +52,8 @@ public class Frame extends JFrame implements Observer{
 	private JButton btnDelete;
 	private JButton btnModify;
 	
+	private int numberSelectedObjects=0;
+	
 	
 	
 	public Frame() {
@@ -271,16 +273,23 @@ public class Frame extends JFrame implements Observer{
 		buttonGroup.add(getTglbtnPoint());
 		buttonGroup.add(getTglbtnSelect());
 		
+		setButton();
 	}
 	
+	@Override
 	public void update(int numberSelectedObjects) {
-		if(numberSelectedObjects==0) {
-			btnModify.setEnabled(false);
-			btnDelete.setEnabled(false);
+		this.numberSelectedObjects=numberSelectedObjects;	
+		setButton();
+	}
+	
+	public void setButton() {
+		if(this.numberSelectedObjects==0) {
+			this.btnModify.setEnabled(false);
+			this.btnDelete.setEnabled(false);
 		}
-		else if(numberSelectedObjects==1) {
-			btnModify.setEnabled(true);
-			btnDelete.setEnabled(true);
+		else if(this.numberSelectedObjects==1) {
+			this.btnModify.setEnabled(true);
+			this.btnDelete.setEnabled(true);
 		}
 		else {
 			btnModify.setEnabled(false);
