@@ -2,16 +2,26 @@ package drawing;
 
 
 import java.awt.Color;
-import java.awt.Graphics;
+
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.ListIterator;
 
-import javax.swing.DefaultListModel;
+
 import javax.swing.JColorChooser;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
 
 import drawing.DrawingModel;
 import geometry.*;
@@ -21,6 +31,8 @@ public class DrawingController {
 	private DrawingModel model;
 	private DrawingView view;
 	private Frame frame;
+
+	private Strategy strategy;
 
 	private DialogCircle dlgCircle;
 	private DialogSquare dlgSquare;
@@ -78,7 +90,6 @@ public class DrawingController {
 				click=0;	
 				model.addToLogList("Added --> "+l);
 			}
-
 		}
 		else if(frame.getTglbtnCircle().isSelected()) {
 			x=e.getX();
@@ -181,16 +192,13 @@ public class DrawingController {
 						selected=true;
 						model.addToLogList("Selected --> "+model.getShapes().get(i));
 						model.selectObject(i);
-						fillDLM();
 						return;
 					}else {
 						model.diselectObject(i);
 						model.addToLogList("Diselected --> "+model.getShapes().get(i));
-						fillDLM();
 						return;
 					}
 				}
-				
 			}
 
 			if(selected ==false) {
@@ -208,10 +216,8 @@ public class DrawingController {
 						}
 					}
 				}
-
 			}
 		}
-		fillDLM();
 	}
 
 	public void modify(ActionEvent e) {
@@ -235,7 +241,6 @@ public class DrawingController {
 						model.add(this.point);
 						model.addToLogList("Modifyed --> *OldState: "+point+", *NewState: "+this.point);
 					} 
-					fillDLM();
 					return;
 				}else if(shape instanceof Line) {
 					Line line=(Line)shape;
@@ -254,7 +259,6 @@ public class DrawingController {
 						model.add(this.line);
 						model.addToLogList("Modifyed --> *OldState: "+line+", *NewState: "+this.line);
 					}
-					fillDLM();
 					return;
 				}else if(shape instanceof Circle) {
 					Circle circle=(Circle)shape;
@@ -273,7 +277,6 @@ public class DrawingController {
 						model.add(this.circle);
 						model.addToLogList("Modifyed --> *OldState: "+circle+", *NewState: "+this.circle);
 					}
-					fillDLM();
 					return;
 				}
 				else if(shape instanceof Rectangle) {
@@ -294,7 +297,6 @@ public class DrawingController {
 						model.add(this.rectangle);
 						model.addToLogList("Modifyed --> *OldState: "+rectangle+", *NewState: "+this.rectangle);
 					}
-					fillDLM();
 					return;
 				}
 				else if(shape instanceof Square) {
@@ -315,7 +317,6 @@ public class DrawingController {
 						model.add(this.square);
 						model.addToLogList("Modifyed --> *OldState: "+square+", *NewState: "+this.square);
 					}
-					fillDLM();
 					return;
 				}
 				else if(shape instanceof HexagonAdapter) {
@@ -336,12 +337,10 @@ public class DrawingController {
 						model.add(this.hexagon);
 						model.addToLogList("Modifyed --> *OldState: "+hexagonAdapter+", *NewState: "+this.hexagon);
 					}
-					fillDLM();
 					return;
 				}
 			}
 		}
-		
 	}
 
 	public void delete(ActionEvent e) {
@@ -363,7 +362,7 @@ public class DrawingController {
 			result = JOptionPane.showConfirmDialog(null,
 					"Do you want to delete all selected objects ?", "Choose",
 					JOptionPane.YES_NO_OPTION);
-			
+
 			if(result == JOptionPane.YES_OPTION) {
 				for(int i=model.getShapes().size()-1;i>=0;i--) {
 					if(model.getShapes().get(i).isSelected()) {
@@ -373,7 +372,6 @@ public class DrawingController {
 				}
 			}
 		}
-		fillDLM();
 	}
 
 	public void toFront(ActionEvent e) {
@@ -387,13 +385,12 @@ public class DrawingController {
 						model.change(i,next);
 						model.change(i+1, current);
 						model.addToLogList("Moved one position to front --->"+current);
-						fillDLM();
+						
 						return;
 					}
 				}
 			}
 		}
-		
 	}
 
 	public void toBack(ActionEvent e) {
@@ -407,13 +404,12 @@ public class DrawingController {
 						model.change(i,next);
 						model.change(i-1, current);
 						model.addToLogList("Moved one position to back --->"+current);
-						fillDLM();
+						
 						return;
 					}
 				}
 			}
 		}
-		
 	}
 
 	public void bringToBack(ActionEvent e) {
@@ -430,13 +426,12 @@ public class DrawingController {
 						}
 						model.change(0, current);
 						model.addToLogList("Bringed to back --->"+current);
-						fillDLM();
+						
 						return;
 					}
 				}
 			}
 		}
-		
 	}
 
 	public void bringToFront(ActionEvent e) {
@@ -452,13 +447,12 @@ public class DrawingController {
 						}
 						model.change(length-1, current);
 						model.addToLogList("Bringed to front --->"+current);
-						fillDLM();
+						
 						return;
 					}
 				}	
 			}
 		}
-		
 	}
 
 	public void edgeColor(ActionEvent e) {
@@ -474,12 +468,61 @@ public class DrawingController {
 			frame.getBtnInsideColor().setBackground(insideColor);
 		}
 	}
-	
-	public void fillDLM() {
-		frame.getDlmList().clear();
-		for(int i=model.getLogList().size()-1;i>=0;i--) {
-			frame.getDlmList().addElement(model.getLogList().get(i));
+	public void saving(ActionEvent e) {
+		JFileChooser fileChooser = new JFileChooser();
+		FileNameExtensionFilter fnef = new FileNameExtensionFilter("Text document", ".txt");
+		fileChooser.setFileFilter(fnef);
+
+		fileChooser.setDialogTitle("Save a file");
+
+		int returnValue = fileChooser.showSaveDialog(null);
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			File output=fileChooser.getSelectedFile();
+			if(!model.getLogList().isEmpty()) {
+
+				try {
+					File file = new File(output.getPath());
+					BufferedWriter buffer= new BufferedWriter(new FileWriter(file));
+					String logString="";
+
+					int size=frame.getDlmList().getSize();
+
+					for(int i=0;i<size;i++) {
+						logString=frame.getDlmList().get(i);
+						buffer.write(logString);
+						buffer.newLine();
+					}
+					buffer.close();
+				}
+				catch(Exception error) {
+					error.getStackTrace();
+				}
+			}
 		}
 	}
-
+	
+	public void openFiles(ActionEvent e) {
+		
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Open a File");
+		
+		int result = fileChooser.showOpenDialog(null);
+		if(result== JFileChooser.APPROVE_OPTION) {
+			try {
+				File fileInput = fileChooser.getSelectedFile();
+				BufferedReader bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
+				
+				String s="";
+				
+				while((s=bufferRead.readLine())!=null) {
+					model.addToLogList(s);
+				}
+				if(bufferRead!=null)
+					bufferRead.close();
+			}
+			catch(Exception error) {
+				error.getStackTrace();
+			}
+		}	
+	}
 }

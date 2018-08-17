@@ -15,7 +15,7 @@ public class DrawingView extends JPanel {
 	private ListIterator<Shape> itShapes;
 
 	public DrawingView() {
-		//setBackground(Color.WHITE);
+		
 	}
 
 	public void paint(Graphics g) {

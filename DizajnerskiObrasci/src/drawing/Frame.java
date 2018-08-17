@@ -14,6 +14,8 @@ import javax.swing.JToggleButton;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import java.awt.Dimension;
@@ -28,9 +30,9 @@ import javax.swing.DefaultListModel;
 public class Frame extends JFrame implements Observer{
 	private DrawingView view = new DrawingView();
 	private DrawingController controller ;
-	
-	private JButton btnSave;
+
 	private JButton btnOpen;
+	private JButton btnSave;
 	private JButton btnLoad;
 	private JButton btnUndo;
 	private JButton btnRedo;
@@ -52,15 +54,15 @@ public class Frame extends JFrame implements Observer{
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JButton btnDelete;
 	private JButton btnModify;
-	
+
 	private DefaultListModel<String> dlmList = new DefaultListModel<String>();
-	
+
 	private int numberSelectedObjects=0;
 	private JScrollPane scrollPane;
 	private JList<String> logList;
-	
-	
-	
+
+
+
 	public Frame() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{1034, 0};
@@ -68,7 +70,7 @@ public class Frame extends JFrame implements Observer{
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		getContentPane().setLayout(gridBagLayout);
-		
+
 		JPanel panelNorth = new JPanel();
 		GridBagConstraints gbc_panelNorth = new GridBagConstraints();
 		gbc_panelNorth.insets = new Insets(0, 0, 5, 0);
@@ -77,51 +79,51 @@ public class Frame extends JFrame implements Observer{
 		gbc_panelNorth.gridx = 0;
 		gbc_panelNorth.gridy = 0;
 		getContentPane().add(panelNorth, gbc_panelNorth);
-		
-		btnSave = new JButton("O");
-		
-		btnOpen = new JButton("S");
-		
+
+		btnOpen = new JButton("O");
+
+		btnSave = new JButton("S");
+
 		btnLoad = new JButton("L");
-		
+
 		btnUndo = new JButton("U");
-		
+
 		btnRedo = new JButton("R");
-		
+
 		tglbtnSelect = new JToggleButton("Sel");
-		
+
 		btnToBack = new JButton("TB");
-		
+
 		btnToFront = new JButton("TF");
-		
+
 		btnBringToBack = new JButton("BTB");
-		
+
 		btnBringToFront = new JButton("BTF");
-		
+
 		btnModify = new JButton("Mod");
 		//btnModify.setEnabled(false);
-		
+
 		btnDelete = new JButton("Del");
 		//btnDelete.setEnabled(false);
-		
+
 		tglbtnPoint = new JToggleButton("Pt");
 		buttonGroup.add(tglbtnPoint);
-		
+
 		tglbtnLine = new JToggleButton("Ln");
 		buttonGroup.add(tglbtnLine);
-		
+
 		tglbtnSquare = new JToggleButton("Sq");
 		buttonGroup.add(tglbtnSquare);
-		
+
 		tglbtnRectangle = new JToggleButton("Rc");
 		buttonGroup.add(tglbtnRectangle);
-		
+
 		tglbtnCircle = new JToggleButton("Cr");
 		buttonGroup.add(tglbtnCircle);
-		
+
 		tglbtnHexagon = new JToggleButton("Hx");
 		buttonGroup.add(tglbtnHexagon);
-		
+
 		btnEdgeColor = new JButton("Eg");
 		btnEdgeColor.setBackground(Color.BLACK);
 		btnEdgeColor.addActionListener(new ActionListener() {
@@ -129,7 +131,7 @@ public class Frame extends JFrame implements Observer{
 				controller.edgeColor(e);
 			}
 		});
-		
+
 		btnInsideColor = new JButton("Ic");
 		btnInsideColor.setBackground(Color.WHITE);
 		btnInsideColor.addActionListener(new ActionListener() {
@@ -137,117 +139,131 @@ public class Frame extends JFrame implements Observer{
 				controller.insideColor(e);
 			}
 		});
-		
+
 		btnModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.modify(e);
 			}
 		});
-		
+
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.delete(e);
 			}
 		});
-		
+
 		btnToFront.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.toFront(e);
 			}
 		});
-		
+
 		btnToBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.toBack(e);
 			}
 		});
-		
+
 		btnBringToBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.bringToBack(e);
 			}
 		});
-		
+
 		btnBringToFront.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.bringToFront(e);
 			}
 		});
-		
+
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.saving(e);
+
+			}
+		});
+
+		btnOpen.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.openFiles(e);
+			}
+		});
+
 		GroupLayout gl_panelNorth = new GroupLayout(panelNorth);
 		gl_panelNorth.setHorizontalGroup(
-			gl_panelNorth.createParallelGroup(Alignment.LEADING)
+				gl_panelNorth.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelNorth.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnSave)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnOpen)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnLoad)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnUndo)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnRedo)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnSelect)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnModify)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnDelete)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnToBack)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnToFront)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnBringToBack)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnBringToFront)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnPoint)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnLine)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnSquare)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnRectangle)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnCircle)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(tglbtnHexagon)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnEdgeColor)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnInsideColor)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-		);
+						.addContainerGap()
+						.addComponent(btnOpen)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnSave)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnLoad)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnUndo)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnRedo)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tglbtnSelect)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnModify)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnDelete)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnToBack)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnToFront)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnBringToBack)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnBringToFront)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tglbtnPoint)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tglbtnLine)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tglbtnSquare)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tglbtnRectangle)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tglbtnCircle)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(tglbtnHexagon)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnEdgeColor)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(btnInsideColor)
+						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+				);
 		gl_panelNorth.setVerticalGroup(
 				gl_panelNorth.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_panelNorth.createSequentialGroup()
+				.addGroup(gl_panelNorth.createSequentialGroup()
 						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addGroup(gl_panelNorth.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnSave)
-							.addComponent(btnOpen)
-							.addComponent(btnLoad)
-							.addComponent(btnUndo)
-							.addComponent(btnRedo)
-							.addComponent(tglbtnSelect)
-							.addComponent(btnToBack)
-							.addComponent(btnToFront)
-							.addComponent(btnBringToBack)
-							.addComponent(btnBringToFront)
-							.addComponent(tglbtnPoint)
-							.addComponent(tglbtnLine)
-							.addComponent(tglbtnSquare)
-							.addComponent(tglbtnRectangle)
-							.addComponent(tglbtnCircle)
-							.addComponent(tglbtnHexagon)
-							.addComponent(btnEdgeColor)
-							.addComponent(btnInsideColor)
-							.addComponent(btnModify)
-							.addComponent(btnDelete)))
-		);
+								.addComponent(btnOpen)
+								.addComponent(btnSave)
+								.addComponent(btnLoad)
+								.addComponent(btnUndo)
+								.addComponent(btnRedo)
+								.addComponent(tglbtnSelect)
+								.addComponent(btnToBack)
+								.addComponent(btnToFront)
+								.addComponent(btnBringToBack)
+								.addComponent(btnBringToFront)
+								.addComponent(tglbtnPoint)
+								.addComponent(tglbtnLine)
+								.addComponent(tglbtnSquare)
+								.addComponent(tglbtnRectangle)
+								.addComponent(tglbtnCircle)
+								.addComponent(tglbtnHexagon)
+								.addComponent(btnEdgeColor)
+								.addComponent(btnInsideColor)
+								.addComponent(btnModify)
+								.addComponent(btnDelete)))
+				);
 		panelNorth.setLayout(gl_panelNorth);
-		
+
 		panelView = new JPanel();
 		view.setBackground(Color.WHITE);//panelView
 		view.addMouseListener(new MouseAdapter() {//panelView
@@ -261,10 +277,10 @@ public class Frame extends JFrame implements Observer{
 		gbc_panelView.gridx = 0;
 		gbc_panelView.gridy = 1;
 		getContentPane().add(view, gbc_panelView);//panelView
-		
+
 		scrollPane = new JScrollPane();
 		logList = new JList<String>(dlmList);
-		
+
 		//panelNort = new JPanel();
 		//panelNort.setBackground(Color.WHITE);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
@@ -274,9 +290,9 @@ public class Frame extends JFrame implements Observer{
 		gbc_scrollPane.gridy = 2;
 		getContentPane().add(scrollPane, gbc_scrollPane);
 		scrollPane.setViewportView(logList);
-		
-		
-		
+
+
+
 		buttonGroup.add(getTglbtnHexagon());
 		buttonGroup.add(getTglbtnCircle());
 		buttonGroup.add(getTglbtnRectangle());
@@ -284,18 +300,16 @@ public class Frame extends JFrame implements Observer{
 		buttonGroup.add(getTglbtnLine());
 		buttonGroup.add(getTglbtnPoint());
 		buttonGroup.add(getTglbtnSelect());
-		
-		
-		
+
 		setButton();
 	}
-	
-	@Override
-	public void update(int numberSelectedObjects) {
+
+
+	public void updateView(int numberSelectedObjects) {
 		this.numberSelectedObjects=numberSelectedObjects;	
 		setButton();
 	}
-	
+
 	public void setButton() {
 		if(this.numberSelectedObjects==0) {
 			this.btnModify.setEnabled(false);
@@ -322,7 +336,13 @@ public class Frame extends JFrame implements Observer{
 			this.btnToBack.setEnabled(false);
 		}
 	}
-	
+
+
+	public void updateLog(String logList) {
+		getDlmList().add(0, logList);
+	}
+
+
 	public DrawingView getView() {
 		return view;
 	}
@@ -340,19 +360,19 @@ public class Frame extends JFrame implements Observer{
 	}
 
 	public JButton getBtnSave() {
-		return btnSave;
-	}
-
-	public void setBtnSave(JButton btnSave) {
-		this.btnSave = btnSave;
-	}
-
-	public JButton getBtnOpen() {
 		return btnOpen;
 	}
 
+	public void setBtnSave(JButton btnSave) {
+		this.btnOpen = btnSave;
+	}
+
+	public JButton getBtnOpen() {
+		return btnSave;
+	}
+
 	public void setBtnOpen(JButton btnOpen) {
-		this.btnOpen = btnOpen;
+		this.btnSave = btnOpen;
 	}
 
 	public JButton getBtnLoad() {
@@ -514,7 +534,19 @@ public class Frame extends JFrame implements Observer{
 	public void setDlmList(DefaultListModel<String> dlmList) {
 		this.dlmList = dlmList;
 	}
-	
-	
-	
+
+	public JList<String> getLogList() {
+		return logList;
+	}
+
+	public void setLogList(JList<String> logList) {
+		this.logList = logList;
+	}
+
+
+
+
+
+
+
 }

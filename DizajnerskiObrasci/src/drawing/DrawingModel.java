@@ -19,19 +19,19 @@ public class DrawingModel implements Observable {
 	
 	public void selectObject(int index){
 		shapes.get(index).setSelected(true);
-		notifyObserver();
+		notifyMenu();
 	}
 	
 	public void diselectObject(int index) {
 		shapes.get(index).setSelected(false);
-		notifyObserver();
+		notifyMenu();
 	} 
 
-	public void notifyObserver() {
+	public void notifyMenu() {
 		int numberSelectedObjects = numberSelectedObject();
 		
 		for(Observer observer:observers) {
-			observer.update(numberSelectedObjects);
+			observer.updateView(numberSelectedObjects);
 		}
 	}
 	
@@ -56,6 +56,15 @@ public class DrawingModel implements Observable {
 		shapes.remove(index);
 	}
 	
+	
+	public void notifyLog() {
+		String logList=getLogList().get(getLogList().size()-1);
+		for(Observer observer:observers) {
+			observer.updateLog(logList);
+		}
+	}
+	
+	
 	public ArrayList<Shape> getShapes() {
 		return shapes;
 	}
@@ -71,6 +80,7 @@ public class DrawingModel implements Observable {
 	
 	public void addToLogList(String string) {
 		logList.add(string);
+		notifyLog();
 	}
 
 	@Override
@@ -89,11 +99,4 @@ public class DrawingModel implements Observable {
 	public ArrayList<String> getLogList() {
 		return logList;
 	}
-
-	public void setLogList(ArrayList<String> logList) {
-		this.logList = logList;
-	}
-	
-	
-	
 }

@@ -2,5 +2,6 @@ package drawing;
 
 public interface Observable {
 	public void addObserver(Observer addObserver);
-	public void notifyObserver();
+	public void notifyMenu();
+	public void notifyLog();
 }
