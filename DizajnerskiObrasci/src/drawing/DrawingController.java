@@ -13,7 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.ListIterator;
-
+import java.util.Stack;
 
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
@@ -22,6 +22,8 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
+
+import org.omg.CORBA.OMGVMCID;
 
 import drawing.DrawingModel;
 import geometry.*;
@@ -41,7 +43,9 @@ public class DrawingController {
 	private DialogPoint dlgPoint;
 	private DialogLine dlgLine;
 	private Color edgeColor,insideColor;
-
+	private Stack<Command> executeCommand;
+	private Stack<Command> unexecuteCommand;
+	
 	private HexagonAdapter hexagon;
 	private Rectangle rectangle;
 	private Circle circle;
@@ -59,6 +63,8 @@ public class DrawingController {
 	public DrawingController(DrawingModel model,Frame frame) {
 		this.model=model;
 		this.frame=frame;
+		executeCommand = new Stack<Command>();
+		unexecuteCommand = new Stack<Command>();
 	}
 
 	public void panelClick(MouseEvent e) {
@@ -69,7 +75,8 @@ public class DrawingController {
 
 			t.setEdgeColor(frame.getBtnEdgeColor().getBackground());
 			model.addToLogList("Added --> "+t);
-			model.add(t);
+			addInStack(new CommandAdd(model, t));
+			
 		}
 		else if(frame.getTglbtnLine().isSelected()) {
 
@@ -86,7 +93,7 @@ public class DrawingController {
 
 				Line l = new Line(t1,t2);
 				l.setEdgeColor(frame.getBtnEdgeColor().getBackground());
-				model.add(l);
+				addInStack(new CommandAdd(model, l));
 				click=0;	
 				model.addToLogList("Added --> "+l);
 			}
@@ -110,7 +117,7 @@ public class DrawingController {
 			dlgCircle.setVisible(true);
 			if(dlgCircle.isAccept()) {
 				circle = dlgCircle.getCircle();
-				model.add(circle);
+				addInStack(new CommandAdd(model, circle));
 				model.addToLogList("Added --> "+circle);
 			}
 		}
@@ -132,7 +139,7 @@ public class DrawingController {
 			if(dlgSquare.isAccept()) {
 				square = dlgSquare.getSquareDialog();
 				model.addToLogList("Added --> "+square);
-				model.add(square);
+				addInStack(new CommandAdd(model,square));
 			}
 		}
 		else if(frame.getTglbtnRectangle().isSelected()) {
@@ -154,7 +161,7 @@ public class DrawingController {
 			if(dlgRectangle.isAccept()) {
 				rectangle = dlgRectangle.getDlgRectangle();
 				model.addToLogList("Added --> "+rectangle);
-				model.add(rectangle);
+				addInStack(new CommandAdd(model, rectangle));
 
 			}
 		}else if(frame.getTglbtnHexagon().isSelected()) {
@@ -500,6 +507,24 @@ public class DrawingController {
 			}
 		}
 	}
+	
+	public void addInStack(Command command) {
+		command.execute();
+		executeCommand.push(command);
+	}
+	
+	public void undo() {
+		model.addToLogList("Undo command");
+		executeCommand.peek().unexecute();
+		unexecuteCommand.push(executeCommand.pop());
+	}
+	
+	public void redo() {
+		model.addToLogList("Redo command");
+		unexecuteCommand.peek().execute();
+		executeCommand.push(unexecuteCommand.pop());
+	}
+	
 	
 	public void openFiles(ActionEvent e) {
 		

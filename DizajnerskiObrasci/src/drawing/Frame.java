@@ -184,9 +184,22 @@ public class Frame extends JFrame implements Observer{
 		});
 
 		btnOpen.addActionListener(new ActionListener() {	
-			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.openFiles(e);
+			}
+		});
+		
+		btnUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.undo();
+				
+			}
+		});
+		
+		btnRedo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.redo();
+				
 			}
 		});
 
