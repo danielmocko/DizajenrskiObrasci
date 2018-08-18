@@ -26,6 +26,16 @@ import javax.swing.filechooser.FileSystemView;
 import org.omg.CORBA.OMGVMCID;
 
 import drawing.DrawingModel;
+import drawing.command.Command;
+import drawing.command.CommandAdd;
+import drawing.command.CommandBringToBack;
+import drawing.command.CommandBringToFront;
+import drawing.command.CommandDiselect;
+import drawing.command.CommandModify;
+import drawing.command.CommandRemove;
+import drawing.command.CommandSelect;
+import drawing.command.CommandToBack;
+import drawing.command.CommandToFront;
 import geometry.*;
 
 
@@ -45,7 +55,7 @@ public class DrawingController {
 	private Color edgeColor,insideColor;
 	private Stack<Command> executeCommand;
 	private Stack<Command> unexecuteCommand;
-	
+
 	private HexagonAdapter hexagon;
 	private Rectangle rectangle;
 	private Circle circle;
@@ -76,7 +86,7 @@ public class DrawingController {
 			t.setEdgeColor(frame.getBtnEdgeColor().getBackground());
 			model.addToLogList("Added --> "+t);
 			addInStack(new CommandAdd(model, t));
-			
+
 		}
 		else if(frame.getTglbtnLine().isSelected()) {
 
@@ -198,10 +208,10 @@ public class DrawingController {
 					if(!model.getShapes().get(i).isSelected()) {
 						selected=true;
 						model.addToLogList("Selected --> "+model.getShapes().get(i));
-						model.selectObject(i);
+						addInStack(new CommandSelect(model, i));
 						return;
 					}else {
-						model.diselectObject(i);
+						addInStack(new CommandDiselect(model, i));
 						model.addToLogList("Diselected --> "+model.getShapes().get(i));
 						return;
 					}
@@ -211,15 +221,17 @@ public class DrawingController {
 			if(selected ==false) {
 				if(model.numberSelectedObject()>1) {
 					for(int i=0;i<model.getShapes().size();i++) {
-						model.diselectObject(i);
+						if(model.getShapes().get(i).isSelected())
+							addInStack(new CommandDiselect(model, i));
 					}
 					model.addToLogList("Diselected --> All selected objects");
 				}
 				else if(model.numberSelectedObject()==1) {
 					for(int i=0;i<model.getShapes().size();i++) {
 						if(model.getShapes().get(i).isSelected()) {
-							model.diselectObject(i);
+							addInStack(new CommandDiselect(model, i));
 							model.addToLogList("Diselected --> "+model.getShapes().get(i));
+							return;
 						}
 					}
 				}
@@ -241,11 +253,11 @@ public class DrawingController {
 					dlgPoint.getBtnColor().setBackground(point.getEdgeColor());
 					dlgPoint.setVisible(true);
 					if (dlgPoint.isAccept()) {
-						model.remove(shape);
+
 						this.point = dlgPoint.getDlgPoint();
 						this.point.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
-						model.add(this.point);
+						addInStack(new CommandModify(model, point, this.point));
 						model.addToLogList("Modifyed --> *OldState: "+point+", *NewState: "+this.point);
 					} 
 					return;
@@ -259,11 +271,11 @@ public class DrawingController {
 					dlgLine.getBtnColorDlg().setBackground(line.getEdgeColor());
 					dlgLine.setVisible(true);
 					if(dlgLine.isAccept()) {
-						model.remove(shape);
+
 						this.line = dlgLine.getDlgLine();
 						this.line.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
-						model.add(this.line);
+						addInStack(new CommandModify(model, line, this.line));
 						model.addToLogList("Modifyed --> *OldState: "+line+", *NewState: "+this.line);
 					}
 					return;
@@ -277,11 +289,11 @@ public class DrawingController {
 					dlgCircle.getBtnInsideColor().setBackground(circle.getInsideColor());
 					dlgCircle.setVisible(true);
 					if(dlgCircle.isAccept()) {
-						model.remove(shape);
+
 						this.circle = dlgCircle.getCircle();
 						this.circle.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
-						model.add(this.circle);
+						addInStack(new CommandModify(model, circle, this.circle));
 						model.addToLogList("Modifyed --> *OldState: "+circle+", *NewState: "+this.circle);
 					}
 					return;
@@ -297,11 +309,11 @@ public class DrawingController {
 					dlgRectangle.getBtnInsideColor().setBackground(rectangle.getInsideColor());
 					dlgRectangle.setVisible(true);
 					if(dlgRectangle.isAccept()) {
-						model.remove(shape);
+
 						this.rectangle = dlgRectangle.getDlgRectangle();
 						this.rectangle.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
-						model.add(this.rectangle);
+						addInStack(new CommandModify(model, rectangle, this.rectangle));
 						model.addToLogList("Modifyed --> *OldState: "+rectangle+", *NewState: "+this.rectangle);
 					}
 					return;
@@ -317,11 +329,11 @@ public class DrawingController {
 					dlgSquare.getBtnInsideColor().setBackground(square.getInsideColor());
 					dlgSquare.setVisible(true);
 					if(dlgSquare.isAccept()) {
-						model.remove(square);
+
 						this.square=dlgSquare.getSquareDialog();
 						this.square.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
-						model.add(this.square);
+						addInStack(new CommandModify(model, square, this.square));
 						model.addToLogList("Modifyed --> *OldState: "+square+", *NewState: "+this.square);
 					}
 					return;
@@ -337,11 +349,11 @@ public class DrawingController {
 					dlgHexagon.getBtnInsideColor().setBackground(hexagonAdapter.getHexagon().getAreaColor());
 					dlgHexagon.setVisible(true);
 					if(dlgHexagon.isAccept()) {
-						model.remove(shape);
+
 						this.hexagon= dlgHexagon.getHexagon();
 						this.hexagon.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
-						model.add(this.hexagon);
+						addInStack(new CommandModify(model, hexagonAdapter, this.hexagon));
 						model.addToLogList("Modifyed --> *OldState: "+hexagonAdapter+", *NewState: "+this.hexagon);
 					}
 					return;
@@ -374,93 +386,29 @@ public class DrawingController {
 			if(result == JOptionPane.YES_OPTION) {
 				for(int i=model.getShapes().size()-1;i>=0;i--) {
 					if(model.getShapes().get(i).isSelected()) {
-						model.addToLogList("Deleted -->"+model.getShapes().get(i));
-						model.removeByIndex(i);
+						Shape shape = (Shape)model.getShapes().get(i);
+						model.addToLogList("Deleted -->"+shape);
+						addInStack(new CommandRemove(model, shape));
 					}
 				}
 			}
 		}
 	}
 
-	public void toFront(ActionEvent e) {
-		int length = model.getShapes().size();
-		if(length>1) {
-			for(int i=0;i<length;i++) {
-				if(model.getShapes().get(i).isSelected()) {
-					if( i+1 < length) {
-						Shape current = model.getShapes().get(i);
-						Shape next = model.getShapes().get(i+1);
-						model.change(i,next);
-						model.change(i+1, current);
-						model.addToLogList("Moved one position to front --->"+current);
-						
-						return;
-					}
-				}
-			}
-		}
+	public void toFront() {
+		addInStack(new CommandToFront(model));
 	}
 
 	public void toBack(ActionEvent e) {
-		int length = model.getShapes().size();
-		if(length>1) {
-			for(int i=length-1;i>=0;i--) {
-				if(model.getShapes().get(i).isSelected()) {
-					if( i-1 >= 0) {
-						Shape current = model.getShapes().get(i);
-						Shape next = model.getShapes().get(i-1);
-						model.change(i,next);
-						model.change(i-1, current);
-						model.addToLogList("Moved one position to back --->"+current);
-						
-						return;
-					}
-				}
-			}
-		}
+		addInStack(new CommandToBack(model));
 	}
 
 	public void bringToBack(ActionEvent e) {
-		int length = model.getShapes().size();
-		if(length>1) {
-			for(int i=length-1;i>=0;i--) {
-				if(model.getShapes().get(i).isSelected()) {
-					if( i != 0) {
-						Shape current = model.getShapes().get(i);
-
-						for(int j=i-1;j>=0;j--) {
-							Shape start = model.getShapes().get(j);
-							model.change(j+1,start);
-						}
-						model.change(0, current);
-						model.addToLogList("Bringed to back --->"+current);
-						
-						return;
-					}
-				}
-			}
-		}
+		addInStack(new CommandBringToBack(model));
 	}
 
 	public void bringToFront(ActionEvent e) {
-		int length = model.getShapes().size();
-		if(length>1) {
-			for(int i=0;i<length;i++) {
-				if(model.getShapes().get(i).isSelected()) {
-					if( i < length) {
-						Shape current = model.getShapes().get(i);
-						for(int j=i+1;j<length;j++) {
-							Shape start = model.getShapes().get(j);
-							model.change(j-1,start);
-						}
-						model.change(length-1, current);
-						model.addToLogList("Bringed to front --->"+current);
-						
-						return;
-					}
-				}	
-			}
-		}
+		addInStack(new CommandBringToFront(model));
 	}
 
 	public void edgeColor(ActionEvent e) {
@@ -508,38 +456,38 @@ public class DrawingController {
 			}
 		}
 	}
-	
+
 	public void addInStack(Command command) {
 		command.execute();
 		executeCommand.push(command);
 	}
-	
+
 	public void undo() {
 		model.addToLogList("Undo command");
 		executeCommand.peek().unexecute();
 		unexecuteCommand.push(executeCommand.pop());
 	}
-	
+
 	public void redo() {
 		model.addToLogList("Redo command");
 		unexecuteCommand.peek().execute();
 		executeCommand.push(unexecuteCommand.pop());
 	}
-	
-	
+
+
 	public void openFiles(ActionEvent e) {
-		
+
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setDialogTitle("Open a File");
-		
+
 		int result = fileChooser.showOpenDialog(null);
 		if(result== JFileChooser.APPROVE_OPTION) {
 			try {
 				File fileInput = fileChooser.getSelectedFile();
 				BufferedReader bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
-				
+
 				String s="";
-				
+
 				while((s=bufferRead.readLine())!=null) {
 					model.addToLogList(s);
 				}

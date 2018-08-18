@@ -154,7 +154,7 @@ public class Frame extends JFrame implements Observer{
 
 		btnToFront.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.toFront(e);
+				controller.toFront();
 			}
 		});
 

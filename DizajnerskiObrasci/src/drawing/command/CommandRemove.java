@@ -1,5 +1,6 @@
-package drawing;
+package drawing.command;
 
+import drawing.DrawingModel;
 import geometry.Shape;
 
 public class CommandRemove implements Command{
