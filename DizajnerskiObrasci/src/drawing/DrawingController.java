@@ -183,7 +183,7 @@ public class DrawingController {
 			if(dlgHexagon.isAccept()) {
 				hexagon = dlgHexagon.getHexagon();
 				model.addToLogList("Added --> "+hexagon);
-				model.add(hexagon);
+				addInStack(new CommandAdd(model, hexagon));
 			}
 		}
 		else if(frame.getTglbtnSelect().isSelected()) {
@@ -359,8 +359,9 @@ public class DrawingController {
 			if(result == JOptionPane.YES_OPTION) {
 				for(int i=model.getShapes().size()-1;i>=0;i--) {
 					if(model.getShapes().get(i).isSelected()) {
-						model.addToLogList("Deleted -->"+model.getShapes().get(i));
-						model.removeByIndex(i);
+						Shape shape = (Shape)model.getShapes().get(i);
+						model.addToLogList("Deleted -->"+shape);
+						addInStack(new CommandRemove(model, shape));
 					}
 				}
 			}
