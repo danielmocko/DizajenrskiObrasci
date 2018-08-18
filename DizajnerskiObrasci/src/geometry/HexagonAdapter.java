@@ -47,7 +47,7 @@ public class HexagonAdapter extends SurfaceShape {
 	}
 	
 	public String toString() {
-		return "Hexagon: center: ("+hexagon.getX()+","+hexagon.getY()+"), radius="+hexagon.getR()+", borderColor= "+toHexString(hexagon.getBorderColor())+", areaColor= "+toHexString(hexagon.getAreaColor());
+		return "Hexagon: center: ("+hexagon.getX()+","+hexagon.getY()+"), radius="+hexagon.getR()+", borderColor="+toHexString(hexagon.getBorderColor())+", areaColor="+toHexString(hexagon.getAreaColor());
 	}
 
 	public boolean contains(int x, int y) {

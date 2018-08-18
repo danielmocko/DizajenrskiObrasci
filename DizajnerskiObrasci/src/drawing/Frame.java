@@ -87,8 +87,10 @@ public class Frame extends JFrame implements Observer{
 		btnLoad = new JButton("L");
 
 		btnUndo = new JButton("U");
+		btnUndo.setEnabled(false);
 
 		btnRedo = new JButton("R");
+		btnRedo.setEnabled(false);
 
 		tglbtnSelect = new JToggleButton("Sel");
 
@@ -101,10 +103,8 @@ public class Frame extends JFrame implements Observer{
 		btnBringToFront = new JButton("BTF");
 
 		btnModify = new JButton("Mod");
-		//btnModify.setEnabled(false);
 
 		btnDelete = new JButton("Del");
-		//btnDelete.setEnabled(false);
 
 		tglbtnPoint = new JToggleButton("Pt");
 		buttonGroup.add(tglbtnPoint);
@@ -199,6 +199,14 @@ public class Frame extends JFrame implements Observer{
 		btnRedo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.redo();
+				
+			}
+		});
+		
+		btnLoad.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.loadData();
 				
 			}
 		});
@@ -316,7 +324,7 @@ public class Frame extends JFrame implements Observer{
 
 		setButton();
 	}
-
+	
 
 	public void updateView(int numberSelectedObjects) {
 		this.numberSelectedObjects=numberSelectedObjects;	

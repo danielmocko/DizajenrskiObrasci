@@ -55,6 +55,7 @@ public class DrawingController {
 	private Color edgeColor,insideColor;
 	private Stack<Command> executeCommand;
 	private Stack<Command> unexecuteCommand;
+	private Stack<String> loadStack;
 
 	private HexagonAdapter hexagon;
 	private Rectangle rectangle;
@@ -75,13 +76,14 @@ public class DrawingController {
 		this.frame=frame;
 		executeCommand = new Stack<Command>();
 		unexecuteCommand = new Stack<Command>();
+		loadStack = new Stack<String>();
 	}
 
 	public void panelClick(MouseEvent e) {
 		if(frame.getTglbtnPoint().isSelected()) {
 			x = e.getX();
 			y = e.getY();
-			Point t = new Point(x,y,Color.BLACK);
+			Point t = new Point(x,y);
 
 			t.setEdgeColor(frame.getBtnEdgeColor().getBackground());
 			model.addToLogList("Added --> "+t);
@@ -372,8 +374,8 @@ public class DrawingController {
 				for(int i=model.getShapes().size()-1;i>=0;i--) {
 					if(model.getShapes().get(i).isSelected()) {
 						Shape shape = (Shape)model.getShapes().get(i);
-						model.addToLogList("Deleted -->"+shape);
-						addInStack(new CommandRemove(model, shape));
+						model.addToLogList("Deleted --> "+shape);
+						addInStack(new CommandRemove(model, shape,i));
 					}
 				}
 			}
@@ -387,8 +389,8 @@ public class DrawingController {
 				for(int i=model.getShapes().size()-1;i>=0;i--) {
 					if(model.getShapes().get(i).isSelected()) {
 						Shape shape = (Shape)model.getShapes().get(i);
-						model.addToLogList("Deleted -->"+shape);
-						addInStack(new CommandRemove(model, shape));
+						model.addToLogList("Deleted --> "+shape);
+						addInStack(new CommandRemove(model, shape,i));
 					}
 				}
 			}
@@ -397,18 +399,46 @@ public class DrawingController {
 
 	public void toFront() {
 		addInStack(new CommandToFront(model));
+		model.addToLogList("Moved one position to front ---> "+model.getSelectedShape());
 	}
 
 	public void toBack(ActionEvent e) {
 		addInStack(new CommandToBack(model));
+		model.addToLogList("Moved one position to back ---> "+model.getSelectedShape());
 	}
 
 	public void bringToBack(ActionEvent e) {
-		addInStack(new CommandBringToBack(model));
+		int length = model.getShapes().size();
+		if(length>1) {
+			for(int i=length-1;i>=0;i--) {
+				if(model.getShapes().get(i).isSelected()) {
+					if( i != 0) {
+						Shape current = model.getShapes().get(i);
+						addInStack(new CommandBringToBack(model,current,i));				
+						return;
+					}
+				}
+			}
+		}
+
+		model.addToLogList("Bringed to back ---> "+model.getSelectedShape());
 	}
 
 	public void bringToFront(ActionEvent e) {
-		addInStack(new CommandBringToFront(model));
+		int length = model.getShapes().size();
+		if(length>1) {
+			for(int i=0;i<length;i++) {
+				if(model.getShapes().get(i).isSelected()) {
+					if( i < length) {
+						Shape current = model.getShapes().get(i);
+						addInStack(new CommandBringToFront(model,current,i));
+						return;
+					}
+				}	
+			}
+		}
+
+		model.addToLogList("Bringed to front --->"+model.getSelectedShape());
 	}
 
 	public void edgeColor(ActionEvent e) {
@@ -460,18 +490,52 @@ public class DrawingController {
 	public void addInStack(Command command) {
 		command.execute();
 		executeCommand.push(command);
+		if(!executeCommand.isEmpty()) {
+			frame.getBtnUndo().setEnabled(true);
+		}
+
+		if(!unexecuteCommand.isEmpty()) {
+			for(int i=0;i<unexecuteCommand.size();i++)
+				unexecuteCommand.pop();
+			frame.getBtnRedo().setEnabled(false);
+		}
 	}
 
 	public void undo() {
-		model.addToLogList("Undo command");
-		executeCommand.peek().unexecute();
-		unexecuteCommand.push(executeCommand.pop());
+		try {
+			model.addToLogList("Undo command");
+			executeCommand.peek().unexecute();
+			unexecuteCommand.push(executeCommand.pop());
+			if(executeCommand.isEmpty() && !unexecuteCommand.isEmpty()) {
+				frame.getBtnUndo().setEnabled(false);
+				frame.getBtnRedo().setEnabled(true);
+			}
+			else {
+				frame.getBtnUndo().setEnabled(true);
+				frame.getBtnRedo().setEnabled(true);
+			}
+		}
+		catch(Exception error) {
+			error.getStackTrace();
+		}
 	}
 
 	public void redo() {
-		model.addToLogList("Redo command");
-		unexecuteCommand.peek().execute();
-		executeCommand.push(unexecuteCommand.pop());
+		try {
+			model.addToLogList("Redo command");
+			unexecuteCommand.peek().execute();
+			executeCommand.push(unexecuteCommand.pop());
+			if(unexecuteCommand.isEmpty() && !executeCommand.isEmpty()) {
+				frame.getBtnUndo().setEnabled(true);
+				frame.getBtnRedo().setEnabled(false);
+			}else {
+				frame.getBtnUndo().setEnabled(true);
+				frame.getBtnRedo().setEnabled(true);
+			}
+		}
+		catch(Exception error) {
+			error.getStackTrace();
+		}
 	}
 
 
@@ -486,10 +550,10 @@ public class DrawingController {
 				File fileInput = fileChooser.getSelectedFile();
 				BufferedReader bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
 
-				String s="";
+				String input="";
 
-				while((s=bufferRead.readLine())!=null) {
-					model.addToLogList(s);
+				while((input=bufferRead.readLine())!=null) {
+					loadStack.push(input);
 				}
 				if(bufferRead!=null)
 					bufferRead.close();
@@ -499,4 +563,16 @@ public class DrawingController {
 			}
 		}	
 	}
+
+	public void loadData() {
+		if(!loadStack.isEmpty()) {
+			model.addToLogList(loadStack.pop());
+			
+		}
+		return;
+	}
+	
+	
+
+
 }

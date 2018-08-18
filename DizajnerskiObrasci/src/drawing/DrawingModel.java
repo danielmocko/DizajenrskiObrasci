@@ -52,6 +52,15 @@ public class DrawingModel implements Observable {
 		return counter;
 	}
 	
+	public Shape getSelectedShape() {
+		Shape shape; 
+		for(int i=0;i<shapes.size();i++) {
+			if(shapes.get(i).isSelected())
+				return shapes.get(i);
+		}
+		return null;
+	}
+	
 	public void removeByIndex(int index) {
 		shapes.remove(index);
 	}

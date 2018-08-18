@@ -26,7 +26,7 @@ public class Line extends Shape implements Moveable{
 	}
 
 	public String toString() {
-		return "Line: start: ("+pStart.getX()+", "+pStart.getY()+"), end: ("+pEnd.getX()+", "+pEnd.getY()+"), color= "+toHexString(getEdgeColor());
+		return "Line: start: ("+pStart.getX()+","+pStart.getY()+"), end: ("+pEnd.getX()+","+pEnd.getY()+"), color= "+toHexString(getEdgeColor());
 	}
 
 	public boolean equals(Object obj) {

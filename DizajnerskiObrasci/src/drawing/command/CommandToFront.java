@@ -21,8 +21,6 @@ public class CommandToFront implements Command{
 						Shape next = model.getShapes().get(i+1);
 						model.change(i,next);
 						model.change(i+1, current);
-						model.addToLogList("Moved one position to front --->"+current);
-						
 						return;
 					}
 				}
@@ -41,7 +39,6 @@ public class CommandToFront implements Command{
 						Shape next = model.getShapes().get(i-1);
 						model.change(i,next);
 						model.change(i-1, current);
-						model.addToLogList("Moved one position to back --->"+current);
 						return;
 					}
 				}

@@ -51,7 +51,7 @@ public class Point extends Shape implements Moveable{
 		return (int)(this.distance(zero)-newPoint.distance(zero));
 	}
 	public void selected(Graphics g) {
-		//g.setColor(findColor("blue"));
+		g.setColor(Color.BLUE);
 		g.drawRect(x -3,y-3, 6, 6);
 	}
 	
