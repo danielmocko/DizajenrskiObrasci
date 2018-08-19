@@ -16,7 +16,7 @@ public class CommandToBack implements Command{
 		int length = model.getShapes().size();
 		if(length>1) {
 			for(int i=length-1;i>=0;i--) {
-				if(model.getShapes().get(i).isSelected()) {
+				if(model.getShapes().get(i).isSelected() && i!=0) {
 					if( i-1 >= 0) {
 						Shape current = model.getShapes().get(i);
 						Shape next = model.getShapes().get(i-1);

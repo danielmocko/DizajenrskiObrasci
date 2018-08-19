@@ -17,15 +17,17 @@ public class CommandModify implements Command {
 	
 	@Override
 	public void execute() {
+		int index = model.getIndex(oldShape);
 		model.remove(oldShape);
-		model.add(newShape);
+		model.addOnIndex(newShape,index);
 		model.selectObject(newShape);
 	}
 
 	@Override
 	public void unexecute() {
+		int index = model.getIndex(newShape);
 		model.remove(newShape);
-		model.add(oldShape);
+		model.addOnIndex(oldShape, index);
 		model.selectObject(oldShape);
 	}
 

@@ -6,30 +6,35 @@ import javax.swing.JFileChooser;
 
 public class SaveLog implements Strategy {
 
-	Frame frame = new Frame(); 
+	private Frame frame = new Frame(); 
+	
+	public SaveLog(Frame frame) {
+		this.frame=frame;
+	}
 
-	
-	
-	@Override
-	public void save() {	
-		String logString ;
-		int size=frame.getDlmList().getSize();
+	public void save(File file) {	
+		BufferedWriter buffer = null;
 		try {
-			FileWriter fileWriter = new FileWriter("This PC:\\Dektop");
+			buffer = new BufferedWriter(new FileWriter(file.getAbsolutePath()));
+			
+			String logString="";
+			int size=frame.getDlmList().getSize();
+
+			for(int i=0;i<size;i++) {
+				logString=frame.getDlmList().get(i);
+				buffer.write(logString);
+				buffer.newLine();
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		finally{
 			try {
-				for(int i=0;i<size;i++) {
-					logString=frame.getDlmList().get(i);
-					fileWriter.write(logString);
-					//fileWriter.flush();
-				}
+				buffer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			catch(Exception error) {
-				error.getStackTrace();
-			}finally {
-				fileWriter.close();
-			}
-		}catch(Exception err) {
-			err.getStackTrace();
 		}
 	}
 }

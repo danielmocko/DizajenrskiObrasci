@@ -185,29 +185,29 @@ public class Frame extends JFrame implements Observer{
 
 		btnOpen.addActionListener(new ActionListener() {	
 			public void actionPerformed(ActionEvent e) {
-				controller.openFiles(e);
+				controller.openFiles();
 			}
 		});
-		
+
 		btnUndo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.undo();
-				
+
 			}
 		});
-		
+
 		btnRedo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.redo();
-				
+
 			}
 		});
-		
+
 		btnLoad.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				controller.loadData();
-				
+
 			}
 		});
 
@@ -322,16 +322,13 @@ public class Frame extends JFrame implements Observer{
 		buttonGroup.add(getTglbtnPoint());
 		buttonGroup.add(getTglbtnSelect());
 
-		setButton();
+		updateView(0, 0, 0);
 	}
-	
 
-	public void updateView(int numberSelectedObjects) {
+
+	public void updateView(int numberSelectedObjects, int flag,int size) {
 		this.numberSelectedObjects=numberSelectedObjects;	
-		setButton();
-	}
 
-	public void setButton() {
 		if(this.numberSelectedObjects==0) {
 			this.btnModify.setEnabled(false);
 			this.btnDelete.setEnabled(false);
@@ -340,13 +337,33 @@ public class Frame extends JFrame implements Observer{
 			this.btnToFront.setEnabled(false);
 			this.btnToBack.setEnabled(false);
 		}
-		else if(this.numberSelectedObjects==1) {
+		else if(this.numberSelectedObjects==1 ) {
 			this.btnModify.setEnabled(true);
 			this.btnDelete.setEnabled(true);
-			this.btnBringToBack.setEnabled(true);
-			this.btnBringToFront.setEnabled(true);
-			this.btnToFront.setEnabled(true);
-			this.btnToBack.setEnabled(true);
+			if(size==1 ) {
+				this.btnBringToBack.setEnabled(false);
+				this.btnToBack.setEnabled(false);
+				this.btnBringToFront.setEnabled(false);
+				this.btnToFront.setEnabled(false);
+			}
+			else if(size>1 && flag==2) {
+				this.btnBringToBack.setEnabled(true);
+				this.btnToBack.setEnabled(true);
+				this.btnBringToFront.setEnabled(false);
+				this.btnToFront.setEnabled(false);
+			}
+			else if(size>1 && flag==1) {
+				this.btnBringToBack.setEnabled(false);
+				this.btnToBack.setEnabled(false);
+				this.btnBringToFront.setEnabled(true);
+				this.btnToFront.setEnabled(true);
+			}
+			else {
+				this.btnBringToBack.setEnabled(true);
+				this.btnToBack.setEnabled(true);
+				this.btnBringToFront.setEnabled(true);
+				this.btnToFront.setEnabled(true);
+			}
 		}
 		else {
 			this.btnModify.setEnabled(false);
@@ -357,7 +374,6 @@ public class Frame extends JFrame implements Observer{
 			this.btnToBack.setEnabled(false);
 		}
 	}
-
 
 	public void updateLog(String logList) {
 		getDlmList().add(0, logList);

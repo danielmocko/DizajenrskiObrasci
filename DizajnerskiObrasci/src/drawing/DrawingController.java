@@ -8,9 +8,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Spliterators;
@@ -457,11 +461,32 @@ public class DrawingController {
 		JFileChooser fileChooser = new JFileChooser("user.home");
 		fileChooser.setDialogTitle("Save a file");
 
+		FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("txt", "txt");
+		FileNameExtensionFilter filterImg = new FileNameExtensionFilter("pnt", "pnt");
+
+		fileChooser.setFileFilter(filterTxt);
+		fileChooser.addChoosableFileFilter(filterImg);
+
 		int returnValue = fileChooser.showSaveDialog(null);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			File output=fileChooser.getSelectedFile();
+			
+			FileStrategy fileStrategy = new FileStrategy();
 			if(!model.getLogList().isEmpty()) {
+				if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".txt")) {
+					
+					File file=new File(fileChooser.getSelectedFile().toString());
+					fileStrategy.setFileStrategy(new SaveLog(frame));
+					fileStrategy.createFile(file);
+				}
+				else if(fileChooser.getSelectedFile().getAbsolutePath().endsWith(".pnt")) {
+					File file=new File(fileChooser.getSelectedFile().toString());
+					fileStrategy.setFileStrategy(new SaveImage(frame));
+					fileStrategy.createFile(file);
+				}
+					
+				
 
+				/*
 				try {
 					File file = new File(output.getPath());
 					BufferedWriter buffer= new BufferedWriter(new FileWriter(file));
@@ -475,10 +500,12 @@ public class DrawingController {
 						buffer.newLine();
 					}
 					buffer.close();
+					/*
 				}
 				catch(Exception error) {
 					error.getStackTrace();
 				}
+			}*/
 			}
 		}
 	}
@@ -512,52 +539,79 @@ public class DrawingController {
 			}
 		}
 		catch(Exception error) {
-			error.getStackTrace();
+			System.out.println(error.getStackTrace());
 		}
 	}
 
 	public void redo() {
-		try {
-			model.addToLogList("Redo command");
-			unexecuteCommand.peek().execute();
-			executeCommand.push(unexecuteCommand.pop());
-			if(unexecuteCommand.isEmpty() && !executeCommand.isEmpty()) {
-				frame.getBtnUndo().setEnabled(true);
-				frame.getBtnRedo().setEnabled(false);
-			}else {
-				frame.getBtnUndo().setEnabled(true);
-				frame.getBtnRedo().setEnabled(true);
-			}
+
+		model.addToLogList("Redo command");
+		unexecuteCommand.peek().execute();
+		executeCommand.push(unexecuteCommand.pop());
+		if(unexecuteCommand.isEmpty() && !executeCommand.isEmpty()) {
+			frame.getBtnUndo().setEnabled(true);
+			frame.getBtnRedo().setEnabled(false);
+		}else {
+			frame.getBtnUndo().setEnabled(true);
+			frame.getBtnRedo().setEnabled(true);
 		}
-		catch(Exception error) {
-			error.getStackTrace();
-		}
+
+
 	}
 
 
-	public void openFiles(ActionEvent e) {
-
+	public void openFiles() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setDialogTitle("Open a File");
+		
+		FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("txt", "txt");
+		FileNameExtensionFilter filterImg = new FileNameExtensionFilter("pnt", "pnt");
+
+		fileChooser.setFileFilter(filterTxt);
+		fileChooser.addChoosableFileFilter(filterImg);
 
 		int result = fileChooser.showOpenDialog(null);
 		if(result== JFileChooser.APPROVE_OPTION) {
-			try {
-				File fileInput = fileChooser.getSelectedFile();
-				BufferedReader bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
+			if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".txt")) {
+				try {
+					
+					File fileInput = fileChooser.getSelectedFile();
+					BufferedReader bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
 
-				String input="";
+					String input="";
 
-				while((input=bufferRead.readLine())!=null) {
-					loadStack.push(input);
+					while((input=bufferRead.readLine())!=null) {
+						loadStack.push(input);
+					}
+					if(bufferRead!=null)
+						bufferRead.close();
 				}
-				if(bufferRead!=null)
-					bufferRead.close();
+				catch(Exception error) {
+					error.getStackTrace();
+				}
 			}
-			catch(Exception error) {
-				error.getStackTrace();
+			else if(fileChooser.getSelectedFile().getAbsolutePath().endsWith(".pnt")) {
+				File selectedFile = fileChooser.getSelectedFile();
+				try (FileInputStream file = new FileInputStream(selectedFile)) {
+					FileInputStream fis = new FileInputStream(selectedFile);
+					byte[] fileContent = new byte[(int) selectedFile.length()];
+					fis.read(fileContent);
+					//commandsLog.clear();
+	                //frame.textArea.setText(null);
+					//model.setShapes((ArrayList<Shape>) deserialize(fileContent));
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}	
+	}
+	
+	public Object deserialize(byte[] data) throws IOException, ClassNotFoundException{
+		
+		ByteArrayInputStream in = new ByteArrayInputStream(data);
+		ObjectInputStream ois = new ObjectInputStream(in);
+		return ois.readObject();
 	}
 
 	public void loadData() {

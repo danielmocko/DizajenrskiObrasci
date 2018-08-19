@@ -30,9 +30,16 @@ public class CommandRemove implements Command{
 			if(i==index) {
 				for(int j=model.getShapes().size()-1;j>=index;j--) {
 					if(j==index) {
+						if(j==model.getShapes().size()-1) {
+							Shape current = model.getShapes().get(j);
+							model.getShapes().add(j+1, current);
+							model.change(index, shape);
+						}
+						else {
 						Shape current = model.getShapes().get(j);
 						model.change(j+1, current);
 						model.change(index, shape);
+						}
 						return;
 					}
 					else if(j==model.getShapes().size()-1) {
@@ -42,7 +49,6 @@ public class CommandRemove implements Command{
 					else {
 						Shape current = model.getShapes().get(j);
 						model.change(j+1, current);
-						
 					}
 				}
 			}
