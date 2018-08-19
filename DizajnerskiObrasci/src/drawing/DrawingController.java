@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.ListIterator;
+import java.util.Spliterators;
 import java.util.Stack;
 
 import javax.swing.JColorChooser;
@@ -566,8 +567,71 @@ public class DrawingController {
 
 	public void loadData() {
 		if(!loadStack.isEmpty()) {
-			model.addToLogList(loadStack.pop());
-			
+			String input = loadStack.pop();
+			model.addToLogList(input);
+			String[] splitInput=input.split(" ");
+			for(int i=0;i<splitInput.length;i++) {
+				System.out.println(splitInput[i]);
+			}
+			if(splitInput[0].endsWith("Added")) {
+				if(splitInput[2].equals("Point:")) {
+					
+					point = new Point();
+					String[] splitCoordinate = splitInput[3].split("[)|\\,|\\(]");
+
+					
+					point.setX(Integer.valueOf(splitCoordinate[1]));
+					point.setY(Integer.valueOf(splitCoordinate[2]));
+					point.setEdgeColor(Color.decode(splitInput[5]));
+					addInStack(new CommandAdd(model,point));
+					
+				}
+				else if(splitInput[2].equals("Line:")) {
+					
+					line=new Line();
+					String[] splitCoordinateStart = splitInput[4].split("[)|\\,|\\(]");
+					String[] splitCoordinateEnd = splitInput[6].split("[)|\\,|\\(]");
+
+					
+					line.setpStart(new Point(Integer.parseInt(splitCoordinateStart[1]),Integer.parseInt(splitCoordinateStart[1])));
+					line.setpEnd(new Point(Integer.valueOf(splitCoordinateEnd[1]),Integer.valueOf(splitCoordinateEnd[2])));
+					line.setEdgeColor(Color.decode(splitInput[8]));
+					
+					addInStack(new CommandAdd(model, line));
+				}
+				else if(splitInput[2].equals("Square:")) {
+					square = new Square();
+					
+					String[] splitUpLeft = splitInput[4].split("[)|\\,|\\(]");
+					String[] splitPageLength = splitInput[5].split("=|,");
+					String[] splitBorderColor = splitInput[7].split(",");
+					
+					
+					square.setUpLeft(new Point(Integer.parseInt(splitUpLeft[1]),Integer.parseInt(splitUpLeft[2])));
+					square.setPageLength(Integer.parseInt(splitPageLength[1]));
+					
+					square.setEdgeColor(Color.decode(splitBorderColor[0]));
+					square.setInsideColor(Color.decode(splitInput[9]));
+					addInStack(new CommandAdd(model, square));
+				}else if(splitInput[2].equals("Rectangle:")) {
+					rectangle= new Rectangle();
+					
+					String[] splitUpLeft=splitInput[4].split("[)|\\,|\\(]");
+					String[] splitWidth = splitInput[5].split("=|,");
+					String[] splitHeight = splitInput[6].split("=|,");
+					String[] splitBorderColor = splitInput[8].split(",");
+					
+					rectangle.setUpLeft(new Point(Integer.parseInt(splitUpLeft[1]),Integer.parseInt(splitUpLeft[2])));
+					rectangle.setHeight(Integer.parseInt(splitHeight[1]));
+					rectangle.setPageLength(Integer.parseInt(splitWidth[1]));
+					rectangle.setEdgeColor(Color.decode(splitBorderColor[0]));
+					rectangle.setInsideColor(Color.decode(splitInput[10]));
+					
+					addInStack(new CommandAdd(model, rectangle));
+				}else if(splitInput[2].equals("Circle:")) {
+					
+				}
+			}			
 		}
 		return;
 	}
