@@ -1,20 +1,26 @@
 package drawing;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.DefaultListModel;
 
+import drawing.command.Command;
 import geometry.Shape;
 
 public class DrawingModel implements Observable {
 	private ArrayList<Observer> observers;
 	private ArrayList<String> logList;
 	private ArrayList<Shape> shapes;
+	private Stack<Command> executeCommand;
+	private Stack<Command> unexecuteCommand;
 
 	public DrawingModel() {
 		observers = new ArrayList<Observer>();
 		shapes = new ArrayList<Shape>();
 		logList= new ArrayList<String>();
+		executeCommand = new Stack<Command>();
+		unexecuteCommand = new Stack<Command>();
 	}
 
 	public void selectObject(Shape shape){
@@ -127,4 +133,22 @@ public class DrawingModel implements Observable {
 	public ArrayList<String> getLogList() {
 		return logList;
 	}
+
+	public Stack<Command> getExecuteCommand() {
+		return executeCommand;
+	}
+
+	public void setExecuteCommand(Stack<Command> executeCommand) {
+		this.executeCommand = executeCommand;
+	}
+
+	public Stack<Command> getUnexecuteCommand() {
+		return unexecuteCommand;
+	}
+
+	public void setUnexecuteCommand(Stack<Command> unexecuteCommand) {
+		this.unexecuteCommand = unexecuteCommand;
+	}
+	
+	
 }

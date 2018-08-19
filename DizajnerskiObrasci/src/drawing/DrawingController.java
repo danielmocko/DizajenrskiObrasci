@@ -678,45 +678,45 @@ public class DrawingController {
 				/*for(int i=0;i<stringObject.length;i++) {
 					System.out.println(stringObject[i]);
 				}
-				*/
+				 */
 				String oldString = "Modifyed --> "+ stringObject[1];
 				String newString = "Modifyed --> "+ stringObject[2];
-				
+
 				//System.out.println(oldString);
 				//System.out.println(newString);
-				
+
 				String[] oldObject =oldString.split(" "); 
 				String[] newObject =newString.split(" ");
-				
+
 				if(splitInput[3].equals("Point:")) {
 					Point oldPoint = pointFromSring(oldObject);
 					Point newPoint =pointFromSring(newObject);
-					
+
 					addInStack(new CommandModify(model, oldPoint, newPoint));
-				
+
 				}
 				else if(splitInput[3].equals("Line:")) {
 					Line oldLine = lineFromString(oldObject);
 					Line newLine = lineFromString(newObject);
-					
+
 					addInStack(new CommandModify(model, oldLine, newLine));
 				}
 				else if(splitInput[3].equals("Square:")) {
 					Square oldSquare = squareFromString(oldObject);
 					Square newSquare = squareFromString(newObject);
-					
+
 					addInStack(new CommandModify(model, oldSquare, newSquare));
-					
+
 				}
 				else if(splitInput[3].equals("Rectangle:")) {
-					
+
 					Rectangle oldRectangle = rectangleFromString(oldObject);
 					Rectangle newRectangle = rectangleFromString(newObject);
-					
+
 					addInStack(new CommandModify(model, oldRectangle, newRectangle));
-					
+
 				}else if(splitInput[3].equals("Circle:")) {
-					
+
 					Circle oldCircle = circleFromString(oldObject);
 					Circle newCircle = circleFromString(newObject);
 					addInStack(new CommandModify(model,oldCircle, newCircle));
@@ -724,14 +724,14 @@ public class DrawingController {
 				}else if(splitInput[3].equals("Hexagon:")){
 					HexagonAdapter oldHexagon = hexagonFromString(oldObject);
 					HexagonAdapter newHexagon = hexagonFromString(newObject);
-					
+
 					addInStack(new CommandModify(model, oldHexagon, newHexagon));
 				}
 			}else if(splitInput[0].equals("Deleted")) {
 				if(splitInput[2].equals("Point:")) {
-				
+
 					point = pointFromSring(splitInput);
-					
+
 					addInStack(new CommandRemove(model,point,model.getIndex(point)));	
 				}
 				else if(splitInput[2].equals("Line:")) {
@@ -790,35 +790,40 @@ public class DrawingController {
 				if(moveInput[2].equals("Point:")) {
 
 					point = pointFromSring(moveInput);
+					point.setSelected(true);
 					addInStack(new CommandBringToBack(model, point, model.getIndex(point)));
 				}
 				else if(moveInput[2].equals("Line:")) {
 
 					line= lineFromString(moveInput);
+					line.setSelected(true);
 					addInStack(new CommandBringToBack(model, line, model.getIndex(line)));
 				}
 				else if(moveInput[2].equals("Square:")) {
 
 					square = squareFromString(moveInput);
+					square.setSelected(true);
 					addInStack(new CommandBringToBack(model, square, model.getIndex(square)));	
 				}
 				else if(moveInput[2].equals("Rectangle:")) {
 
 					rectangle= rectangleFromString(moveInput);
+					rectangle.setSelected(true);
 					addInStack(new CommandBringToBack(model, rectangle, model.getIndex(rectangle)));
 
 				}else if(moveInput[2].equals("Circle:")) {
 
 					circle = circleFromString(moveInput);
+					circle.setSelected(true);
 					addInStack(new CommandBringToBack(model, circle, model.getIndex(circle)));
 
 				}else if(moveInput[2].equals("Hexagon:")){
 
 					hexagon=hexagonFromString(moveInput);
+					hexagon.setSelected(true);
 					addInStack(new CommandBringToBack(model, hexagon, model.getIndex(hexagon)));
 				}	
 			}
-			//Bringed to front
 			else if(splitInput[0].equals("Bringed") && splitInput[2].equals("front")) {
 				String [] moveInput = new String [splitInput.length-2];
 				int j=2;
@@ -836,6 +841,7 @@ public class DrawingController {
 				}
 				else if(moveInput[2].equals("Line:")) {
 					line= lineFromString(moveInput);
+					line.setSelected(true);
 					addInStack(new CommandBringToFront(model, line, model.getIndex(line)));
 				}
 				else if(moveInput[2].equals("Square:")) {
@@ -845,16 +851,27 @@ public class DrawingController {
 				}
 				else if(moveInput[2].equals("Rectangle:")) {
 					rectangle= rectangleFromString(moveInput);
+					rectangle.setSelected(true);
 					addInStack(new CommandBringToFront(model, rectangle, model.getIndex(rectangle)));
 
 				}else if(moveInput[2].equals("Circle:")) {
 					circle = circleFromString(moveInput);
+					circle.setSelected(true);
 					addInStack(new CommandBringToFront(model, circle, model.getIndex(circle)));
 
 				}else if(moveInput[2].equals("Hexagon:")){
 					hexagon=hexagonFromString(moveInput);
+					hexagon.setSelected(true);
 					addInStack(new CommandBringToFront(model, hexagon, model.getIndex(hexagon)));
 				}	
+			}
+			else if(input.equals("Undo command")) {
+				executeCommand.peek().unexecute();
+				unexecuteCommand.push(executeCommand.pop());
+			}
+			else if(input.equals("Redo command")) {
+				unexecuteCommand.peek().execute();
+				executeCommand.push(unexecuteCommand.pop());
 			}
 		}
 		return;
