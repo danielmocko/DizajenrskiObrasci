@@ -1,25 +1,26 @@
 package drawing.command;
 
 import drawing.DrawingModel;
+import geometry.Shape;
 
 public class CommandSelect implements Command{
 
 	private DrawingModel model;
-	private int index;
+	private Shape shape;
 	
-	public CommandSelect(DrawingModel model,int index) {
+	public CommandSelect(DrawingModel model,Shape shape) {
 		this.model=model;
-		this.index=index;
+		this.shape=shape;
 	}
 	
 	@Override
 	public void execute() {
-		model.selectObject(index);
+		model.selectObject(shape);
 	}
 
 	@Override
 	public void unexecute() {
-		model.diselectObject(index);
+		model.diselectObject(shape);
 	}
 
 }

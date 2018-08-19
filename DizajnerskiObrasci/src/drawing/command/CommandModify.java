@@ -19,12 +19,14 @@ public class CommandModify implements Command {
 	public void execute() {
 		model.remove(oldShape);
 		model.add(newShape);
+		model.selectObject(newShape);
 	}
 
 	@Override
 	public void unexecute() {
 		model.remove(newShape);
 		model.add(oldShape);
+		model.selectObject(oldShape);
 	}
 
 }

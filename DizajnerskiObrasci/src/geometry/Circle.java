@@ -26,7 +26,7 @@ public class Circle extends SurfaceShape implements Moveable {
 	}
 
 	public String toString() {
-		return "Circle: center: ("+center.getX()+","+center.getY()+"), radius="+r+", borderColor="+toHexString(getEdgeColor())+", areaColor="+toHexString(getInsideColor());
+		return "Circle: center: ("+center.getX()+","+center.getY()+"), radius="+r+", borderColor= "+toHexString(getEdgeColor())+", areaColor= "+toHexString(getInsideColor());
 	}
 
 	public int compareTo(Object o) {

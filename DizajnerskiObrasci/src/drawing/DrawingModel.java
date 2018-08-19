@@ -16,33 +16,41 @@ public class DrawingModel implements Observable {
 		shapes = new ArrayList<Shape>();
 		logList= new ArrayList<String>();
 	}
-	
-	public void selectObject(int index){
-		shapes.get(index).setSelected(true);
-		notifyMenu();
+
+	public void selectObject(Shape shape){
+		for(int i=0;i<shapes.size();i++) {
+			if(shapes.get(i).equals(shape)) {
+				shapes.get(i).setSelected(true);
+				notifyMenu();
+			}
+		}
 	}
-	
-	public void diselectObject(int index) {
-		shapes.get(index).setSelected(false);
-		notifyMenu();
+
+	public void diselectObject(Shape shape) {
+		for(int i=0;i<shapes.size();i++) {
+			if(shapes.get(i).equals(shape)) {
+				shapes.get(i).setSelected(false);
+				notifyMenu();
+			}
+		}
 	} 
 
 	public void notifyMenu() {
 		int numberSelectedObjects = numberSelectedObject();
-		
+
 		for(Observer observer:observers) {
 			observer.updateView(numberSelectedObjects);
 		}
 	}
-	
+
 	public void add(Shape o) {
 		shapes.add(o);
 	}
-	
+
 	public void remove(Shape o) {
 		shapes.remove(o);
 	}
-	
+
 	public int numberSelectedObject() {
 		int counter=0;
 		for(int i=0;i<shapes.size();i++) {
@@ -51,7 +59,7 @@ public class DrawingModel implements Observable {
 		}
 		return counter;
 	}
-	
+
 	public Shape getSelectedShape() {
 		Shape shape; 
 		for(int i=0;i<shapes.size();i++) {
@@ -60,20 +68,31 @@ public class DrawingModel implements Observable {
 		}
 		return null;
 	}
-	
+
 	public void removeByIndex(int index) {
 		shapes.remove(index);
 	}
 	
-	
+	public int getIndex(Shape shape) {
+		
+		for(int i=0;i<shapes.size();i++) {
+			if(shapes.get(i).equals(shape)) {
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+
+
 	public void notifyLog() {
 		String logList=getLogList().get(getLogList().size()-1);
 		for(Observer observer:observers) {
 			observer.updateLog(logList);
 		}
 	}
-	
-	
+
+
 	public ArrayList<Shape> getShapes() {
 		return shapes;
 	}
@@ -81,12 +100,12 @@ public class DrawingModel implements Observable {
 	public void setShapes(ArrayList<Shape> shapes) {
 		this.shapes = shapes;
 	}
-	
+
 	public void change(int i, Shape shape) {
 		shapes.remove(i);
 		shapes.add(i, shape);
 	}
-	
+
 	public void addToLogList(String string) {
 		logList.add(string);
 		notifyLog();
