@@ -230,8 +230,8 @@ public class DialogRectangle extends JDialog {
 						dlgRectangle.setUpLeft(upLeft);
 						dlgRectangle.setPageLength(Integer.parseInt(getTxtWidth().getText()));
 						dlgRectangle.setHeight(Integer.parseInt(getTxtHeight().getText()));
-						dlgRectangle.setEdgeColor(btnEdgeColor.getBackground());
-						dlgRectangle.setInsideColor(btnInsideColor.getBackground());
+						dlgRectangle.setBorderColor(btnEdgeColor.getBackground());
+						dlgRectangle.setAreaColor(btnInsideColor.getBackground());
 						setAccept(true);
 						setVisible(false);
 					} catch (Exception h) {

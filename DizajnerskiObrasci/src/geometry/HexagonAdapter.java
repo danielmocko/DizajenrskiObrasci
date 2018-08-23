@@ -2,10 +2,11 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import hexagon.Hexagon;
 
-public class HexagonAdapter extends SurfaceShape {
+public class HexagonAdapter extends SurfaceShape implements Serializable {
 	
 	private Hexagon hexagon;
 

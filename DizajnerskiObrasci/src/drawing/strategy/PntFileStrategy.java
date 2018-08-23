@@ -1,4 +1,4 @@
-package drawing;
+package drawing.strategy;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -6,14 +6,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-public class SaveImage implements Strategy {
-	private Frame frame;
+import drawing.FileStrategy;
+import drawing.Frame;
 
-	public SaveImage(Frame frame) {
+public class PntFileStrategy implements FileStrategy {
+	
+private Frame frame;
+	
+	public PntFileStrategy(Frame frame) {
 		this.frame = frame;
 	}
-
-	public void save(File selectedFile) {
+	
+	public void saveFile(File selectedFile) {
 		 
 		try (FileOutputStream fos = new FileOutputStream(selectedFile)) {
 			 byte[] imgByte = serialize(frame.getView().getModel().getShapes());

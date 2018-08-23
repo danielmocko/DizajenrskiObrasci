@@ -2,11 +2,12 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import geometry.Line;
 import geometry.Point;
 
-public class Circle extends SurfaceShape implements Moveable {
+public class Circle extends SurfaceShape implements Moveable,Serializable {
 	private Point center;
 	private int r;
 
@@ -19,14 +20,14 @@ public class Circle extends SurfaceShape implements Moveable {
 		this.r=r;
 	}
 
-	public Circle(Point center,int r,Color edgeColor,Color insideColor) {
+	public Circle(Point center,int r,Color borderColor,Color areaColor) {
 		this(center,r);
-		setEdgeColor(edgeColor);
-		setInsideColor(insideColor);
+		setBorderColor(borderColor);
+		setAreaColor(areaColor);
 	}
 
 	public String toString() {
-		return "Circle: center: ("+center.getX()+","+center.getY()+"), radius="+r+", borderColor= "+toHexString(getEdgeColor())+", areaColor= "+toHexString(getInsideColor());
+		return "Circle: center: ("+center.getX()+","+center.getY()+"), radius="+r+", borderColor= "+toHexString(getBorderColor())+", areaColor= "+toHexString(getAreaColor());
 	}
 
 	public int compareTo(Object o) {
@@ -71,9 +72,9 @@ public class Circle extends SurfaceShape implements Moveable {
 	}
 	@Override
 	public void drawColor(Graphics g) {
-		g.setColor(getEdgeColor());
+		g.setColor(getBorderColor());
 		g.drawOval(center.getX() - r, center.getY() - r, 2 * r, r * 2);
-		g.setColor(getInsideColor());
+		g.setColor(getAreaColor());
 		g.fillOval(center.getX() - r + 1, center.getY() - r + 1, 2 * r - 2, r * 2 - 2);
 		if(isSelected())
 			selected(g);

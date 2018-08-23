@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 public abstract class Shape implements Comparable {
-	private Color edgeColor;
+	private Color borderColor;
 	private boolean selected;
 	
 	public Shape() {
@@ -13,7 +13,7 @@ public abstract class Shape implements Comparable {
 	}
 	
 	public Shape(Color edgeColor) {
-		this.edgeColor=edgeColor;
+		this.borderColor=edgeColor;
 	}
 	
 	public abstract void drawSelf(Graphics g);
@@ -32,12 +32,14 @@ public abstract class Shape implements Comparable {
 		return "#" + hexColour;
 	}
 
-	public Color getEdgeColor() {
-		return edgeColor;
+	
+
+	public Color getBorderColor() {
+		return borderColor;
 	}
 
-	public void setEdgeColor(Color edgeColor) {
-		this.edgeColor = edgeColor;
+	public void setBorderColor(Color borderColor) {
+		this.borderColor = borderColor;
 	}
 
 	public boolean isSelected() {

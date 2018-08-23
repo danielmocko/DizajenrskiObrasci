@@ -213,8 +213,8 @@ public class DialogSquare extends JDialog {
 								Integer.parseInt(getTxtYCoordinate().getText()));
 						squareDialog.setUpLeft(goreLevo);
 						squareDialog.setPageLength(Integer.parseInt(getTxtSide().getText()));
-						squareDialog.setEdgeColor(btnEdgeColor.getBackground());
-						squareDialog.setInsideColor(btnInsideColor.getBackground());
+						squareDialog.setBorderColor(btnEdgeColor.getBackground());
+						squareDialog.setAreaColor(btnInsideColor.getBackground());
 						setAccept(true);
 						setVisible(false);
 

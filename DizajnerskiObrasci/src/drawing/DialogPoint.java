@@ -175,7 +175,7 @@ public class DialogPoint extends JDialog {
 						dlgPoint = new Point();
 						dlgPoint.setX(Integer.parseInt(getTxtXCoordinate().getText()));
 						dlgPoint.setY(Integer.parseInt(getTxtYCoordinate().getText()));
-						dlgPoint.setEdgeColor(btnColor.getBackground());
+						dlgPoint.setBorderColor(btnColor.getBackground());
 						setAccept(true);
 						setVisible(false);
 					} catch (Exception g) {

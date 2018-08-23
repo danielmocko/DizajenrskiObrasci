@@ -14,6 +14,7 @@ import javax.swing.JToggleButton;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
@@ -185,7 +186,12 @@ public class Frame extends JFrame implements Observer{
 
 		btnOpen.addActionListener(new ActionListener() {	
 			public void actionPerformed(ActionEvent e) {
-				controller.openFiles();
+				try {
+					controller.openFiles();
+				} catch (FileNotFoundException | ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 

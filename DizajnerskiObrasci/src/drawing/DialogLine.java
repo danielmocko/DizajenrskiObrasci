@@ -209,7 +209,7 @@ public class DialogLine extends JDialog {
 						// linijaDijalog.gettKrajnja().setY(Integer.parseInt(getTxtYkoordinataTKrajnja().getText()));
 						dlgLine.setpStart(pStart);
 						dlgLine.setpEnd(pEnd);
-						dlgLine.setEdgeColor(btnColorDlg.getBackground());
+						dlgLine.setBorderColor(btnColorDlg.getBackground());
 						// JOptionPane.showMessageDialog(null, tPocetna);
 						setAccept(true);
 						setVisible(false);

@@ -1,5 +1,6 @@
 package drawing;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -8,7 +9,7 @@ import javax.swing.DefaultListModel;
 import drawing.command.Command;
 import geometry.Shape;
 
-public class DrawingModel implements Observable {
+public class DrawingModel implements Observable,Serializable{
 	private ArrayList<Observer> observers;
 	private ArrayList<String> logList;
 	private ArrayList<Shape> shapes;

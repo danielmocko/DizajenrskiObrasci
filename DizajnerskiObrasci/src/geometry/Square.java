@@ -2,10 +2,12 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
+
 import geometry.Point;
 import geometry.Line;
 
-public class Square extends SurfaceShape implements Moveable{
+public class Square extends SurfaceShape implements Moveable,Serializable{
 	protected Point upLeft;
 	protected int pageLength;
 	
@@ -18,10 +20,10 @@ public class Square extends SurfaceShape implements Moveable{
 		this.pageLength=pageLength;
 	}
 	
-	public Square(Point upLeft, int pageLength,Color edgeColor, Color insideColor) {
+	public Square(Point upLeft, int pageLength,Color borderColor, Color areaColor) {
 		this(upLeft,pageLength);
-		setEdgeColor(edgeColor);
-		setInsideColor(insideColor);
+		setBorderColor(borderColor);
+		setAreaColor(areaColor);
 	}
 	
 	public Line diagonal() {
@@ -29,7 +31,7 @@ public class Square extends SurfaceShape implements Moveable{
 	}
 	
 	public String toString() {
-		return "Square: upLeftPoint: ("+upLeft.getX()+","+upLeft.getY()+"), pageLength="+pageLength+", borderColor= "+toHexString(getEdgeColor())+", areaColor= "+toHexString(getInsideColor());
+		return "Square: upLeftPoint: ("+upLeft.getX()+","+upLeft.getY()+"), pageLength="+pageLength+", borderColor= "+toHexString(getBorderColor())+", areaColor= "+toHexString(getAreaColor());
 	}
 	
 	public boolean equals(Object obj) {
@@ -88,9 +90,9 @@ public class Square extends SurfaceShape implements Moveable{
 
 	@Override
 	public void drawColor(Graphics g) {
-		g.setColor(getEdgeColor());
+		g.setColor(getBorderColor());
 		g.drawRect(upLeft.getX(), upLeft.getY(), pageLength, pageLength);
-		g.setColor(getInsideColor());
+		g.setColor(getAreaColor());
 		g.fillRect(getUpLeft().getX() + 1, getUpLeft().getY() + 1, pageLength - 1, pageLength - 1);
 		if(isSelected())
 			selected(g);

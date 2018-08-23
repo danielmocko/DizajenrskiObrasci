@@ -2,8 +2,13 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
-public class Line extends Shape implements Moveable{
+public class Line extends Shape implements Moveable,Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Point pStart;
 	private Point pEnd;
 
@@ -14,9 +19,9 @@ public class Line extends Shape implements Moveable{
 		this.pStart=pStart;
 		this.pEnd=pEnd;
 	}
-	public Line(Point pStart,Point pEnd,Color color) {
+	public Line(Point pStart,Point pEnd,Color borderColor) {
 		this(pStart,pEnd);
-		setEdgeColor(color);
+		setBorderColor(borderColor);
 	}
 
 	public Point centerLine() {
@@ -26,7 +31,7 @@ public class Line extends Shape implements Moveable{
 	}
 
 	public String toString() {
-		return "Line: start: ("+pStart.getX()+","+pStart.getY()+"), end: ("+pEnd.getX()+","+pEnd.getY()+"), color= "+toHexString(getEdgeColor());
+		return "Line: start: ("+pStart.getX()+","+pStart.getY()+"), end: ("+pEnd.getX()+","+pEnd.getY()+"), color= "+toHexString(getBorderColor());
 	}
 
 	public boolean equals(Object obj) {
@@ -55,14 +60,14 @@ public class Line extends Shape implements Moveable{
 	}
 
 	public void drawSelf(Graphics g) {
-		g.setColor(getEdgeColor());
+		g.setColor(getBorderColor());
 		g.drawLine(pStart.getX(), pStart.getY(), pEnd.getX(), pEnd.getY());
 		if(isSelected())
 			selected(g);
 	}
 
 	public void drawColor(Graphics g) {
-		g.setColor(getEdgeColor());
+		g.setColor(getBorderColor());
 		g.drawLine(pStart.getX(), pStart.getY(), pEnd.getX(), pEnd.getY());
 		if(isSelected())
 			selected(g);

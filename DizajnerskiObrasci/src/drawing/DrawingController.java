@@ -6,29 +6,24 @@ import java.awt.Color;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+
 import java.util.ArrayList;
 import java.util.ListIterator;
-import java.util.Spliterators;
 import java.util.Stack;
 
 import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
-
-import org.omg.CORBA.OMGVMCID;
 
 import drawing.DrawingModel;
 import drawing.command.Command;
@@ -41,15 +36,14 @@ import drawing.command.CommandRemove;
 import drawing.command.CommandSelect;
 import drawing.command.CommandToBack;
 import drawing.command.CommandToFront;
+import drawing.strategy.FileContext;
+import drawing.strategy.LogFileStrategy;
+import drawing.strategy.PntFileStrategy;
 import geometry.*;
-
 
 public class DrawingController {
 	private DrawingModel model;
-	private DrawingView view;
 	private Frame frame;
-
-	private Strategy strategy;
 
 	private DialogCircle dlgCircle;
 	private DialogSquare dlgSquare;
@@ -90,7 +84,7 @@ public class DrawingController {
 			y = e.getY();
 			Point t = new Point(x,y);
 
-			t.setEdgeColor(frame.getBtnEdgeColor().getBackground());
+			t.setBorderColor(frame.getBtnEdgeColor().getBackground());
 			model.addToLogList("Added --> "+t);
 			addInStack(new CommandAdd(model, t));
 
@@ -109,7 +103,7 @@ public class DrawingController {
 				t2 = new Point(x,y);
 
 				Line l = new Line(t1,t2);
-				l.setEdgeColor(frame.getBtnEdgeColor().getBackground());
+				l.setBorderColor(frame.getBtnEdgeColor().getBackground());
 				addInStack(new CommandAdd(model, l));
 				click=0;	
 				model.addToLogList("Added --> "+l);
@@ -247,7 +241,7 @@ public class DrawingController {
 	}
 
 	public void modify(ActionEvent e) {
-		ListIterator it1 = model.getShapes().listIterator(model.getShapes().size());
+		ListIterator<Shape> it1 = model.getShapes().listIterator(model.getShapes().size());
 
 		while(it1.hasPrevious()) {
 			Shape shape = (Shape) it1.previous();
@@ -257,7 +251,7 @@ public class DrawingController {
 					dlgPoint = new DialogPoint();
 					dlgPoint.getTxtXCoordinate().setText(String.valueOf(point.getX()));
 					dlgPoint.getTxtYCoordinate().setText(String.valueOf(point.getY()));
-					dlgPoint.getBtnColor().setBackground(point.getEdgeColor());
+					dlgPoint.getBtnColor().setBackground(point.getBorderColor());
 					dlgPoint.setVisible(true);
 					if (dlgPoint.isAccept()) {
 
@@ -275,7 +269,7 @@ public class DrawingController {
 					dlgLine.getTxtYCoordinateStartPoint().setText(String.valueOf(line.getpStart().getY()));
 					dlgLine.getTxtXCoordinateEndPoint().setText(String.valueOf(line.getpEnd().getX()));
 					dlgLine.getTxtYCoordinateEndPoint().setText(String.valueOf(line.getpEnd().getY()));
-					dlgLine.getBtnColorDlg().setBackground(line.getEdgeColor());
+					dlgLine.getBtnColorDlg().setBackground(line.getBorderColor());
 					dlgLine.setVisible(true);
 					if(dlgLine.isAccept()) {
 
@@ -292,8 +286,8 @@ public class DrawingController {
 					dlgCircle.getTxtXCenter().setText(String.valueOf(circle.getCenter().getX()));
 					dlgCircle.getTxtYCenter().setText(String.valueOf(circle.getCenter().getY()));
 					dlgCircle.getTxtRadius().setText(String.valueOf(circle.getR()));
-					dlgCircle.getBtnEdgeColor().setBackground(circle.getEdgeColor());
-					dlgCircle.getBtnInsideColor().setBackground(circle.getInsideColor());
+					dlgCircle.getBtnEdgeColor().setBackground(circle.getBorderColor());
+					dlgCircle.getBtnInsideColor().setBackground(circle.getAreaColor());
 					dlgCircle.setVisible(true);
 					if(dlgCircle.isAccept()) {
 
@@ -312,8 +306,8 @@ public class DrawingController {
 					dlgRectangle.getTxtYCoordinate().setText(String.valueOf(rectangle.getUpLeft().getY()));
 					dlgRectangle.getTxtWidth().setText(String.valueOf(rectangle.getPageLength()));
 					dlgRectangle.getTxtHeight().setText(String.valueOf(rectangle.getHeight()));
-					dlgRectangle.getBtnEdgeColor().setBackground(rectangle.getEdgeColor());
-					dlgRectangle.getBtnInsideColor().setBackground(rectangle.getInsideColor());
+					dlgRectangle.getBtnEdgeColor().setBackground(rectangle.getBorderColor());
+					dlgRectangle.getBtnInsideColor().setBackground(rectangle.getAreaColor());
 					dlgRectangle.setVisible(true);
 					if(dlgRectangle.isAccept()) {
 
@@ -332,8 +326,8 @@ public class DrawingController {
 					dlgSquare.getTxtXCoordinate().setText(String.valueOf(square.getUpLeft().getX()));
 					dlgSquare.getTxtYCoordinate().setText(String.valueOf(square.getUpLeft().getY()));
 					dlgSquare.getTxtSide().setText(String.valueOf(square.getPageLength()));
-					dlgSquare.getBtnEdgeColor().setBackground(square.getEdgeColor());
-					dlgSquare.getBtnInsideColor().setBackground(square.getInsideColor());
+					dlgSquare.getBtnEdgeColor().setBackground(square.getBorderColor());
+					dlgSquare.getBtnInsideColor().setBackground(square.getAreaColor());
 					dlgSquare.setVisible(true);
 					if(dlgSquare.isAccept()) {
 
@@ -458,6 +452,50 @@ public class DrawingController {
 		}
 	}
 	public void saving(ActionEvent e) {
+
+
+		JFileChooser fileChooser = new JFileChooser();
+		File selectedFile = null;
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("log", "log");
+		FileNameExtensionFilter filterPnt = new FileNameExtensionFilter("pnt", "pnt");
+
+		fileChooser.setFileFilter(filter);
+		fileChooser.addChoosableFileFilter(filterPnt);
+
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+		int result = fileChooser.showSaveDialog(frame.getView());
+
+		if (result == JFileChooser.APPROVE_OPTION) {
+
+			FileContext ctx = new FileContext();
+
+			if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".log")) {
+
+				selectedFile = new File(fileChooser.getSelectedFile().toString());
+				ctx.setFileStrategy(new LogFileStrategy(frame));
+				ctx.createFile(selectedFile);
+			}
+			else if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".pnt")) {
+
+				selectedFile = new File(fileChooser.getSelectedFile().toString());
+				ctx.setFileStrategy(new PntFileStrategy(frame));
+				ctx.createFile(selectedFile);
+			}
+			else {
+
+				selectedFile = new File(fileChooser.getSelectedFile() + ".pnt");
+				ctx.setFileStrategy(new PntFileStrategy(frame));
+				ctx.createFile(selectedFile);
+			}
+		}
+
+
+	}
+
+
+
+	/*
 		JFileChooser fileChooser = new JFileChooser("user.home");
 		fileChooser.setDialogTitle("Save a file");
 
@@ -469,11 +507,11 @@ public class DrawingController {
 
 		int returnValue = fileChooser.showSaveDialog(null);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			
+
 			FileStrategy fileStrategy = new FileStrategy();
 			if(!model.getLogList().isEmpty()) {
 				if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".txt")) {
-					
+
 					File file=new File(fileChooser.getSelectedFile().toString());
 					fileStrategy.setFileStrategy(new SaveLog(frame));
 					fileStrategy.createFile(file);
@@ -483,8 +521,8 @@ public class DrawingController {
 					fileStrategy.setFileStrategy(new SaveImage(frame));
 					fileStrategy.createFile(file);
 				}
-					
-				
+
+
 
 				/*
 				try {
@@ -505,10 +543,10 @@ public class DrawingController {
 				catch(Exception error) {
 					error.getStackTrace();
 				}
-			}*/
+			}
 			}
 		}
-	}
+	}*/
 
 	public void addInStack(Command command) {
 		command.execute();
@@ -560,21 +598,26 @@ public class DrawingController {
 	}
 
 
-	public void openFiles() {
+	public void openFiles() throws FileNotFoundException,ClassNotFoundException {
 		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setDialogTitle("Open a File");
-		
-		FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("txt", "txt");
-		FileNameExtensionFilter filterImg = new FileNameExtensionFilter("pnt", "pnt");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("log", "log");
+		FileNameExtensionFilter filterPnt = new FileNameExtensionFilter("pnt", "pnt");
+		File selectedFile = null;
 
-		fileChooser.setFileFilter(filterTxt);
-		fileChooser.addChoosableFileFilter(filterImg);
+		fileChooser.setFileFilter(filter);
+		fileChooser.addChoosableFileFilter(filterPnt);
+		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 
-		int result = fileChooser.showOpenDialog(null);
-		if(result== JFileChooser.APPROVE_OPTION) {
-			if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".txt")) {
+		int result = fileChooser.showOpenDialog(frame.getView());
+
+		selectedFile = fileChooser.getSelectedFile();
+
+
+		BufferedReader reader = null;
+		if(!fileChooser.getSelectedFile().getAbsolutePath().isEmpty()) {
+			if (selectedFile.getAbsolutePath().endsWith(".log")) {
 				try {
-					
+
 					File fileInput = fileChooser.getSelectedFile();
 					BufferedReader bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
 
@@ -590,30 +633,26 @@ public class DrawingController {
 					error.getStackTrace();
 				}
 			}
-			else if(fileChooser.getSelectedFile().getAbsolutePath().endsWith(".pnt")) {
-				File selectedFile = fileChooser.getSelectedFile();
-				try (FileInputStream file = new FileInputStream(selectedFile)) {
-					FileInputStream fis = new FileInputStream(selectedFile);
+			else if (selectedFile.getAbsolutePath().endsWith(".pnt")) {
+				try (FileInputStream fis = new FileInputStream(selectedFile)) {
 					byte[] fileContent = new byte[(int) selectedFile.length()];
 					fis.read(fileContent);
-					//commandsLog.clear();
-	                //frame.textArea.setText(null);
-					//model.setShapes((ArrayList<Shape>) deserialize(fileContent));
+					model.setShapes((ArrayList<Shape>) deserialize(fileContent));
 				}
 				catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-		}	
+		}
 	}
-	
+
 	public Object deserialize(byte[] data) throws IOException, ClassNotFoundException{
 		
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 		ObjectInputStream ois = new ObjectInputStream(in);
 		return ois.readObject();
 	}
-
+	
 	public void loadData() {
 		if(!loadStack.isEmpty()) {
 			String input = loadStack.pop();

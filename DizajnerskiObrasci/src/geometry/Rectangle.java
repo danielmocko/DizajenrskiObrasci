@@ -2,13 +2,14 @@ package geometry;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import com.sun.org.apache.regexp.internal.recompile;
 
 import geometry.Line;
 import geometry.Point;
 
-public class Rectangle extends Square {
+public class Rectangle extends Square implements Serializable{
 	private int height;
 	
 	public Rectangle() {
@@ -20,10 +21,10 @@ public class Rectangle extends Square {
 		this.height=height;
 	}
 	
-	public Rectangle(Point upLeft, int width, int height,Color edgeColor, Color insideColor) {
+	public Rectangle(Point upLeft, int width, int height,Color borderColor, Color areaColor) {
 		this(upLeft,width,height);
-		setEdgeColor(edgeColor);
-		setInsideColor(insideColor);
+		setAreaColor(areaColor);
+		setBorderColor(borderColor);
 	}
 	
 	public Line diagonal() {
@@ -48,7 +49,7 @@ public class Rectangle extends Square {
 	}
 	
 	public String toString() {
-		return "Rectangle: upLeftPoint: ("+getUpLeft().getX()+","+getUpLeft().getY()+"), width="+getPageLength()+", height="+getHeight()+", borderColor= "+toHexString(getEdgeColor())+", areaColor= "+toHexString(getInsideColor());
+		return "Rectangle: upLeftPoint: ("+getUpLeft().getX()+","+getUpLeft().getY()+"), width="+getPageLength()+", height="+getHeight()+", borderColor= "+toHexString(getBorderColor())+", areaColor= "+toHexString(getAreaColor());
 	}
 	
 	public int bulk() {
@@ -78,9 +79,9 @@ public class Rectangle extends Square {
 	}
 	
 	public void drawColor(Graphics g) {
-		g.setColor(getEdgeColor());
+		g.setColor(getBorderColor());
 		g.drawRect(upLeft.getX(), upLeft.getY(), getPageLength(), height);
-		g.setColor(getInsideColor());
+		g.setColor(getAreaColor());
 		g.fillRect(upLeft.getX() + 1, upLeft.getY() + 1, getPageLength() - 1, height - 1);
 		if(isSelected())
 			selected(g);

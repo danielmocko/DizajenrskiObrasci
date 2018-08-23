@@ -1,9 +1,10 @@
 package geometry;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 import java.awt.Color;
 
-public class Point extends Shape implements Moveable{
+public class Point extends Shape implements Moveable,Serializable{
 	private int x;
 	private int y;
 	
@@ -16,13 +17,13 @@ public class Point extends Shape implements Moveable{
 		this.y=y;
 	}
 	
-	public Point(int x, int y,Color color) {
+	public Point(int x, int y,Color borderColor) {
 		this(x,y);
-		setEdgeColor(color);
+		setBorderColor(borderColor);
 	}
 	
 	public String toString() {
-		return "Point: (" + this.x + "," + this.y + ")"+", color= "+toHexString(getEdgeColor());
+		return "Point: (" + this.x + "," + this.y + ")"+", color= "+toHexString(getBorderColor());
 	}
 	
 	public boolean equals(Object obj) {
@@ -66,7 +67,7 @@ public class Point extends Shape implements Moveable{
 	}
 
 	public void drawColor(Graphics g) {
-		g.setColor(getEdgeColor());
+		g.setColor(getBorderColor());
 		g.drawLine(x - 2, y, x + 2, y);
 		g.drawLine(x, y - 2, x, y + 2);
 		if (isSelected())

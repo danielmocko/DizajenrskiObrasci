@@ -32,8 +32,8 @@ public class DialogCircle extends JDialog {
 	private JTextField txtXCenter;
 	private JTextField txtYCenter;
 
-	private Color edgeColorDialog;
-	private Color insideColorDialog;
+	private Color borderColorDialog;
+	private Color areaColorDialog;
 	private JButton btnInsideColor;
 	private JButton btnEdgeColor;
 	private Circle circle;
@@ -188,17 +188,17 @@ public class DialogCircle extends JDialog {
 			buttonPane.setLayout(gl_buttonPane);
 			btnEdgeColor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					edgeColorDialog = JColorChooser.showDialog(null, "Edge color",edgeColorDialog);
-					if(edgeColorDialog!=null) {
-						btnEdgeColor.setBackground(edgeColorDialog);
+					borderColorDialog = JColorChooser.showDialog(null, "Edge color",borderColorDialog);
+					if(borderColorDialog!=null) {
+						btnEdgeColor.setBackground(borderColorDialog);
 					}
 				}
 			});
 			btnInsideColor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					insideColorDialog = JColorChooser.showDialog(null, "Inside color", insideColorDialog);
-					if(insideColorDialog!=null) {
-						btnInsideColor.setBackground(insideColorDialog);
+					areaColorDialog = JColorChooser.showDialog(null, "Inside color", areaColorDialog);
+					if(areaColorDialog!=null) {
+						btnInsideColor.setBackground(areaColorDialog);
 					}
 				}
 			});
@@ -211,8 +211,8 @@ public class DialogCircle extends JDialog {
 							Integer.parseInt(getTxtYCenter().getText()));
 					circle.setCenter(center);
 					circle.setR(Integer.parseInt(getTxtRadius().getText()));
-					circle.setEdgeColor(getBtnEdgeColor().getBackground());
-					circle.setInsideColor(getBtnInsideColor().getBackground());
+					circle.setBorderColor(getBtnEdgeColor().getBackground());
+					circle.setAreaColor(getBtnInsideColor().getBackground());
 					setVisible(false);
 					setAccept(true);
 				}
@@ -259,22 +259,6 @@ public class DialogCircle extends JDialog {
 		this.txtYCenter = txtYCenter;
 	}
 
-	public Color getEdgeColorDialog() {
-		return edgeColorDialog;
-	}
-
-	public void setEdgeColorDialog(Color edgeColorDialog) {
-		this.edgeColorDialog = edgeColorDialog;
-	}
-
-	public Color getInsideColorDialog() {
-		return insideColorDialog;
-	}
-
-	public void setInsideColorDialog(Color insideColorDialog) {
-		this.insideColorDialog = insideColorDialog;
-	}
-
 	public JButton getBtnInsideColor() {
 		return btnInsideColor;
 	}
@@ -319,4 +303,20 @@ public class DialogCircle extends JDialog {
 		return contentPanel;
 	}
 
+	public Color getBorderColorDialog() {
+		return borderColorDialog;
+	}
+
+	public void setBorderColorDialog(Color borderColorDialog) {
+		this.borderColorDialog = borderColorDialog;
+	}
+
+	public Color getAreaColorDialog() {
+		return areaColorDialog;
+	}
+
+	public void setAreaColorDialog(Color areaColorDialog) {
+		this.areaColorDialog = areaColorDialog;
+	}
+	
 }
