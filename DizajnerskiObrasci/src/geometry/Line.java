@@ -15,6 +15,7 @@ public class Line extends Shape implements Moveable,Serializable{
 		this.pStart=pStart;
 		this.pEnd=pEnd;
 	}
+	
 	public Line(Point pStart,Point pEnd,Color borderColor) {
 		this(pStart,pEnd);
 		setBorderColor(borderColor);

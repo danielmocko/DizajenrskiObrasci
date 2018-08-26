@@ -129,6 +129,7 @@ public class Frame extends JFrame implements Observer{
 
 		btnEdgeColor = new JButton("Eg");
 		btnEdgeColor.setBackground(Color.BLACK);
+		
 		btnEdgeColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.edgeColor(e);
@@ -137,6 +138,7 @@ public class Frame extends JFrame implements Observer{
 
 		btnInsideColor = new JButton("Ic");
 		btnInsideColor.setBackground(Color.WHITE);
+		
 		btnInsideColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.insideColor(e);
@@ -191,7 +193,6 @@ public class Frame extends JFrame implements Observer{
 				try {
 					controller.openFiles();
 				} catch (FileNotFoundException | ClassNotFoundException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}

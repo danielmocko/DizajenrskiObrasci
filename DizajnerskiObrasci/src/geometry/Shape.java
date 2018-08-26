@@ -12,11 +12,9 @@ public abstract class Shape implements Comparable {
 		
 	}
 	
-	public Shape(Color edgeColor) {
-		this.borderColor=edgeColor;
+	public Shape(Color borderColor) {
+		this.borderColor=borderColor;
 	}
-	
-	public abstract void drawSelf(Graphics g);
 	
 	public abstract void drawColor(Graphics g);
 	
@@ -31,8 +29,6 @@ public abstract class Shape implements Comparable {
 		}
 		return "#" + hexColour;
 	}
-
-	
 
 	public Color getBorderColor() {
 		return borderColor;

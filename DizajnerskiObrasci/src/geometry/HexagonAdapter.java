@@ -10,10 +10,10 @@ public class HexagonAdapter extends SurfaceShape implements Serializable {
 	
 	private Hexagon hexagon;
 
-	public HexagonAdapter(int x, int y, int r,Color edgeColor, Color innerColor) {
+	public HexagonAdapter(int x, int y, int r,Color borderColor, Color areaColor) {
 		hexagon = new Hexagon(x,y,r);
-		hexagon.setAreaColor(innerColor);
-		hexagon.setBorderColor(edgeColor);
+		hexagon.setAreaColor(areaColor);
+		hexagon.setBorderColor(borderColor);
 	}
 	
 	public int compareTo(Object o) {
@@ -24,7 +24,6 @@ public class HexagonAdapter extends SurfaceShape implements Serializable {
 		g.setColor(hexagon.getBorderColor());
 		fill(g);
 		hexagon.paint(g);
-		
 		selected(g);
 	}
 
@@ -55,16 +54,11 @@ public class HexagonAdapter extends SurfaceShape implements Serializable {
 		return hexagon.doesContain(x, y);
 	}
 
-	public void drawSelf(Graphics g) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void fill(Graphics g) {
 		g.setColor(hexagon.getAreaColor());
-		
 	}
+	
 
 	public Hexagon getHexagon() {
 		return hexagon;

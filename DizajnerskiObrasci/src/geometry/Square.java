@@ -78,13 +78,8 @@ public class Square extends SurfaceShape implements Moveable,Serializable{
 
 	@Override
 	public void fill(Graphics g) {
+		g.setColor(getAreaColor());
 		g.fillRect(upLeft.getX()+1, upLeft.getY()+1, pageLength-1, pageLength-1);;
-		
-	}
-
-	@Override
-	public void drawSelf(Graphics g) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -92,8 +87,7 @@ public class Square extends SurfaceShape implements Moveable,Serializable{
 	public void drawColor(Graphics g) {
 		g.setColor(getBorderColor());
 		g.drawRect(upLeft.getX(), upLeft.getY(), pageLength, pageLength);
-		g.setColor(getAreaColor());
-		g.fillRect(getUpLeft().getX() + 1, getUpLeft().getY() + 1, pageLength - 1, pageLength - 1);
+		fill(g);
 		if(isSelected())
 			selected(g);
 	}

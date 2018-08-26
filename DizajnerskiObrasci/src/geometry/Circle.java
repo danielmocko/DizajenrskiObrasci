@@ -60,22 +60,18 @@ public class Circle extends SurfaceShape implements Moveable,Serializable {
 		center.setX(x);
 		center.setY(y);
 	}
+	
 	@Override
 	public void fill(Graphics g) {
-		// TODO Auto-generated method stub
-
+		g.setColor(getAreaColor());
+		g.fillOval(center.getX() - r + 1, center.getY() - r + 1, 2 * r - 2, r * 2 - 2);
 	}
-	@Override
-	public void drawSelf(Graphics g) {
-		// TODO Auto-generated method stub
-
-	}
+	
 	@Override
 	public void drawColor(Graphics g) {
 		g.setColor(getBorderColor());
 		g.drawOval(center.getX() - r, center.getY() - r, 2 * r, r * 2);
-		g.setColor(getAreaColor());
-		g.fillOval(center.getX() - r + 1, center.getY() - r + 1, 2 * r - 2, r * 2 - 2);
+		fill(g);
 		if(isSelected())
 			selected(g);
 	}

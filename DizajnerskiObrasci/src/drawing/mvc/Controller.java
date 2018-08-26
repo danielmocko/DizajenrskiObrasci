@@ -85,6 +85,7 @@ public class Controller {
 
 	public void panelClick(MouseEvent e) {
 		if(frame.getTglbtnPoint().isSelected()) {
+			diselect();
 			x = e.getX();
 			y = e.getY();
 			Point t = new Point(x,y);
@@ -95,7 +96,7 @@ public class Controller {
 
 		}
 		else if(frame.getTglbtnLine().isSelected()) {
-
+			diselect();
 			if(click==0) {
 				Point1_x=e.getX();
 				Point1_y=e.getY();
@@ -115,6 +116,7 @@ public class Controller {
 			}
 		}
 		else if(frame.getTglbtnCircle().isSelected()) {
+			diselect();
 			x=e.getX();
 			y=e.getY();
 			dlgCircle= new DialogCircle();
@@ -138,6 +140,7 @@ public class Controller {
 			}
 		}
 		else if(frame.getTglbtnSquare().isSelected()) {
+			diselect();
 			x=e.getX();
 			y=e.getY();
 			dlgSquare= new DialogSquare();
@@ -159,6 +162,7 @@ public class Controller {
 			}
 		}
 		else if(frame.getTglbtnRectangle().isSelected()) {
+			diselect();
 			x=e.getX();
 			y=e.getY();
 
@@ -181,7 +185,7 @@ public class Controller {
 
 			}
 		}else if(frame.getTglbtnHexagon().isSelected()) {
-
+			diselect();
 			x=e.getX();
 			y=e.getY();
 			dlgHexagon= new DialogHexagon();
@@ -213,7 +217,7 @@ public class Controller {
 				if(model.getShapes().get(i).contains(x, y)) {
 					if(!model.getShapes().get(i).isSelected()) {
 						selected=true;
-						model.addToLogList("Selected --> "+model.getShapes().get(i));
+						model.addToLogList("Selected --> "+model.getShapes().get(i).toString());
 						addInStack(new CommandSelect(model, model.getShapes().get(i)));
 						return;
 					}else {
@@ -225,21 +229,25 @@ public class Controller {
 			}
 
 			if(selected ==false) {
-				if(model.numberSelectedObject()>1) {
-					for(int i=0;i<model.getShapes().size();i++) {
-						if(model.getShapes().get(i).isSelected())
-							addInStack(new CommandDiselect(model, model.getShapes().get(i)));
-					}
-					model.addToLogList("Diselected --> All selected objects");
-				}
-				else if(model.numberSelectedObject()==1) {
-					for(int i=0;i<model.getShapes().size();i++) {
-						if(model.getShapes().get(i).isSelected()) {
-							addInStack(new CommandDiselect(model, model.getShapes().get(i)));
-							model.addToLogList("Diselected --> "+model.getShapes().get(i));
-							return;
-						}
-					}
+				diselect();
+			}
+		}
+	}
+
+	public void diselect() {
+		if(model.numberSelectedObject()>1) {
+			for(int i=0;i<model.getShapes().size();i++) {
+				if(model.getShapes().get(i).isSelected())
+					addInStack(new CommandDiselect(model, model.getShapes().get(i)));
+			}
+			model.addToLogList("Diselected --> All selected objects");
+		}
+		else if(model.numberSelectedObject()==1) {
+			for(int i=0;i<model.getShapes().size();i++) {
+				if(model.getShapes().get(i).isSelected()) {
+					addInStack(new CommandDiselect(model, model.getShapes().get(i)));
+					model.addToLogList("Diselected --> "+model.getShapes().get(i));
+					return;
 				}
 			}
 		}
@@ -618,13 +626,12 @@ public class Controller {
 		selectedFile = fileChooser.getSelectedFile();
 
 
-		BufferedReader reader = null;
+		BufferedReader bufferRead = null;
 		if(!fileChooser.getSelectedFile().getAbsolutePath().isEmpty()) {
 			if (selectedFile.getAbsolutePath().endsWith(".log")) {
 				try {
-
 					File fileInput = fileChooser.getSelectedFile();
-					BufferedReader bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
+					bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
 
 					String input="";
 
@@ -652,12 +659,12 @@ public class Controller {
 	}
 
 	public Object deserialize(byte[] data) throws IOException, ClassNotFoundException{
-		
+
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 		ObjectInputStream ois = new ObjectInputStream(in);
 		return ois.readObject();
 	}
-	
+
 	public void loadData() {
 		if(!loadStack.isEmpty()) {
 			String input = loadStack.pop();
