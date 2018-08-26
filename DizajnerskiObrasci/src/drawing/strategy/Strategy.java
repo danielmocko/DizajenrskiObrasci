@@ -1,8 +1,8 @@
-package drawing;
+package drawing.strategy;
 
 import java.io.File;
 
-public interface FileStrategy {
+public interface Strategy {
 
 	public void saveFile(File selectedFile);
 }

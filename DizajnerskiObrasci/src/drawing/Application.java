@@ -1,10 +1,15 @@
 package drawing;
 
 import javax.swing.JFrame;
+
+import drawing.mvc.Controller;
+import drawing.mvc.Frame;
+import drawing.mvc.Model;
+
 import java.awt.GridBagLayout;
 
 
-public class PaintApplication {
+public class Application {
 	//private static final ButtonGroup buttonGroup = new ButtonGroup();
 
 	public static void main(String[] args) {
@@ -12,9 +17,9 @@ public class PaintApplication {
 		Frame frame = new Frame();
 		GridBagLayout gridBagLayout = (GridBagLayout) frame.getContentPane().getLayout();
 		gridBagLayout.rowHeights = new int[]{0, 338, 154};
-		DrawingModel model = new DrawingModel();
+		Model model = new Model();
 		
-		DrawingController controller = new DrawingController(model,frame);
+		Controller controller = new Controller(model,frame);
 		
 		frame.setController(controller);
 		frame.setSize(1200,600);

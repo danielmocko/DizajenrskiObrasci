@@ -1,15 +1,15 @@
 package drawing.command;
 
-import drawing.DrawingModel;
+import drawing.mvc.Model;
 import geometry.Shape;
 
 public class CommandModify implements Command {
 
-	private DrawingModel model;
+	private Model model;
 	private Shape oldShape;
 	private Shape newShape;
 	
-	public CommandModify(DrawingModel model,Shape oldShape, Shape newShape) {
+	public CommandModify(Model model,Shape oldShape, Shape newShape) {
 		this.model=model;
 		this.oldShape=oldShape;
 		this.newShape=newShape;

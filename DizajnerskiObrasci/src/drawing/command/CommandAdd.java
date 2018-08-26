@@ -1,14 +1,14 @@
 package drawing.command;
 
-import drawing.DrawingModel;
+import drawing.mvc.Model;
 import geometry.Shape;
 
 public class CommandAdd implements Command {
 	
-	private DrawingModel model;
+	private Model model;
 	private Shape shape;
 	
-	public CommandAdd(DrawingModel model,Shape shape) {
+	public CommandAdd(Model model,Shape shape) {
 		this.model=model;
 		this.shape=shape;
 	}

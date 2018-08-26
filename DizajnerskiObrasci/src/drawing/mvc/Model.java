@@ -1,4 +1,4 @@
-package drawing;
+package drawing.mvc;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,16 +7,18 @@ import java.util.Stack;
 import javax.swing.DefaultListModel;
 
 import drawing.command.Command;
+import drawing.observer.Observable;
+import drawing.observer.Observer;
 import geometry.Shape;
 
-public class DrawingModel implements Observable,Serializable{
+public class Model implements Observable,Serializable{
 	private ArrayList<Observer> observers;
 	private ArrayList<String> logList;
 	private ArrayList<Shape> shapes;
 	private Stack<Command> executeCommand;
 	private Stack<Command> unexecuteCommand;
 
-	public DrawingModel() {
+	public Model() {
 		observers = new ArrayList<Observer>();
 		shapes = new ArrayList<Shape>();
 		logList= new ArrayList<String>();

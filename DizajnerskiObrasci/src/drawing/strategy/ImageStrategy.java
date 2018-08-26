@@ -6,14 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import drawing.FileStrategy;
-import drawing.Frame;
+import drawing.mvc.Frame;
 
-public class PntFileStrategy implements FileStrategy {
+public class ImageStrategy implements Strategy {
 	
 private Frame frame;
 	
-	public PntFileStrategy(Frame frame) {
+	public ImageStrategy(Frame frame) {
 		this.frame = frame;
 	}
 	

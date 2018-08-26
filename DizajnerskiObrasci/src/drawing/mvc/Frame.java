@@ -1,4 +1,4 @@
-package drawing;
+package drawing.mvc;
 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import com.sun.jmx.mbeanserver.SunJmxMBeanServer;
+
+import drawing.observer.Observer;
 
 import javax.swing.JToggleButton;
 import java.awt.Color;
@@ -29,8 +31,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 
 public class Frame extends JFrame implements Observer{
-	private DrawingView view = new DrawingView();
-	private DrawingController controller ;
+	private View view = new View();
+	private Controller controller ;
 
 	private JButton btnOpen;
 	private JButton btnSave;
@@ -386,19 +388,19 @@ public class Frame extends JFrame implements Observer{
 	}
 
 
-	public DrawingView getView() {
+	public View getView() {
 		return view;
 	}
 
-	public void setView(DrawingView view) {
+	public void setView(View view) {
 		this.view = view;
 	}
 
-	public DrawingController getController() {
+	public Controller getController() {
 		return controller;
 	}
 
-	public void setController(DrawingController controller) {
+	public void setController(Controller controller) {
 		this.controller = controller;
 	}
 

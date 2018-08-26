@@ -1,16 +1,16 @@
 package drawing.command;
 
-import drawing.DrawingModel;
+import drawing.mvc.Model;
 import geometry.Shape;
 
 public class CommandRemove implements Command{
 
-	private DrawingModel model;
+	private Model model;
 	private Shape shape;
 	private int index;
 	
 	
-	public CommandRemove(DrawingModel model, Shape shape,int index) {
+	public CommandRemove(Model model, Shape shape,int index) {
 		this.model=model;
 		this.shape=shape;
 		this.index=index;

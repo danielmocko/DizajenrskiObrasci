@@ -2,13 +2,11 @@ package drawing.strategy;
 
 import java.io.File;
 
-import drawing.FileStrategy;
-
 public class FileContext {
 
-	private FileStrategy strategy;
+	private Strategy strategy;
 	
-	public void setFileStrategy(FileStrategy strategy) {
+	public void setFileStrategy(Strategy strategy) {
 		this.strategy = strategy;
 	}
 	

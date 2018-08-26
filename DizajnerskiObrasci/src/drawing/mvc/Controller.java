@@ -1,4 +1,4 @@
-package drawing;
+package drawing.mvc;
 
 
 import java.awt.Color;
@@ -25,7 +25,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import drawing.DrawingModel;
 import drawing.command.Command;
 import drawing.command.CommandAdd;
 import drawing.command.CommandBringToBack;
@@ -36,13 +35,19 @@ import drawing.command.CommandRemove;
 import drawing.command.CommandSelect;
 import drawing.command.CommandToBack;
 import drawing.command.CommandToFront;
+import drawing.dialogs.DialogCircle;
+import drawing.dialogs.DialogHexagon;
+import drawing.dialogs.DialogLine;
+import drawing.dialogs.DialogPoint;
+import drawing.dialogs.DialogRectangle;
+import drawing.dialogs.DialogSquare;
 import drawing.strategy.FileContext;
-import drawing.strategy.LogFileStrategy;
-import drawing.strategy.PntFileStrategy;
+import drawing.strategy.LogStrategy;
+import drawing.strategy.ImageStrategy;
 import geometry.*;
 
-public class DrawingController {
-	private DrawingModel model;
+public class Controller {
+	private Model model;
 	private Frame frame;
 
 	private DialogCircle dlgCircle;
@@ -70,7 +75,7 @@ public class DrawingController {
 	private int x,y;
 	private boolean selected=false;
 
-	public DrawingController(DrawingModel model,Frame frame) {
+	public Controller(Model model,Frame frame) {
 		this.model=model;
 		this.frame=frame;
 		executeCommand = new Stack<Command>();
@@ -473,19 +478,19 @@ public class DrawingController {
 			if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".log")) {
 
 				selectedFile = new File(fileChooser.getSelectedFile().toString());
-				ctx.setFileStrategy(new LogFileStrategy(frame));
+				ctx.setFileStrategy(new LogStrategy(frame));
 				ctx.createFile(selectedFile);
 			}
 			else if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".pnt")) {
 
 				selectedFile = new File(fileChooser.getSelectedFile().toString());
-				ctx.setFileStrategy(new PntFileStrategy(frame));
+				ctx.setFileStrategy(new ImageStrategy(frame));
 				ctx.createFile(selectedFile);
 			}
 			else {
 
 				selectedFile = new File(fileChooser.getSelectedFile() + ".pnt");
-				ctx.setFileStrategy(new PntFileStrategy(frame));
+				ctx.setFileStrategy(new ImageStrategy(frame));
 				ctx.createFile(selectedFile);
 			}
 		}

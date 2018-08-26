@@ -5,10 +5,6 @@ import java.awt.Graphics;
 import java.io.Serializable;
 
 public class Line extends Shape implements Moveable,Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private Point pStart;
 	private Point pEnd;
 

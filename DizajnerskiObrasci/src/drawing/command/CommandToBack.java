@@ -1,13 +1,13 @@
 package drawing.command;
 
-import drawing.DrawingModel;
+import drawing.mvc.Model;
 import geometry.Shape;
 
 public class CommandToBack implements Command{
 
-	private DrawingModel model;
+	private Model model;
 	
-	public CommandToBack(DrawingModel model) {
+	public CommandToBack(Model model) {
 		this.model=model;
 	}
 	

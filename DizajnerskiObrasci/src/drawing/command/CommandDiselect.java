@@ -1,14 +1,14 @@
 package drawing.command;
 
-import drawing.DrawingModel;
+import drawing.mvc.Model;
 import geometry.Shape;
 
 public class CommandDiselect implements Command{
 
-	private DrawingModel model;
+	private Model model;
 	private Shape shape;
 	
-	public CommandDiselect(DrawingModel model, Shape shape) {
+	public CommandDiselect(Model model, Shape shape) {
 		this.model=model;
 		this.shape=shape;
 	}

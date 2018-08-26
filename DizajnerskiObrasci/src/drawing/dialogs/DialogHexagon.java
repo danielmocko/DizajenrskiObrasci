@@ -1,4 +1,4 @@
-package drawing;
+package drawing.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,7 +10,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import geometry.Circle;
+import drawing.mvc.Frame;
 import geometry.Point;
 
 import javax.swing.GroupLayout;
@@ -22,8 +22,10 @@ import javax.swing.JTextField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import geometry.HexagonAdapter;
 
-public class DialogCircle extends JDialog {
+
+public class DialogHexagon extends JDialog {
 
 	private Frame frame;
 	private final JPanel contentPanel = new JPanel();
@@ -32,11 +34,11 @@ public class DialogCircle extends JDialog {
 	private JTextField txtXCenter;
 	private JTextField txtYCenter;
 
-	private Color borderColorDialog;
-	private Color areaColorDialog;
+	private Color edgeColorDialog;
+	private Color insideColorDialog;
 	private JButton btnInsideColor;
 	private JButton btnEdgeColor;
-	private Circle circle;
+	private HexagonAdapter hexagon;
 	private boolean accept;
 	private JTextField txtRadius;
 
@@ -45,7 +47,7 @@ public class DialogCircle extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			DialogCircle dialog = new DialogCircle();
+			DialogHexagon dialog = new DialogHexagon();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -56,14 +58,14 @@ public class DialogCircle extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public DialogCircle() {
+	public DialogHexagon() {
 		setModal(true);
 		setBounds(100, 100, 450, 352);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 
-		JLabel lblCircle = new JLabel("Circle");
+		JLabel lblCircle = new JLabel("Hexagon");
 		lblCircle.setFont(new Font("Tahoma", Font.PLAIN, 20));
 
 		JLabel lblCenter = new JLabel("Center :");
@@ -188,31 +190,29 @@ public class DialogCircle extends JDialog {
 			buttonPane.setLayout(gl_buttonPane);
 			btnEdgeColor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					borderColorDialog = JColorChooser.showDialog(null, "Edge color",borderColorDialog);
-					if(borderColorDialog!=null) {
-						btnEdgeColor.setBackground(borderColorDialog);
+					edgeColorDialog = JColorChooser.showDialog(null, "Edge color",edgeColorDialog);
+					if(edgeColorDialog!=null) {
+						btnEdgeColor.setBackground(edgeColorDialog);
 					}
 				}
 			});
 			btnInsideColor.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					areaColorDialog = JColorChooser.showDialog(null, "Inside color", areaColorDialog);
-					if(areaColorDialog!=null) {
-						btnInsideColor.setBackground(areaColorDialog);
+					insideColorDialog = JColorChooser.showDialog(null, "Inside color", insideColorDialog);
+					if(insideColorDialog!=null) {
+						btnInsideColor.setBackground(insideColorDialog);
 					}
 				}
 			});
 			btnAccept.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					circle = new Circle();
-					Point center = new Point(
-							Integer.parseInt(getTxtXCenter().getText()),
-							Integer.parseInt(getTxtYCenter().getText()));
-					circle.setCenter(center);
-					circle.setR(Integer.parseInt(getTxtRadius().getText()));
-					circle.setBorderColor(getBtnEdgeColor().getBackground());
-					circle.setAreaColor(getBtnInsideColor().getBackground());
+				
+					
+					int x=Integer.parseInt(getTxtXCenter().getText());
+					int y=Integer.parseInt(getTxtYCenter().getText());
+					int r=Integer.parseInt(getTxtRadius().getText());
+					hexagon = new HexagonAdapter(x,y,r,getBtnEdgeColor().getBackground(),getBtnInsideColor().getBackground());
 					setVisible(false);
 					setAccept(true);
 				}
@@ -220,7 +220,7 @@ public class DialogCircle extends JDialog {
 			btnDecline.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					setVisible(false);
-					circle = null;
+					hexagon = null;
 					setAccept(false);
 				}
 			});
@@ -259,6 +259,22 @@ public class DialogCircle extends JDialog {
 		this.txtYCenter = txtYCenter;
 	}
 
+	public Color getEdgeColorDialog() {
+		return edgeColorDialog;
+	}
+
+	public void setEdgeColorDialog(Color edgeColorDialog) {
+		this.edgeColorDialog = edgeColorDialog;
+	}
+
+	public Color getInsideColorDialog() {
+		return insideColorDialog;
+	}
+
+	public void setInsideColorDialog(Color insideColorDialog) {
+		this.insideColorDialog = insideColorDialog;
+	}
+
 	public JButton getBtnInsideColor() {
 		return btnInsideColor;
 	}
@@ -275,12 +291,12 @@ public class DialogCircle extends JDialog {
 		this.btnEdgeColor = btnEdgeColor;
 	}
 
-	public Circle getCircle() {
-		return circle;
+	public HexagonAdapter getHexagon() {
+		return hexagon;
 	}
 
-	public void setCircle(Circle circle) {
-		this.circle = circle;
+	public void setHexagon(HexagonAdapter hexagon) {
+		this.hexagon = hexagon;
 	}
 
 	public boolean isAccept() {
@@ -303,20 +319,4 @@ public class DialogCircle extends JDialog {
 		return contentPanel;
 	}
 
-	public Color getBorderColorDialog() {
-		return borderColorDialog;
-	}
-
-	public void setBorderColorDialog(Color borderColorDialog) {
-		this.borderColorDialog = borderColorDialog;
-	}
-
-	public Color getAreaColorDialog() {
-		return areaColorDialog;
-	}
-
-	public void setAreaColorDialog(Color areaColorDialog) {
-		this.areaColorDialog = areaColorDialog;
-	}
-	
 }

@@ -1,4 +1,4 @@
-package drawing;
+package drawing.observer;
 
 public interface Observer {
 	public abstract void updateView(int numberSelectedObjects,int flag,int numberObjects);

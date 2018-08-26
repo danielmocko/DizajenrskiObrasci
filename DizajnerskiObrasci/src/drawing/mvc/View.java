@@ -1,4 +1,4 @@
-package drawing;
+package drawing.mvc;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,12 +9,12 @@ import javax.swing.JPanel;
 
 import geometry.Shape;
 
-public class DrawingView extends JPanel {
-	private DrawingModel model;
+public class View extends JPanel {
+	private Model model;
 	private Frame frame;
 	private ListIterator<Shape> itShapes;
 
-	public DrawingView() {
+	public View() {
 		
 	}
 
@@ -31,11 +31,11 @@ public class DrawingView extends JPanel {
 		repaint();
 	}
 
-	public DrawingModel getModel() {
+	public Model getModel() {
 		return model;
 	}
 
-	public void setModel(DrawingModel model) {
+	public void setModel(Model model) {
 		this.model = model;
 	}
 

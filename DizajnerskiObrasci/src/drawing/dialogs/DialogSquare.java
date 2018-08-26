@@ -1,4 +1,4 @@
-package drawing;
+package drawing.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

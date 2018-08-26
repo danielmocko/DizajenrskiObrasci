@@ -1,12 +1,12 @@
 package drawing.command;
 
-import drawing.DrawingModel;
+import drawing.mvc.Model;
 import geometry.Shape;
 
 public class CommandToFront implements Command{
-	private DrawingModel model ;
+	private Model model ;
 	
-	public CommandToFront(DrawingModel model) {
+	public CommandToFront(Model model) {
 		this.model=model;
 	}
 
