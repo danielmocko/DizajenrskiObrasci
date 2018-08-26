@@ -22,7 +22,7 @@ public class Application {
 		Controller controller = new Controller(model,frame);
 		
 		frame.setController(controller);
-		frame.setSize(1229,600);
+		frame.setSize(926,600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		model.addObserver(frame);
