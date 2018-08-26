@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
@@ -29,6 +31,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
 
 public class Frame extends JFrame implements Observer{
 	private View view = new View();
@@ -57,77 +60,150 @@ public class Frame extends JFrame implements Observer{
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JButton btnDelete;
 	private JButton btnModify;
-
+	private String color = "#f0f0f0";
 	private DefaultListModel<String> dlmList = new DefaultListModel<String>();
 
 	private int numberSelectedObjects=0;
 	private JScrollPane scrollPane;
 	private JList<String> logList;
+	private JLabel lblAreaColor;
 
 
 
 	public Frame() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{1034, 0};
-		gridBagLayout.rowHeights = new int[]{55, 288, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{55, 448, 0, 0};
 		gridBagLayout.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
 		getContentPane().setLayout(gridBagLayout);
 
 		JPanel panelNorth = new JPanel();
 		GridBagConstraints gbc_panelNorth = new GridBagConstraints();
+		gbc_panelNorth.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelNorth.insets = new Insets(0, 0, 5, 0);
 		gbc_panelNorth.anchor = GridBagConstraints.NORTH;
-		gbc_panelNorth.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelNorth.gridx = 0;
 		gbc_panelNorth.gridy = 0;
 		getContentPane().add(panelNorth, gbc_panelNorth);
+		
+		Icon open = new ImageIcon("Icons/open.png");
+		btnOpen = new JButton(open);
+		btnOpen.setBorder(null);
+		btnOpen.setBackground(Color.decode(color));
+		btnOpen.setBorderPainted(false);
 
-		btnOpen = new JButton("O");
+		Icon save = new ImageIcon("Icons/save.png");
+		btnSave = new JButton(save);
+		btnSave.setBorder(null);
+		btnSave.setBackground(Color.decode(color));
+		btnSave.setBorderPainted(false);
 
-		btnSave = new JButton("S");
+		Icon load = new ImageIcon("Icons/load.png");
+		btnLoad = new JButton(load);
+		btnLoad.setBorder(null);
+		btnLoad.setBackground(Color.decode(color));
+		btnLoad.setBorderPainted(false);
 
-		btnLoad = new JButton("L");
-
-		btnUndo = new JButton("U");
+		Icon undo = new ImageIcon("Icons/undo.png");
+		btnUndo = new JButton(undo);
+		btnUndo.setBorder(null);
 		btnUndo.setEnabled(false);
+		btnUndo.setBackground(Color.decode(color));
+		btnUndo.setBorderPainted(false);
 
-		btnRedo = new JButton("R");
+		Icon redo = new ImageIcon("Icons/redo.png");
+		btnRedo = new JButton(redo);
+		btnRedo.setBorder(null);
 		btnRedo.setEnabled(false);
+		btnRedo.setBackground(Color.decode(color));
+		btnRedo.setBorderPainted(false);
+		
+		Icon select = new ImageIcon("Icons/select.png");
+		tglbtnSelect = new JToggleButton(select);
+		tglbtnSelect.setBorder(null);
+		tglbtnSelect.setBackground(Color.decode(color));
+		tglbtnSelect.setBorderPainted(false);
 
-		tglbtnSelect = new JToggleButton("Sel");
+		Icon toBack= new ImageIcon("Icons/goToBack.png");
+		btnToBack = new JButton(toBack);
+		btnToBack.setBorder(null);
+		btnToBack.setBackground(Color.decode(color));
+		btnToBack.setBorderPainted(false);
 
-		btnToBack = new JButton("TB");
+		Icon toFront = new ImageIcon("Icons/goToFront.png");
+		btnToFront = new JButton(toFront);
+		btnToFront.setBorder(null);
+		btnToFront.setBackground(Color.decode(color));
+		btnToFront.setBorderPainted(false);
 
-		btnToFront = new JButton("TF");
+		Icon bringToBack = new ImageIcon("Icons/bringToBack.png");
+		btnBringToBack = new JButton(bringToBack);
+		btnBringToBack.setBorder(null);
+		btnBringToBack.setBackground(Color.decode(color));
+		btnBringToBack.setBorderPainted(false);
+		
+		Icon bringToFront = new ImageIcon("Icons/bringToFront.png");
+		btnBringToFront = new JButton(bringToFront);
+		btnBringToFront.setBorder(null);
+		btnBringToFront.setBackground(Color.decode(color));
+		btnBringToFront.setBorderPainted(false);
+		
+		Icon modify = new ImageIcon("Icons/modify.png");
+		btnModify = new JButton(modify);
+		btnModify.setBorder(null);
+		btnModify.setBackground(Color.decode(color));
+		btnModify.setBorderPainted(false);
+		
+		Icon delete = new ImageIcon("Icons/delete.png");
+		btnDelete = new JButton(delete);
+		btnDelete.setBorder(null);
+		btnDelete.setBackground(Color.decode(color));
+		btnDelete.setBorderPainted(false);
 
-		btnBringToBack = new JButton("BTB");
-
-		btnBringToFront = new JButton("BTF");
-
-		btnModify = new JButton("Mod");
-
-		btnDelete = new JButton("Del");
-
-		tglbtnPoint = new JToggleButton("Pt");
+		Icon point = new ImageIcon("Icons/point.png");
+		tglbtnPoint = new JToggleButton(point);
+		tglbtnPoint.setBorder(null);
 		buttonGroup.add(tglbtnPoint);
+		tglbtnPoint.setBackground(Color.decode(color));
+		tglbtnPoint.setBorderPainted(false);
 
-		tglbtnLine = new JToggleButton("Ln");
+		Icon line = new ImageIcon("Icons/line.png");
+		tglbtnLine = new JToggleButton(line);
+		tglbtnLine.setBorder(null);
 		buttonGroup.add(tglbtnLine);
+		tglbtnLine.setBackground(Color.decode(color));
+		tglbtnLine.setBorderPainted(false);
 
-		tglbtnSquare = new JToggleButton("Sq");
+		Icon square = new ImageIcon("Icons/square.png");
+		tglbtnSquare = new JToggleButton(square);
+		tglbtnSquare.setBorder(null);
 		buttonGroup.add(tglbtnSquare);
+		tglbtnSquare.setBackground(Color.decode(color));
+		tglbtnSquare.setBorderPainted(false);
 
-		tglbtnRectangle = new JToggleButton("Rc");
+		Icon rectangle = new ImageIcon("Icons/rectangle.png");
+		tglbtnRectangle = new JToggleButton(rectangle);
+		tglbtnRectangle.setBorder(null);
 		buttonGroup.add(tglbtnRectangle);
+		tglbtnRectangle.setBackground(Color.decode(color));
+		tglbtnRectangle.setBorderPainted(false);
 
-		tglbtnCircle = new JToggleButton("Cr");
+		Icon circle = new ImageIcon("Icons/circle.png");
+		tglbtnCircle = new JToggleButton(circle);
+		tglbtnCircle.setBorder(null);
 		buttonGroup.add(tglbtnCircle);
+		tglbtnCircle.setBackground(Color.decode(color));
+		tglbtnCircle.setBorderPainted(false);
 
-		tglbtnHexagon = new JToggleButton("Hx");
+		Icon hexagon = new ImageIcon("Icons/Hexagon.png");
+		tglbtnHexagon = new JToggleButton(hexagon);
+		//tglbtnHexagon.setBorder(null);
 		buttonGroup.add(tglbtnHexagon);
+		tglbtnHexagon.setBackground(Color.decode(color));
+		tglbtnHexagon.setBorderPainted(false);
 
-		btnEdgeColor = new JButton("Eg");
+		btnEdgeColor = new JButton();
 		btnEdgeColor.setBackground(Color.BLACK);
 		
 		btnEdgeColor.addActionListener(new ActionListener() {
@@ -136,7 +212,7 @@ public class Frame extends JFrame implements Observer{
 			}
 		});
 
-		btnInsideColor = new JButton("Ic");
+		btnInsideColor = new JButton();
 		btnInsideColor.setBackground(Color.WHITE);
 		
 		btnInsideColor.addActionListener(new ActionListener() {
@@ -147,6 +223,7 @@ public class Frame extends JFrame implements Observer{
 
 		btnModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				controller.modify(e);
 			}
 		});
@@ -219,58 +296,72 @@ public class Frame extends JFrame implements Observer{
 
 			}
 		});
+		
+		JLabel lblBorderColor = new JLabel("Border color:");
+		
+		lblAreaColor = new JLabel("Area color");
 
 		GroupLayout gl_panelNorth = new GroupLayout(panelNorth);
 		gl_panelNorth.setHorizontalGroup(
-				gl_panelNorth.createParallelGroup(Alignment.LEADING)
+			gl_panelNorth.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panelNorth.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(btnOpen)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnSave)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnLoad)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnUndo)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnRedo)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tglbtnSelect)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnModify)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnDelete)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnToBack)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnToFront)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnBringToBack)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnBringToFront)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tglbtnPoint)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tglbtnLine)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tglbtnSquare)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tglbtnRectangle)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tglbtnCircle)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(tglbtnHexagon)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnEdgeColor)
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addComponent(btnInsideColor)
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				);
+					.addContainerGap()
+					.addGroup(gl_panelNorth.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panelNorth.createSequentialGroup()
+							.addComponent(btnOpen, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnSave, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnLoad, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnUndo, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnRedo, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(tglbtnSelect, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnModify, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnDelete, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnToBack, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnToFront, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnBringToBack, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnBringToFront, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(tglbtnPoint, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(tglbtnLine, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(tglbtnSquare, GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(tglbtnRectangle, GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(tglbtnCircle, GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(tglbtnHexagon, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+							.addGap(31)
+							.addComponent(lblAreaColor))
+						.addGroup(gl_panelNorth.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED, 683, Short.MAX_VALUE)
+							.addComponent(lblBorderColor)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panelNorth.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnEdgeColor, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(btnInsideColor, GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
+					.addGap(12))
+		);
 		gl_panelNorth.setVerticalGroup(
-				gl_panelNorth.createParallelGroup(Alignment.TRAILING)
+			gl_panelNorth.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panelNorth.createSequentialGroup()
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(gl_panelNorth.createParallelGroup(Alignment.BASELINE)
+					.addGap(25)
+					.addGroup(gl_panelNorth.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panelNorth.createSequentialGroup()
+							.addGap(13)
+							.addGroup(gl_panelNorth.createParallelGroup(Alignment.BASELINE)
 								.addComponent(btnOpen)
 								.addComponent(btnSave)
 								.addComponent(btnLoad)
@@ -287,16 +378,24 @@ public class Frame extends JFrame implements Observer{
 								.addComponent(tglbtnRectangle)
 								.addComponent(tglbtnCircle)
 								.addComponent(tglbtnHexagon)
-								.addComponent(btnEdgeColor)
-								.addComponent(btnInsideColor)
 								.addComponent(btnModify)
 								.addComponent(btnDelete)))
-				);
+						.addGroup(gl_panelNorth.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panelNorth.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblBorderColor)
+								.addComponent(btnEdgeColor))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_panelNorth.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnInsideColor)
+								.addComponent(lblAreaColor))))
+					.addGap(25))
+		);
 		panelNorth.setLayout(gl_panelNorth);
 
 		panelView = new JPanel();
-		view.setBackground(Color.WHITE);//panelView
-		view.addMouseListener(new MouseAdapter() {//panelView
+		panelView.setBackground(Color.WHITE);//panelView
+		panelView.addMouseListener(new MouseAdapter() {//panelView
 			public void mousePressed(MouseEvent e) {
 				controller.panelClick(e);
 			}
@@ -306,7 +405,7 @@ public class Frame extends JFrame implements Observer{
 		gbc_panelView.fill = GridBagConstraints.BOTH;
 		gbc_panelView.gridx = 0;
 		gbc_panelView.gridy = 1;
-		getContentPane().add(view, gbc_panelView);//panelView
+		getContentPane().add(panelView, gbc_panelView);//panelView
 
 		scrollPane = new JScrollPane();
 		logList = new JList<String>(dlmList);
@@ -314,7 +413,6 @@ public class Frame extends JFrame implements Observer{
 		//panelNort = new JPanel();
 		//panelNort.setBackground(Color.WHITE);
 		GridBagConstraints gbc_scrollPane = new GridBagConstraints();
-		gbc_scrollPane.insets = new Insets(0, 0, 5, 0);
 		gbc_scrollPane.fill = GridBagConstraints.BOTH;
 		gbc_scrollPane.gridx = 0;
 		gbc_scrollPane.gridy = 2;
@@ -332,6 +430,16 @@ public class Frame extends JFrame implements Observer{
 		buttonGroup.add(getTglbtnSelect());
 
 		updateView(0, 0, 0);
+		
+		if(btnModify.isSelected()) {
+			setBackground(Color.decode("#f00ff0"));
+		}
+		else {
+			setBackground(Color.decode("#f0f0f0"));
+		}
+		
+		
+		
 	}
 
 
@@ -588,11 +696,4 @@ public class Frame extends JFrame implements Observer{
 	public void setLogList(JList<String> logList) {
 		this.logList = logList;
 	}
-
-
-
-
-
-
-
 }
