@@ -87,7 +87,7 @@ public class Frame extends JFrame implements Observer{
 		gbc_panelNorth.gridx = 0;
 		gbc_panelNorth.gridy = 0;
 		getContentPane().add(panelNorth, gbc_panelNorth);
-		
+
 		Icon open = new ImageIcon("Icons/open.png");
 
 		Icon save = new ImageIcon("Icons/save.png");
@@ -97,7 +97,7 @@ public class Frame extends JFrame implements Observer{
 		Icon undo = new ImageIcon("Icons/undo.png");
 
 		Icon redo = new ImageIcon("Icons/redo.png");
-		
+
 		Icon select = new ImageIcon("Icons/select.png");
 
 		Icon toBack= new ImageIcon("Icons/goToBack.png");
@@ -105,11 +105,11 @@ public class Frame extends JFrame implements Observer{
 		Icon toFront = new ImageIcon("Icons/goToFront.png");
 
 		Icon bringToBack = new ImageIcon("Icons/bringToBack.png");
-		
+
 		Icon bringToFront = new ImageIcon("Icons/bringToFront.png");
-		
+
 		Icon modify = new ImageIcon("Icons/modify.png");
-		
+
 		Icon delete = new ImageIcon("Icons/delete.png");
 
 		Icon point = new ImageIcon("Icons/point.png");
@@ -125,8 +125,8 @@ public class Frame extends JFrame implements Observer{
 		Icon hexagon = new ImageIcon("Icons/Hexagon.png");
 
 		panelView = new JPanel();
-		view.setBackground(Color.WHITE);//panelView
-		view.addMouseListener(new MouseAdapter() {//panelView
+		panelView.setBackground(Color.WHITE);//panelView
+		panelView.addMouseListener(new MouseAdapter() {//panelView
 			public void mousePressed(MouseEvent e) {
 				controller.panelClick(e);
 			}
@@ -136,7 +136,7 @@ public class Frame extends JFrame implements Observer{
 		gbc_panelView.fill = GridBagConstraints.BOTH;
 		gbc_panelView.gridx = 0;
 		gbc_panelView.gridy = 1;
-		getContentPane().add(view, gbc_panelView);//panelView
+		getContentPane().add(panelView, gbc_panelView);//panelView
 
 		scrollPane = new JScrollPane();
 		logList = new JList<String>(dlmList);
@@ -155,377 +155,411 @@ public class Frame extends JFrame implements Observer{
 		gbl_panelNorth.columnWeights = new double[]{0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
 		gbl_panelNorth.rowWeights = new double[]{1.0, 0.0, 1.0, Double.MIN_VALUE};
 		panelNorth.setLayout(gbl_panelNorth);
+		
 		btnUndo = new JButton(undo);
 		btnUndo.setBorder(null);
 		btnUndo.setEnabled(false);
 		btnUndo.setBackground(Color.decode(color));
 		btnUndo.setBorderPainted(false);
+		btnUndo.setToolTipText("Undo");
+
+		btnUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.undo();
+			}
+		});
+		btnSave = new JButton(save);
+		btnSave.setBorder(null);
+		btnSave.setBackground(Color.decode(color));
+		btnSave.setBorderPainted(false);
+		btnSave.setToolTipText("Save file");
+
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.saving(e);
+
+			}
+		});
+
+		panel = new JPanel();
+		GridBagConstraints gbc_panel = new GridBagConstraints();
+		gbc_panel.gridheight = 2;
+		gbc_panel.insets = new Insets(0, 0, 5, 0);
+		gbc_panel.fill = GridBagConstraints.BOTH;
+		gbc_panel.gridx = 19;
+		gbc_panel.gridy = 0;
+		panelNorth.add(panel, gbc_panel);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{0, 0, 0};
+		gbl_panel.rowHeights = new int[]{0, 0, 0};
+		gbl_panel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
+
+		JLabel lblBorderColor = new JLabel("Border color:");
+		GridBagConstraints gbc_lblBorderColor = new GridBagConstraints();
+		gbc_lblBorderColor.fill = GridBagConstraints.BOTH;
+		gbc_lblBorderColor.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBorderColor.gridx = 0;
+		gbc_lblBorderColor.gridy = 0;
+		panel.add(lblBorderColor, gbc_lblBorderColor);
+
+		btnInsideColor = new JButton();
+		GridBagConstraints gbc_btnInsideColor = new GridBagConstraints();
+		gbc_btnInsideColor.fill = GridBagConstraints.BOTH;
+		gbc_btnInsideColor.insets = new Insets(0, 0, 5, 0);
+		gbc_btnInsideColor.gridx = 1;
+		gbc_btnInsideColor.gridy = 1;
+		panel.add(btnInsideColor, gbc_btnInsideColor);
+		btnInsideColor.setBackground(Color.WHITE);
+		btnInsideColor.setToolTipText("Area color");
+
+		btnInsideColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.insideColor(e);
+			}
+		});
+
+		lblAreaColor = new JLabel("Area color:");
+		GridBagConstraints gbc_lblAreaColor = new GridBagConstraints();
+		gbc_lblAreaColor.fill = GridBagConstraints.BOTH;
+		gbc_lblAreaColor.insets = new Insets(0, 0, 0, 5);
+		gbc_lblAreaColor.gridx = 0;
+		gbc_lblAreaColor.gridy = 1;
+		panel.add(lblAreaColor, gbc_lblAreaColor);
+
+		btnEdgeColor = new JButton();
+		GridBagConstraints gbc_btnEdgeColor = new GridBagConstraints();
+		gbc_btnEdgeColor.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnEdgeColor.gridx = 1;
+		gbc_btnEdgeColor.gridy = 0;
+		panel.add(btnEdgeColor, gbc_btnEdgeColor);
+		btnEdgeColor.setBackground(Color.BLACK);
+		btnEdgeColor.setToolTipText("Broder color");
+
+		btnEdgeColor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.edgeColor(e);
+			}
+		});
+		btnOpen = new JButton(open);
+		btnOpen.setBorder(null);
+		btnOpen.setBackground(Color.decode(color));
+		btnOpen.setBorderPainted(false);
+		btnOpen.setToolTipText("Open file");
 		
-				btnUndo.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						controller.undo();
+		btnOpen.addActionListener(new ActionListener() {	
+			public void actionPerformed(ActionEvent e) {
+				try {
+					controller.openFiles();
+				} catch (FileNotFoundException | ClassNotFoundException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		GridBagConstraints gbc_btnOpen = new GridBagConstraints();
+		gbc_btnOpen.gridheight = 2;
+		gbc_btnOpen.fill = GridBagConstraints.BOTH;
+		gbc_btnOpen.insets = new Insets(0, 0, 5, 5);
+		gbc_btnOpen.gridx = 1;
+		gbc_btnOpen.gridy = 0;
+		panelNorth.add(btnOpen, gbc_btnOpen);
+		GridBagConstraints gbc_btnSave = new GridBagConstraints();
+		gbc_btnSave.gridheight = 2;
+		gbc_btnSave.fill = GridBagConstraints.BOTH;
+		gbc_btnSave.insets = new Insets(0, 0, 5, 5);
+		gbc_btnSave.gridx = 2;
+		gbc_btnSave.gridy = 0;
+		panelNorth.add(btnSave, gbc_btnSave);
 		
-					}
-				});
-				btnSave = new JButton(save);
-				btnSave.setBorder(null);
-				btnSave.setBackground(Color.decode(color));
-				btnSave.setBorderPainted(false);
-				
-						btnSave.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								controller.saving(e);
-				
-							}
-						});
-						
-						panel = new JPanel();
-						GridBagConstraints gbc_panel = new GridBagConstraints();
-						gbc_panel.gridheight = 2;
-						gbc_panel.insets = new Insets(0, 0, 5, 0);
-						gbc_panel.fill = GridBagConstraints.BOTH;
-						gbc_panel.gridx = 19;
-						gbc_panel.gridy = 0;
-						panelNorth.add(panel, gbc_panel);
-						GridBagLayout gbl_panel = new GridBagLayout();
-						gbl_panel.columnWidths = new int[]{0, 0, 0};
-						gbl_panel.rowHeights = new int[]{0, 0, 0};
-						gbl_panel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-						gbl_panel.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-						panel.setLayout(gbl_panel);
-												
-												JLabel lblBorderColor = new JLabel("Border color:");
-												GridBagConstraints gbc_lblBorderColor = new GridBagConstraints();
-												gbc_lblBorderColor.fill = GridBagConstraints.BOTH;
-												gbc_lblBorderColor.insets = new Insets(0, 0, 5, 5);
-												gbc_lblBorderColor.gridx = 0;
-												gbc_lblBorderColor.gridy = 0;
-												panel.add(lblBorderColor, gbc_lblBorderColor);
-												
-														btnInsideColor = new JButton();
-														GridBagConstraints gbc_btnInsideColor = new GridBagConstraints();
-														gbc_btnInsideColor.fill = GridBagConstraints.BOTH;
-														gbc_btnInsideColor.insets = new Insets(0, 0, 5, 0);
-														gbc_btnInsideColor.gridx = 1;
-														gbc_btnInsideColor.gridy = 0;
-														panel.add(btnInsideColor, gbc_btnInsideColor);
-														btnInsideColor.setBackground(Color.WHITE);
-														
-														btnInsideColor.addActionListener(new ActionListener() {
-															public void actionPerformed(ActionEvent e) {
-																controller.insideColor(e);
-															}
-														});
-												
-												lblAreaColor = new JLabel("Area color:");
-												GridBagConstraints gbc_lblAreaColor = new GridBagConstraints();
-												gbc_lblAreaColor.fill = GridBagConstraints.BOTH;
-												gbc_lblAreaColor.insets = new Insets(0, 0, 0, 5);
-												gbc_lblAreaColor.gridx = 0;
-												gbc_lblAreaColor.gridy = 1;
-												panel.add(lblAreaColor, gbc_lblAreaColor);
-												
-														btnEdgeColor = new JButton();
-														GridBagConstraints gbc_btnEdgeColor = new GridBagConstraints();
-														gbc_btnEdgeColor.fill = GridBagConstraints.BOTH;
-														gbc_btnEdgeColor.gridx = 1;
-														gbc_btnEdgeColor.gridy = 1;
-														panel.add(btnEdgeColor, gbc_btnEdgeColor);
-														btnEdgeColor.setBackground(Color.BLACK);
-												
-												btnEdgeColor.addActionListener(new ActionListener() {
-													public void actionPerformed(ActionEvent e) {
-														controller.edgeColor(e);
-													}
-												});
-						btnOpen = new JButton(open);
-						btnOpen.setBorder(null);
-						btnOpen.setBackground(Color.decode(color));
-						btnOpen.setBorderPainted(false);
-						
-								btnOpen.addActionListener(new ActionListener() {	
-									public void actionPerformed(ActionEvent e) {
-										try {
-											controller.openFiles();
-										} catch (FileNotFoundException | ClassNotFoundException e1) {
-											e1.printStackTrace();
-										}
-									}
-								});
-								GridBagConstraints gbc_btnOpen = new GridBagConstraints();
-								gbc_btnOpen.anchor = GridBagConstraints.NORTH;
-								gbc_btnOpen.fill = GridBagConstraints.HORIZONTAL;
-								gbc_btnOpen.insets = new Insets(0, 0, 5, 5);
-								gbc_btnOpen.gridx = 1;
-								gbc_btnOpen.gridy = 1;
-								panelNorth.add(btnOpen, gbc_btnOpen);
-						GridBagConstraints gbc_btnSave = new GridBagConstraints();
-						gbc_btnSave.anchor = GridBagConstraints.NORTH;
-						gbc_btnSave.fill = GridBagConstraints.HORIZONTAL;
-						gbc_btnSave.insets = new Insets(0, 0, 5, 5);
-						gbc_btnSave.gridx = 2;
-						gbc_btnSave.gridy = 1;
-						panelNorth.add(btnSave, gbc_btnSave);
-				btnLoad = new JButton(load);
-				btnLoad.setBorder(null);
-				btnLoad.setBackground(Color.decode(color));
-				btnLoad.setBorderPainted(false);
-				btnLoad.setEnabled(false);
-				
-						btnLoad.addActionListener(new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								controller.loadData();
-				
-							}
-						});
-						GridBagConstraints gbc_btnLoad = new GridBagConstraints();
-						gbc_btnLoad.anchor = GridBagConstraints.NORTH;
-						gbc_btnLoad.fill = GridBagConstraints.HORIZONTAL;
-						gbc_btnLoad.insets = new Insets(0, 0, 5, 5);
-						gbc_btnLoad.gridx = 3;
-						gbc_btnLoad.gridy = 1;
-						panelNorth.add(btnLoad, gbc_btnLoad);
-				GridBagConstraints gbc_btnUndo = new GridBagConstraints();
-				gbc_btnUndo.anchor = GridBagConstraints.NORTH;
-				gbc_btnUndo.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnUndo.insets = new Insets(0, 0, 5, 5);
-				gbc_btnUndo.gridx = 4;
-				gbc_btnUndo.gridy = 1;
-				panelNorth.add(btnUndo, gbc_btnUndo);
+		btnLoad = new JButton(load);
+		btnLoad.setBorder(null);
+		btnLoad.setBackground(Color.decode(color));
+		btnLoad.setBorderPainted(false);
+		btnLoad.setEnabled(false);
+		btnLoad.setToolTipText("Load log file");
+
+		btnLoad.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				controller.loadData();
+
+			}
+		});
+		GridBagConstraints gbc_btnLoad = new GridBagConstraints();
+		gbc_btnLoad.gridheight = 2;
+		gbc_btnLoad.fill = GridBagConstraints.BOTH;
+		gbc_btnLoad.insets = new Insets(0, 0, 5, 5);
+		gbc_btnLoad.gridx = 3;
+		gbc_btnLoad.gridy = 0;
+		panelNorth.add(btnLoad, gbc_btnLoad);
+		GridBagConstraints gbc_btnUndo = new GridBagConstraints();
+		gbc_btnUndo.gridheight = 2;
+		gbc_btnUndo.fill = GridBagConstraints.BOTH;
+		gbc_btnUndo.insets = new Insets(0, 0, 5, 5);
+		gbc_btnUndo.gridx = 4;
+		gbc_btnUndo.gridy = 0;
+		panelNorth.add(btnUndo, gbc_btnUndo);
 		btnBringToBack = new JButton(bringToBack);
 		btnBringToBack.setBorder(null);
 		btnBringToBack.setBackground(Color.decode(color));
 		btnBringToBack.setBorderPainted(false);
+		btnBringToBack.setToolTipText("Bring to back");
 		
-				btnBringToBack.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						controller.bringToBack(e);
-					}
-				});
-				btnToBack = new JButton(toBack);
-				btnToBack.setBorder(null);
-				btnToBack.setBackground(Color.decode(color));
-				btnToBack.setBorderPainted(false);
-				
-						btnToBack.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								controller.toBack(e);
-							}
-						});
-						btnModify = new JButton(modify);
-						btnModify.setBorder(null);
-						btnModify.setBackground(Color.decode(color));
-						btnModify.setBorderPainted(false);
-						
-								btnModify.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										
-										controller.modify(e);
-									}
-								});
-								btnRedo = new JButton(redo);
-								btnRedo.setBorder(null);
-								btnRedo.setEnabled(false);
-								btnRedo.setBackground(Color.decode(color));
-								btnRedo.setBorderPainted(false);
-								
-										btnRedo.addActionListener(new ActionListener() {
-											public void actionPerformed(ActionEvent e) {
-												controller.redo();
-								
-											}
-										});
-										GridBagConstraints gbc_btnRedo = new GridBagConstraints();
-										gbc_btnRedo.anchor = GridBagConstraints.NORTH;
-										gbc_btnRedo.fill = GridBagConstraints.HORIZONTAL;
-										gbc_btnRedo.insets = new Insets(0, 0, 5, 5);
-										gbc_btnRedo.gridx = 5;
-										gbc_btnRedo.gridy = 1;
-										panelNorth.add(btnRedo, gbc_btnRedo);
-								tglbtnSelect = new JToggleButton(select);
-								tglbtnSelect.setBorder(null);
-								tglbtnSelect.setBackground(Color.decode(color));
-								tglbtnSelect.setBorderPainted(false);
-								buttonGroup.add(getTglbtnSelect());
-								GridBagConstraints gbc_tglbtnSelect = new GridBagConstraints();
-								gbc_tglbtnSelect.anchor = GridBagConstraints.NORTH;
-								gbc_tglbtnSelect.fill = GridBagConstraints.HORIZONTAL;
-								gbc_tglbtnSelect.insets = new Insets(0, 0, 5, 5);
-								gbc_tglbtnSelect.gridx = 6;
-								gbc_tglbtnSelect.gridy = 1;
-								panelNorth.add(tglbtnSelect, gbc_tglbtnSelect);
-								GridBagConstraints gbc_btnModify = new GridBagConstraints();
-								gbc_btnModify.anchor = GridBagConstraints.NORTH;
-								gbc_btnModify.fill = GridBagConstraints.HORIZONTAL;
-								gbc_btnModify.insets = new Insets(0, 0, 5, 5);
-								gbc_btnModify.gridx = 7;
-								gbc_btnModify.gridy = 1;
-								panelNorth.add(btnModify, gbc_btnModify);
-						btnDelete = new JButton(delete);
-						btnDelete.setBorder(null);
-						btnDelete.setBackground(Color.decode(color));
-						btnDelete.setBorderPainted(false);
-						
-								btnDelete.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										controller.delete(e);
-									}
-								});
-								GridBagConstraints gbc_btnDelete = new GridBagConstraints();
-								gbc_btnDelete.anchor = GridBagConstraints.NORTH;
-								gbc_btnDelete.fill = GridBagConstraints.HORIZONTAL;
-								gbc_btnDelete.insets = new Insets(0, 0, 5, 5);
-								gbc_btnDelete.gridx = 8;
-								gbc_btnDelete.gridy = 1;
-								panelNorth.add(btnDelete, gbc_btnDelete);
-						GridBagConstraints gbc_btnToBack = new GridBagConstraints();
-						gbc_btnToBack.anchor = GridBagConstraints.NORTH;
-						gbc_btnToBack.fill = GridBagConstraints.HORIZONTAL;
-						gbc_btnToBack.insets = new Insets(0, 0, 5, 5);
-						gbc_btnToBack.gridx = 9;
-						gbc_btnToBack.gridy = 1;
-						panelNorth.add(btnToBack, gbc_btnToBack);
-				btnToFront = new JButton(toFront);
-				btnToFront.setBorder(null);
-				btnToFront.setBackground(Color.decode(color));
-				btnToFront.setBorderPainted(false);
-				
-						btnToFront.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								controller.toFront();
-							}
-						});
-						GridBagConstraints gbc_btnToFront = new GridBagConstraints();
-						gbc_btnToFront.anchor = GridBagConstraints.NORTH;
-						gbc_btnToFront.fill = GridBagConstraints.HORIZONTAL;
-						gbc_btnToFront.insets = new Insets(0, 0, 5, 5);
-						gbc_btnToFront.gridx = 10;
-						gbc_btnToFront.gridy = 1;
-						panelNorth.add(btnToFront, gbc_btnToFront);
-				GridBagConstraints gbc_btnBringToBack = new GridBagConstraints();
-				gbc_btnBringToBack.anchor = GridBagConstraints.NORTH;
-				gbc_btnBringToBack.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnBringToBack.insets = new Insets(0, 0, 5, 5);
-				gbc_btnBringToBack.gridx = 11;
-				gbc_btnBringToBack.gridy = 1;
-				panelNorth.add(btnBringToBack, gbc_btnBringToBack);
+		btnBringToBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.bringToBack(e);
+			}
+		});
+		btnToBack = new JButton(toBack);
+		btnToBack.setBorder(null);
+		btnToBack.setBackground(Color.decode(color));
+		btnToBack.setBorderPainted(false);
+		btnToBack.setToolTipText("Go to back");
+
+		btnToBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.toBack(e);
+			}
+		});
+		btnModify = new JButton(modify);
+		btnModify.setBorder(null);
+		btnModify.setBackground(Color.decode(color));
+		btnModify.setBorderPainted(false);
+		btnModify.setToolTipText("Modify");
+
+		btnModify.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				controller.modify(e);
+			}
+		});
+		btnRedo = new JButton(redo);
+		btnRedo.setBorder(null);
+		btnRedo.setEnabled(false);
+		btnRedo.setBackground(Color.decode(color));
+		btnRedo.setBorderPainted(false);
+		btnRedo.setToolTipText("Redo");
+
+		btnRedo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.redo();
+
+			}
+		});
+		GridBagConstraints gbc_btnRedo = new GridBagConstraints();
+		gbc_btnRedo.gridheight = 2;
+		gbc_btnRedo.fill = GridBagConstraints.BOTH;
+		gbc_btnRedo.insets = new Insets(0, 0, 5, 5);
+		gbc_btnRedo.gridx = 5;
+		gbc_btnRedo.gridy = 0;
+		panelNorth.add(btnRedo, gbc_btnRedo);
+		
+		tglbtnSelect = new JToggleButton(select);
+		tglbtnSelect.setBorder(null);
+		tglbtnSelect.setBackground(Color.decode(color));
+		tglbtnSelect.setBorderPainted(false);
+		buttonGroup.add(getTglbtnSelect());
+		tglbtnSelect.setToolTipText("Select");
+		
+		GridBagConstraints gbc_tglbtnSelect = new GridBagConstraints();
+		gbc_tglbtnSelect.gridheight = 2;
+		gbc_tglbtnSelect.fill = GridBagConstraints.BOTH;
+		gbc_tglbtnSelect.insets = new Insets(0, 0, 5, 5);
+		gbc_tglbtnSelect.gridx = 6;
+		gbc_tglbtnSelect.gridy = 0;
+		panelNorth.add(tglbtnSelect, gbc_tglbtnSelect);
+		GridBagConstraints gbc_btnModify = new GridBagConstraints();
+		gbc_btnModify.gridheight = 2;
+		gbc_btnModify.fill = GridBagConstraints.BOTH;
+		gbc_btnModify.insets = new Insets(0, 0, 5, 5);
+		gbc_btnModify.gridx = 7;
+		gbc_btnModify.gridy = 0;
+		panelNorth.add(btnModify, gbc_btnModify);
+		
+		btnDelete = new JButton(delete);
+		btnDelete.setBorder(null);
+		btnDelete.setBackground(Color.decode(color));
+		btnDelete.setBorderPainted(false);
+		btnDelete.setToolTipText("Delete");
+
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.delete(e);
+			}
+		});
+		GridBagConstraints gbc_btnDelete = new GridBagConstraints();
+		gbc_btnDelete.gridheight = 2;
+		gbc_btnDelete.fill = GridBagConstraints.BOTH;
+		gbc_btnDelete.insets = new Insets(0, 0, 5, 5);
+		gbc_btnDelete.gridx = 8;
+		gbc_btnDelete.gridy = 0;
+		panelNorth.add(btnDelete, gbc_btnDelete);
+		GridBagConstraints gbc_btnToBack = new GridBagConstraints();
+		gbc_btnToBack.gridheight = 2;
+		gbc_btnToBack.fill = GridBagConstraints.BOTH;
+		gbc_btnToBack.insets = new Insets(0, 0, 5, 5);
+		gbc_btnToBack.gridx = 9;
+		gbc_btnToBack.gridy = 0;
+		panelNorth.add(btnToBack, gbc_btnToBack);
+		
+		btnToFront = new JButton(toFront);
+		btnToFront.setBorder(null);
+		btnToFront.setBackground(Color.decode(color));
+		btnToFront.setBorderPainted(false);
+		btnToFront.setToolTipText("Go to front");
+
+		btnToFront.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.toFront();
+			}
+		});
+		GridBagConstraints gbc_btnToFront = new GridBagConstraints();
+		gbc_btnToFront.gridheight = 2;
+		gbc_btnToFront.fill = GridBagConstraints.BOTH;
+		gbc_btnToFront.insets = new Insets(0, 0, 5, 5);
+		gbc_btnToFront.gridx = 10;
+		gbc_btnToFront.gridy = 0;
+		panelNorth.add(btnToFront, gbc_btnToFront);
+		GridBagConstraints gbc_btnBringToBack = new GridBagConstraints();
+		gbc_btnBringToBack.gridheight = 2;
+		gbc_btnBringToBack.fill = GridBagConstraints.BOTH;
+		gbc_btnBringToBack.insets = new Insets(0, 0, 5, 5);
+		gbc_btnBringToBack.gridx = 11;
+		gbc_btnBringToBack.gridy = 0;
+		panelNorth.add(btnBringToBack, gbc_btnBringToBack);
+		
 		btnBringToFront = new JButton(bringToFront);
 		btnBringToFront.setBorder(null);
 		btnBringToFront.setBackground(Color.decode(color));
 		btnBringToFront.setBorderPainted(false);
+		btnBringToFront.setToolTipText("Bring to front");
+
+		btnBringToFront.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.bringToFront(e);
+			}
+		});
 		
-				btnBringToFront.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						controller.bringToFront(e);
-					}
-				});
-				GridBagConstraints gbc_btnBringToFront = new GridBagConstraints();
-				gbc_btnBringToFront.anchor = GridBagConstraints.NORTH;
-				gbc_btnBringToFront.fill = GridBagConstraints.HORIZONTAL;
-				gbc_btnBringToFront.insets = new Insets(0, 0, 5, 5);
-				gbc_btnBringToFront.gridx = 12;
-				gbc_btnBringToFront.gridy = 1;
-				panelNorth.add(btnBringToFront, gbc_btnBringToFront);
+		GridBagConstraints gbc_btnBringToFront = new GridBagConstraints();
+		gbc_btnBringToFront.gridheight = 2;
+		gbc_btnBringToFront.fill = GridBagConstraints.BOTH;
+		gbc_btnBringToFront.insets = new Insets(0, 0, 5, 5);
+		gbc_btnBringToFront.gridx = 12;
+		gbc_btnBringToFront.gridy = 0;
+		panelNorth.add(btnBringToFront, gbc_btnBringToFront);
+		
 		tglbtnPoint = new JToggleButton(point);
 		tglbtnPoint.setBorder(null);
 		buttonGroup.add(tglbtnPoint);
 		tglbtnPoint.setBackground(Color.decode(color));
 		tglbtnPoint.setBorderPainted(false);
 		buttonGroup.add(getTglbtnPoint());
+		tglbtnPoint.setToolTipText("Point");
+		
 		GridBagConstraints gbc_tglbtnPoint = new GridBagConstraints();
-		gbc_tglbtnPoint.anchor = GridBagConstraints.NORTH;
-		gbc_tglbtnPoint.fill = GridBagConstraints.HORIZONTAL;
+		gbc_tglbtnPoint.gridheight = 2;
+		gbc_tglbtnPoint.fill = GridBagConstraints.BOTH;
 		gbc_tglbtnPoint.insets = new Insets(0, 0, 5, 5);
 		gbc_tglbtnPoint.gridx = 13;
-		gbc_tglbtnPoint.gridy = 1;
+		gbc_tglbtnPoint.gridy = 0;
 		panelNorth.add(tglbtnPoint, gbc_tglbtnPoint);
+		
 		tglbtnLine = new JToggleButton(line);
 		tglbtnLine.setBorder(null);
 		buttonGroup.add(tglbtnLine);
 		tglbtnLine.setBackground(Color.decode(color));
 		tglbtnLine.setBorderPainted(false);
+		tglbtnLine.setToolTipText("Line");
 		buttonGroup.add(getTglbtnLine());
+		
+		
 		GridBagConstraints gbc_tglbtnLine = new GridBagConstraints();
-		gbc_tglbtnLine.anchor = GridBagConstraints.NORTH;
-		gbc_tglbtnLine.fill = GridBagConstraints.HORIZONTAL;
+		gbc_tglbtnLine.gridheight = 2;
+		gbc_tglbtnLine.fill = GridBagConstraints.BOTH;
 		gbc_tglbtnLine.insets = new Insets(0, 0, 5, 5);
 		gbc_tglbtnLine.gridx = 14;
-		gbc_tglbtnLine.gridy = 1;
+		gbc_tglbtnLine.gridy = 0;
 		panelNorth.add(tglbtnLine, gbc_tglbtnLine);
+		
 		tglbtnSquare = new JToggleButton(square);
 		tglbtnSquare.setBorder(null);
 		buttonGroup.add(tglbtnSquare);
 		tglbtnSquare.setBackground(Color.decode(color));
 		tglbtnSquare.setBorderPainted(false);
+		tglbtnSquare.setToolTipText("Square");
 		buttonGroup.add(getTglbtnSquare());
+		
 		GridBagConstraints gbc_tglbtnSquare = new GridBagConstraints();
-		gbc_tglbtnSquare.anchor = GridBagConstraints.NORTH;
-		gbc_tglbtnSquare.fill = GridBagConstraints.HORIZONTAL;
+		gbc_tglbtnSquare.gridheight = 2;
+		gbc_tglbtnSquare.fill = GridBagConstraints.BOTH;
 		gbc_tglbtnSquare.insets = new Insets(0, 0, 5, 5);
 		gbc_tglbtnSquare.gridx = 15;
-		gbc_tglbtnSquare.gridy = 1;
+		gbc_tglbtnSquare.gridy = 0;
 		panelNorth.add(tglbtnSquare, gbc_tglbtnSquare);
+		
 		tglbtnRectangle = new JToggleButton(rectangle);
 		tglbtnRectangle.setBorder(null);
 		buttonGroup.add(tglbtnRectangle);
 		tglbtnRectangle.setBackground(Color.decode(color));
 		tglbtnRectangle.setBorderPainted(false);
+		tglbtnRectangle.setToolTipText("Rectangle");
 		buttonGroup.add(getTglbtnRectangle());
+		
 		GridBagConstraints gbc_tglbtnRectangle = new GridBagConstraints();
-		gbc_tglbtnRectangle.anchor = GridBagConstraints.NORTH;
-		gbc_tglbtnRectangle.fill = GridBagConstraints.HORIZONTAL;
+		gbc_tglbtnRectangle.gridheight = 2;
+		gbc_tglbtnRectangle.fill = GridBagConstraints.BOTH;
 		gbc_tglbtnRectangle.insets = new Insets(0, 0, 5, 5);
 		gbc_tglbtnRectangle.gridx = 16;
-		gbc_tglbtnRectangle.gridy = 1;
+		gbc_tglbtnRectangle.gridy = 0;
 		panelNorth.add(tglbtnRectangle, gbc_tglbtnRectangle);
+		
 		tglbtnCircle = new JToggleButton(circle);
 		tglbtnCircle.setBorder(null);
 		buttonGroup.add(tglbtnCircle);
 		tglbtnCircle.setBackground(Color.decode(color));
 		tglbtnCircle.setBorderPainted(false);
+		tglbtnCircle.setToolTipText("Circle");
 		buttonGroup.add(getTglbtnCircle());
+		
 		GridBagConstraints gbc_tglbtnCircle = new GridBagConstraints();
-		gbc_tglbtnCircle.anchor = GridBagConstraints.NORTH;
-		gbc_tglbtnCircle.fill = GridBagConstraints.HORIZONTAL;
+		gbc_tglbtnCircle.gridheight = 2;
+		gbc_tglbtnCircle.fill = GridBagConstraints.BOTH;
 		gbc_tglbtnCircle.insets = new Insets(0, 0, 5, 5);
 		gbc_tglbtnCircle.gridx = 17;
-		gbc_tglbtnCircle.gridy = 1;
+		gbc_tglbtnCircle.gridy = 0;
 		panelNorth.add(tglbtnCircle, gbc_tglbtnCircle);
 		tglbtnHexagon = new JToggleButton(hexagon);
 		tglbtnHexagon.setBorder(null);
 		buttonGroup.add(tglbtnHexagon);
 		tglbtnHexagon.setBackground(Color.decode(color));
 		tglbtnHexagon.setBorderPainted(false);
-		
-		
-		
-				buttonGroup.add(getTglbtnHexagon());
-				GridBagConstraints gbc_tglbtnHexagon = new GridBagConstraints();
-				gbc_tglbtnHexagon.anchor = GridBagConstraints.NORTH;
-				gbc_tglbtnHexagon.fill = GridBagConstraints.HORIZONTAL;
-				gbc_tglbtnHexagon.insets = new Insets(0, 0, 0, 5);
-				gbc_tglbtnHexagon.gridheight = 2;
-				gbc_tglbtnHexagon.gridx = 18;
-				gbc_tglbtnHexagon.gridy = 1;
-				panelNorth.add(tglbtnHexagon, gbc_tglbtnHexagon);
+		tglbtnHexagon.setToolTipText("Hexagon");
+
+
+
+		buttonGroup.add(getTglbtnHexagon());
+		GridBagConstraints gbc_tglbtnHexagon = new GridBagConstraints();
+		gbc_tglbtnHexagon.fill = GridBagConstraints.BOTH;
+		gbc_tglbtnHexagon.insets = new Insets(0, 0, 0, 5);
+		gbc_tglbtnHexagon.gridheight = 3;
+		gbc_tglbtnHexagon.gridx = 18;
+		gbc_tglbtnHexagon.gridy = 0;
+		panelNorth.add(tglbtnHexagon, gbc_tglbtnHexagon);
 
 		updateView(0, 0, 0);
-		
-		if(btnModify.isSelected()) {
-			setBackground(Color.decode("#f00ff0"));
-		}
-		else {
-			setBackground(Color.decode("#f0f0f0"));
-		}
-		
-		
-		
+
 	}
 
 
 	public void updateView(int numberSelectedObjects, int flag,int size) {
 		this.numberSelectedObjects=numberSelectedObjects;	
+		if(size==0) {
+			this.btnSave.setEnabled(false);
+		}
+		else if(size>0) {
+			this.btnSave.setEnabled(true);
+		}
 
 		if(this.numberSelectedObjects==0) {
 			this.btnModify.setEnabled(false);
@@ -570,6 +604,7 @@ public class Frame extends JFrame implements Observer{
 			this.btnBringToFront.setEnabled(false);
 			this.btnToFront.setEnabled(false);
 			this.btnToBack.setEnabled(false);
+
 		}
 	}
 

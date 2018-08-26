@@ -77,6 +77,7 @@ public class Model implements Observable,Serializable{
 
 	public void add(Shape o) {
 		shapes.add(o);
+		notifyMenu();
 	}
 
 	public void remove(Shape o) {
@@ -93,7 +94,7 @@ public class Model implements Observable,Serializable{
 	}
 
 	public Shape getSelectedShape() {
-		Shape shape; 
+	//	Shape shape; 
 		for(int i=0;i<shapes.size();i++) {
 			if(shapes.get(i).isSelected())
 				return shapes.get(i);
@@ -116,7 +117,6 @@ public class Model implements Observable,Serializable{
 		return -1;
 	}
 
-
 	public void notifyLog() {
 		String logList=getLogList().get(getLogList().size()-1);
 		for(Observer observer:observers) {
@@ -137,7 +137,7 @@ public class Model implements Observable,Serializable{
 		shapes.add(i, shape);
 		notifyMenu();
 	}
-	
+
 	public void addOnIndex(Shape shape,int index) {
 		if(listSize()==0) {
 			shapes.add(shape);
@@ -165,40 +165,6 @@ public class Model implements Observable,Serializable{
 					}
 				}
 			}
-			
-			/*if(i==index) {
-				if(index==shapes.size()) {
-					//menjan poslednji
-					shapes.add(shape);
-					return;
-				}else {
-					//pomeri u levo
-					Shape current=shapes.get(i);
-					if(i==listSize()-1) {
-						shapes.add(i+1, current);
-						shapes.remove(i);
-						shapes.add(i, shape);
-					}else {
-						change(i+1, current);
-						shapes.add(i,shape);
-
-					}
-					return;
-				}
-			}else {
-				if(index==shapes.size()) {
-					//poslednji
-					shapes.add(shape);
-					return;
-				}else {
-					Shape current=shapes.get(i);
-					if(i==listSize()-1) {
-						shapes.add(i+1, current);
-					}
-					else
-						change(i+1, current);
-				}
-			}*/
 		}
 	}
 
@@ -234,4 +200,4 @@ public class Model implements Observable,Serializable{
 	public void setUnexecuteCommand(Stack<Command> unexecuteCommand) {
 		this.unexecuteCommand = unexecuteCommand;
 	}
-	}
+}

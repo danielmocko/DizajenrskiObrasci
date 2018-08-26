@@ -125,12 +125,10 @@ public class Controller {
 			dlgCircle.getBtnInsideColor().setBackground(frame.getBtnInsideColor().getBackground());
 			dlgCircle.getBtnEdgeColor().setBackground(frame.getBtnEdgeColor().getBackground());
 
-
 			dlgCircle.getTxtXCenter().setEditable(false);
 			dlgCircle.getTxtYCenter().setEditable(false);
 			dlgCircle.getBtnInsideColor().setEnabled(false);
 			dlgCircle.getBtnEdgeColor().setEnabled(false);
-
 
 			dlgCircle.setVisible(true);
 			if(dlgCircle.isAccept()) {
@@ -182,7 +180,6 @@ public class Controller {
 				rectangle = dlgRectangle.getDlgRectangle();
 				model.addToLogList("Added --> "+rectangle);
 				addInStack(new CommandAdd(model, rectangle));
-
 			}
 		}else if(frame.getTglbtnHexagon().isSelected()) {
 			diselect();
@@ -466,7 +463,6 @@ public class Controller {
 	}
 	public void saving(ActionEvent e) {
 
-
 		JFileChooser fileChooser = new JFileChooser();
 		File selectedFile = null;
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("log", "log");
@@ -502,64 +498,7 @@ public class Controller {
 				ctx.createFile(selectedFile);
 			}
 		}
-
-
 	}
-
-
-
-	/*
-		JFileChooser fileChooser = new JFileChooser("user.home");
-		fileChooser.setDialogTitle("Save a file");
-
-		FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("txt", "txt");
-		FileNameExtensionFilter filterImg = new FileNameExtensionFilter("pnt", "pnt");
-
-		fileChooser.setFileFilter(filterTxt);
-		fileChooser.addChoosableFileFilter(filterImg);
-
-		int returnValue = fileChooser.showSaveDialog(null);
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-
-			FileStrategy fileStrategy = new FileStrategy();
-			if(!model.getLogList().isEmpty()) {
-				if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".txt")) {
-
-					File file=new File(fileChooser.getSelectedFile().toString());
-					fileStrategy.setFileStrategy(new SaveLog(frame));
-					fileStrategy.createFile(file);
-				}
-				else if(fileChooser.getSelectedFile().getAbsolutePath().endsWith(".pnt")) {
-					File file=new File(fileChooser.getSelectedFile().toString());
-					fileStrategy.setFileStrategy(new SaveImage(frame));
-					fileStrategy.createFile(file);
-				}
-
-
-
-				/*
-				try {
-					File file = new File(output.getPath());
-					BufferedWriter buffer= new BufferedWriter(new FileWriter(file));
-					String logString="";
-
-					int size=frame.getDlmList().getSize();
-
-					for(int i=0;i<size;i++) {
-						logString=frame.getDlmList().get(i);
-						buffer.write(logString);
-						buffer.newLine();
-					}
-					buffer.close();
-					/*
-				}
-				catch(Exception error) {
-					error.getStackTrace();
-				}
-			}
-			}
-		}
-	}*/
 
 	public void addInStack(Command command) {
 		command.execute();
@@ -569,7 +508,7 @@ public class Controller {
 		}
 
 		if(!unexecuteCommand.isEmpty()) {
-			for(int i=0;i<unexecuteCommand.size();i++)
+			for(int i=0;i<=unexecuteCommand.size();i++)
 				unexecuteCommand.pop();
 			frame.getBtnRedo().setEnabled(false);
 		}
@@ -610,7 +549,6 @@ public class Controller {
 
 	}
 
-
 	public void openFiles() throws FileNotFoundException,ClassNotFoundException {
 		JFileChooser fileChooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("log", "log");
@@ -630,6 +568,7 @@ public class Controller {
 		if(!fileChooser.getSelectedFile().getAbsolutePath().isEmpty()) {
 			if (selectedFile.getAbsolutePath().endsWith(".log")) {
 				try {
+					
 					File fileInput = fileChooser.getSelectedFile();
 					bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
 
@@ -638,11 +577,16 @@ public class Controller {
 					while((input=bufferRead.readLine())!=null) {
 						loadStack.push(input);
 					}
-					if(bufferRead!=null)
-						bufferRead.close();
+					frame.getBtnLoad().setEnabled(true);
 				}
 				catch(Exception error) {
 					error.getStackTrace();
+				}finally{
+					try {
+						bufferRead.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 			else if (selectedFile.getAbsolutePath().endsWith(".pnt")) {
@@ -670,9 +614,7 @@ public class Controller {
 			String input = loadStack.pop();
 			model.addToLogList(input);
 			String[] splitInput=input.split(" ");
-			/*for(int i=0;i<splitInput.length;i++) {
-				System.out.println(splitInput[i]);
-			}*/
+			
 			if(splitInput[0].equals("Added")) {
 				if(splitInput[2].equals("Point:")) {
 
@@ -776,26 +718,18 @@ public class Controller {
 				}
 			}
 			else if(splitInput[0].equals("Modifyed")) {
-				/*
-				System.out.println(input);
-				System.out.println("String Object");*/
+
 				String [] stringObject = input.split("OldState: |NewState: ");
-				/*for(int i=0;i<stringObject.length;i++) {
-					System.out.println(stringObject[i]);
-				}
-				 */
+		
 				String oldString = "Modifyed --> "+ stringObject[1];
 				String newString = "Modifyed --> "+ stringObject[2];
-
-				//System.out.println(oldString);
-				//System.out.println(newString);
 
 				String[] oldObject =oldString.split(" "); 
 				String[] newObject =newString.split(" ");
 
 				if(splitInput[3].equals("Point:")) {
 					Point oldPoint = pointFromSring(oldObject);
-					Point newPoint =pointFromSring(newObject);
+					Point newPoint = pointFromSring(newObject);
 
 					addInStack(new CommandModify(model, oldPoint, newPoint));
 
@@ -865,23 +799,13 @@ public class Controller {
 					addInStack(new CommandRemove(model,hexagon,model.getIndex(hexagon)));
 				}
 			}
-			//Moved one position to front --> 
 			else if(splitInput[0].equals("Moved") && splitInput[4].equals("front")) {
-				/*String [] moveInput = new String [splitInput.length-6];
-				int j=6;
-				for(int i=0;i<moveInput.length;i++) {
-					moveInput[i]= splitInput[j];
-					j++;
-				}
-				for(String s:moveInput) {
-					System.out.println(s);
-				}*/
+			
 				addInStack(new CommandToFront(model));
 			}
 			else if(splitInput[0].equals("Moved") && splitInput[4].equals("back")) {
 				addInStack(new CommandToBack(model));
 			}
-			//Bringed to back
 			else if(splitInput[0].equals("Bringed") && splitInput[2].equals("back")) {
 				String [] moveInput = new String [splitInput.length-2];
 				int j=2;
@@ -979,7 +903,9 @@ public class Controller {
 				executeCommand.push(unexecuteCommand.pop());
 			}
 		}
-		return;
+		else {
+			frame.getBtnLoad().setEnabled(false);
+		}
 	}
 
 	public Point pointFromSring(String[] input) {
