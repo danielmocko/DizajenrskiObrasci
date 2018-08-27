@@ -1,10 +1,10 @@
 package geometry;
 
 import java.awt.Graphics;
-
+import java.io.Serializable;
 import java.awt.Color;
 
-public abstract class Shape implements Comparable {
+public abstract class Shape implements Comparable,Serializable {
 	private Color borderColor;
 	private boolean selected;
 	
@@ -45,6 +45,4 @@ public abstract class Shape implements Comparable {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
-	
-	
 }

@@ -93,7 +93,6 @@ public class Controller {
 			t.setBorderColor(frame.getBtnEdgeColor().getBackground());
 			model.addToLogList("Added --> "+t);
 			addInStack(new CommandAdd(model, t));
-
 		}
 		else if(frame.getTglbtnLine().isSelected()) {
 			diselect();

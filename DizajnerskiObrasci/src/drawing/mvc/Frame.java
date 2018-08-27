@@ -125,8 +125,8 @@ public class Frame extends JFrame implements Observer{
 		Icon hexagon = new ImageIcon("Icons/Hexagon.png");
 
 		panelView = new JPanel();
-		panelView.setBackground(Color.WHITE);//panelView
-		panelView.addMouseListener(new MouseAdapter() {//panelView
+		view.setBackground(Color.WHITE);//panelView
+		view.addMouseListener(new MouseAdapter() {//panelView
 			public void mousePressed(MouseEvent e) {
 				controller.panelClick(e);
 			}
@@ -136,10 +136,11 @@ public class Frame extends JFrame implements Observer{
 		gbc_panelView.fill = GridBagConstraints.BOTH;
 		gbc_panelView.gridx = 0;
 		gbc_panelView.gridy = 1;
-		getContentPane().add(panelView, gbc_panelView);//panelView
+		getContentPane().add(view, gbc_panelView);//panelView
 
 		scrollPane = new JScrollPane();
 		logList = new JList<String>(dlmList);
+		logList.disable();
 
 		//panelNort = new JPanel();
 		//panelNort.setBackground(Color.WHITE);
@@ -189,28 +190,10 @@ public class Frame extends JFrame implements Observer{
 		gbc_panel.gridx = 19;
 		gbc_panel.gridy = 0;
 		panelNorth.add(panel, gbc_panel);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{0, 0, 0};
-		gbl_panel.rowHeights = new int[]{0, 0, 0};
-		gbl_panel.columnWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{1.0, 1.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
 
 		JLabel lblBorderColor = new JLabel("Border color:");
-		GridBagConstraints gbc_lblBorderColor = new GridBagConstraints();
-		gbc_lblBorderColor.fill = GridBagConstraints.BOTH;
-		gbc_lblBorderColor.insets = new Insets(0, 0, 5, 5);
-		gbc_lblBorderColor.gridx = 0;
-		gbc_lblBorderColor.gridy = 0;
-		panel.add(lblBorderColor, gbc_lblBorderColor);
 
 		btnInsideColor = new JButton();
-		GridBagConstraints gbc_btnInsideColor = new GridBagConstraints();
-		gbc_btnInsideColor.fill = GridBagConstraints.BOTH;
-		gbc_btnInsideColor.insets = new Insets(0, 0, 5, 0);
-		gbc_btnInsideColor.gridx = 1;
-		gbc_btnInsideColor.gridy = 1;
-		panel.add(btnInsideColor, gbc_btnInsideColor);
 		btnInsideColor.setBackground(Color.WHITE);
 		btnInsideColor.setToolTipText("Area color");
 
@@ -221,21 +204,40 @@ public class Frame extends JFrame implements Observer{
 		});
 
 		lblAreaColor = new JLabel("Area color:");
-		GridBagConstraints gbc_lblAreaColor = new GridBagConstraints();
-		gbc_lblAreaColor.fill = GridBagConstraints.BOTH;
-		gbc_lblAreaColor.insets = new Insets(0, 0, 0, 5);
-		gbc_lblAreaColor.gridx = 0;
-		gbc_lblAreaColor.gridy = 1;
-		panel.add(lblAreaColor, gbc_lblAreaColor);
 
 		btnEdgeColor = new JButton();
-		GridBagConstraints gbc_btnEdgeColor = new GridBagConstraints();
-		gbc_btnEdgeColor.fill = GridBagConstraints.HORIZONTAL;
-		gbc_btnEdgeColor.gridx = 1;
-		gbc_btnEdgeColor.gridy = 0;
-		panel.add(btnEdgeColor, gbc_btnEdgeColor);
 		btnEdgeColor.setBackground(Color.BLACK);
 		btnEdgeColor.setToolTipText("Broder color");
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(lblAreaColor, GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
+							.addGap(3))
+						.addComponent(lblBorderColor, GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnInsideColor, GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+						.addComponent(btnEdgeColor, GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE))
+					.addContainerGap())
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+						.addComponent(lblBorderColor, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+						.addComponent(btnEdgeColor, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnInsideColor, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(lblAreaColor, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
+		);
+		panel.setLayout(gl_panel);
 
 		btnEdgeColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -542,7 +544,7 @@ public class Frame extends JFrame implements Observer{
 		GridBagConstraints gbc_tglbtnHexagon = new GridBagConstraints();
 		gbc_tglbtnHexagon.fill = GridBagConstraints.BOTH;
 		gbc_tglbtnHexagon.insets = new Insets(0, 0, 0, 5);
-		gbc_tglbtnHexagon.gridheight = 3;
+		gbc_tglbtnHexagon.gridheight = 2;
 		gbc_tglbtnHexagon.gridx = 18;
 		gbc_tglbtnHexagon.gridy = 0;
 		panelNorth.add(tglbtnHexagon, gbc_tglbtnHexagon);
