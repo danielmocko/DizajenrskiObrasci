@@ -34,11 +34,13 @@ public class CommandRemove implements Command{
 							Shape current = model.getShapes().get(j);
 							model.getShapes().add(j+1, current);
 							model.change(index, shape);
+							//model.diselectObject(shape);
 						}
 						else {
 						Shape current = model.getShapes().get(j);
 						model.change(j+1, current);
 						model.change(index, shape);
+					//	model.diselectObject(shape);
 						}
 						return;
 					}

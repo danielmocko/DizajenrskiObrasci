@@ -69,8 +69,6 @@ public class Controller {
 	private Point point;
 	private Point t1;
 	private Point t2;
-	private int Point1_x;
-	private int Point1_y;
 	private int click=0;
 	private int x,y;
 	private boolean selected=false;
@@ -97,14 +95,14 @@ public class Controller {
 		else if(frame.getTglbtnLine().isSelected()) {
 			diselect();
 			if(click==0) {
-				Point1_x=e.getX();
-				Point1_y=e.getY();
-				t1= new Point(Point1_x,Point1_y);
+				int x=e.getX();
+				int y=e.getY();
+				t1= new Point(x,y);
 				click++;
 			}
 			else if(click==1) {
-				x=e.getX();
-				y=e.getY();
+				int x=e.getX();
+				int y=e.getY();
 				t2 = new Point(x,y);
 
 				Line l = new Line(t1,t2);
@@ -304,6 +302,7 @@ public class Controller {
 						this.circle.setSelected(true);
 						frame.getTglbtnSelect().setSelected(true);
 						addInStack(new CommandModify(model, circle, this.circle));
+						model.selectObject(this.circle);
 						model.addToLogList("Modifyed --> *OldState: "+circle+" *NewState: "+this.circle);
 					}
 					return;
@@ -485,13 +484,11 @@ public class Controller {
 				ctx.createFile(selectedFile);
 			}
 			else if (fileChooser.getSelectedFile().getAbsolutePath().endsWith(".pnt")) {
-
 				selectedFile = new File(fileChooser.getSelectedFile().toString());
 				ctx.setFileStrategy(new ImageStrategy(frame));
 				ctx.createFile(selectedFile);
 			}
 			else {
-
 				selectedFile = new File(fileChooser.getSelectedFile() + ".pnt");
 				ctx.setFileStrategy(new ImageStrategy(frame));
 				ctx.createFile(selectedFile);
@@ -533,19 +530,21 @@ public class Controller {
 	}
 
 	public void redo() {
-
-		model.addToLogList("Redo command");
-		unexecuteCommand.peek().execute();
-		executeCommand.push(unexecuteCommand.pop());
-		if(unexecuteCommand.isEmpty() && !executeCommand.isEmpty()) {
-			frame.getBtnUndo().setEnabled(true);
-			frame.getBtnRedo().setEnabled(false);
-		}else {
-			frame.getBtnUndo().setEnabled(true);
-			frame.getBtnRedo().setEnabled(true);
+		try {
+			model.addToLogList("Redo command");
+			unexecuteCommand.peek().execute();
+			executeCommand.push(unexecuteCommand.pop());
+			if(unexecuteCommand.isEmpty() && !executeCommand.isEmpty()) {
+				frame.getBtnUndo().setEnabled(true);
+				frame.getBtnRedo().setEnabled(false);
+			}else {
+				frame.getBtnUndo().setEnabled(true);
+				frame.getBtnRedo().setEnabled(true);
+			}
 		}
-
-
+		catch(Exception e) {
+			System.out.println(e.getStackTrace());
+		}
 	}
 
 	public void openFiles() throws FileNotFoundException,ClassNotFoundException {
@@ -562,47 +561,60 @@ public class Controller {
 
 		selectedFile = fileChooser.getSelectedFile();
 
-
 		BufferedReader bufferRead = null;
-		if(!fileChooser.getSelectedFile().getAbsolutePath().isEmpty()) {
-			if (selectedFile.getAbsolutePath().endsWith(".log")) {
-				try {
-					
-					File fileInput = fileChooser.getSelectedFile();
-					bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
-
-					String input="";
-
-					while((input=bufferRead.readLine())!=null) {
-						loadStack.push(input);
-					}
-					frame.getBtnLoad().setEnabled(true);
-				}
-				catch(Exception error) {
-					error.getStackTrace();
-				}finally{
+		if(result == JFileChooser.APPROVE_OPTION) {
+			
+			model.removeLogList();
+			model.removeShapesList();
+			frame.getDlmList().removeAllElements();
+			
+			while(!executeCommand.isEmpty()){
+				executeCommand.pop();
+			}
+			while(!unexecuteCommand.isEmpty()) {
+				unexecuteCommand.pop();
+			}
+			
+			if(!fileChooser.getSelectedFile().getAbsolutePath().isEmpty()) {
+				if (selectedFile.getAbsolutePath().endsWith(".log")) {
 					try {
-						bufferRead.close();
-					} catch (IOException e) {
+
+						File fileInput = fileChooser.getSelectedFile();
+						bufferRead = new BufferedReader(new FileReader(fileInput.getPath()));
+
+						String input="";
+
+						while((input=bufferRead.readLine())!=null) {
+							loadStack.push(input);
+							input="";
+						}
+						frame.getBtnLoad().setEnabled(true);
+					}
+					catch(Exception error) {
+						error.getStackTrace();
+					}finally{
+						try {
+							bufferRead.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				else if (selectedFile.getAbsolutePath().endsWith(".pnt")) {
+					try (FileInputStream fis = new FileInputStream(selectedFile)) {
+						byte[] fileContent = new byte[(int) selectedFile.length()];
+						fis.read(fileContent);
+						model.setShapes((ArrayList<Shape>) deserialize(fileContent));
+					}
+					catch (IOException e) {
 						e.printStackTrace();
 					}
-				}
-			}
-			else if (selectedFile.getAbsolutePath().endsWith(".pnt")) {
-				try (FileInputStream fis = new FileInputStream(selectedFile)) {
-					byte[] fileContent = new byte[(int) selectedFile.length()];
-					fis.read(fileContent);
-					model.setShapes((ArrayList<Shape>) deserialize(fileContent));
-				}
-				catch (IOException e) {
-					e.printStackTrace();
 				}
 			}
 		}
 	}
 
 	public Object deserialize(byte[] data) throws IOException, ClassNotFoundException{
-
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 		ObjectInputStream ois = new ObjectInputStream(in);
 		return ois.readObject();
@@ -611,9 +623,12 @@ public class Controller {
 	public void loadData() {
 		if(!loadStack.isEmpty()) {
 			String input = loadStack.pop();
+			if(loadStack.isEmpty()) {
+				frame.getBtnLoad().setEnabled(false);
+			}
 			model.addToLogList(input);
 			String[] splitInput=input.split(" ");
-			
+
 			if(splitInput[0].equals("Added")) {
 				if(splitInput[2].equals("Point:")) {
 
@@ -719,7 +734,7 @@ public class Controller {
 			else if(splitInput[0].equals("Modifyed")) {
 
 				String [] stringObject = input.split("OldState: |NewState: ");
-		
+
 				String oldString = "Modifyed --> "+ stringObject[1];
 				String newString = "Modifyed --> "+ stringObject[2];
 
@@ -799,7 +814,7 @@ public class Controller {
 				}
 			}
 			else if(splitInput[0].equals("Moved") && splitInput[4].equals("front")) {
-			
+
 				addInStack(new CommandToFront(model));
 			}
 			else if(splitInput[0].equals("Moved") && splitInput[4].equals("back")) {

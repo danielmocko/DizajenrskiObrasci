@@ -16,6 +16,7 @@ public class CommandAdd implements Command {
 	@Override
 	public void execute() {
 		model.add(shape);
+		model.diselectObject(shape);
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package drawing.mvc;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ListIterator;
 
@@ -27,7 +26,6 @@ public class View extends JPanel {
 				s.drawColor(g);
 			}
 		}
-
 		repaint();
 	}
 

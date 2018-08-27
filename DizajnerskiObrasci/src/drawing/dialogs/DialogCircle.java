@@ -17,7 +17,11 @@ import geometry.Point;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.awt.TrayIcon.MessageType;
+
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
 
@@ -205,7 +209,7 @@ public class DialogCircle extends JDialog {
 			});
 			btnAccept.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					try {
 					circle = new Circle();
 					Point center = new Point(
 							Integer.parseInt(getTxtXCenter().getText()),
@@ -216,6 +220,9 @@ public class DialogCircle extends JDialog {
 					circle.setAreaColor(getBtnInsideColor().getBackground());
 					setVisible(false);
 					setAccept(true);
+					}catch(Exception exc) {
+						JOptionPane.showMessageDialog(null, "You didn't input the number","Warning",JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			});
 			btnDecline.addActionListener(new ActionListener() {

@@ -29,6 +29,7 @@ public class CommandModify implements Command {
 		model.remove(newShape);
 		model.addOnIndex(oldShape, index);
 		model.selectObject(oldShape);
+		
 	}
 
 }

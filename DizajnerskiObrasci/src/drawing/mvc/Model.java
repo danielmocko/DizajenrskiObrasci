@@ -2,11 +2,6 @@ package drawing.mvc;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Stack;
-
-import javax.swing.DefaultListModel;
-
-import drawing.command.Command;
 import drawing.observer.Observable;
 import drawing.observer.Observer;
 import geometry.Shape;
@@ -15,15 +10,65 @@ public class Model implements Observable,Serializable{
 	private ArrayList<Observer> observers;
 	private ArrayList<String> logList;
 	private ArrayList<Shape> shapes;
-	private Stack<Command> executeCommand;
-	private Stack<Command> unexecuteCommand;
+
+
 
 	public Model() {
 		observers = new ArrayList<Observer>();
 		shapes = new ArrayList<Shape>();
 		logList= new ArrayList<String>();
-		executeCommand = new Stack<Command>();
-		unexecuteCommand = new Stack<Command>();
+	}
+
+	/**************************************************
+					Remove function
+	 **************************************************/
+	public void removeLogList() {
+		int size =logList.size();
+		for(int i=0;i<size;i++) {
+			logList.remove(0);
+		}
+	}
+
+	public void removeShapesList() {
+		while(shapes.size()!=0) {
+			shapes.remove(0);
+		}
+	}
+
+	public void remove(Shape o) {
+		shapes.remove(o);
+	}
+
+
+	public void removeByIndex(int index) {
+		shapes.remove(index);
+	}
+
+	/***********************************************
+				select functions
+	 ***********************************************/
+
+
+	public int selectedLastShape() { 
+		for(int i=shapes.size()-1;i>=0;i--) {
+			if(shapes.get(i).isSelected() && i==0) {
+				return 1;
+			}
+		}
+		for(int i=0;i<shapes.size();i++) {
+			if(shapes.get(i).isSelected() && i==shapes.size()-1) {
+				return 2;
+			}
+		}
+		return 0;
+	}
+
+	public Shape getSelectedShape() {
+		for(int i=0;i<shapes.size();i++) {
+			if(shapes.get(i).isSelected())
+				return shapes.get(i);
+		}
+		return null;
 	}
 
 	public void selectObject(Shape shape){
@@ -44,22 +89,15 @@ public class Model implements Observable,Serializable{
 		}
 	} 
 
-	public int selectedLastShape() { 
-		for(int i=shapes.size()-1;i>=0;i--) {
-			if(shapes.get(i).isSelected() && i==0) {
-				return 1;
-			}
-		}
-		for(int i=0;i<shapes.size();i++) {
-			if(shapes.get(i).isSelected() && i==shapes.size()-1) {
-				return 2;
-			}
-		}
-		return 0;
-	}
+	/************************************************
+	 					Observer functions
+	 ************************************************/
 
-	public int listSize() {
-		return shapes.size();
+	public void notifyLog() {
+		String logList=getLogList().get(getLogList().size()-1);
+		for(Observer observer:observers) {
+			observer.updateLog(logList);
+		}
 	}
 
 	public void notifyMenu() {
@@ -71,19 +109,6 @@ public class Model implements Observable,Serializable{
 		}
 	}
 
-	public void addObserver(Observer addObserver) {
-		observers.add(addObserver);
-	}
-
-	public void add(Shape o) {
-		shapes.add(o);
-		notifyMenu();
-	}
-
-	public void remove(Shape o) {
-		shapes.remove(o);
-	}
-
 	public int numberSelectedObject() {
 		int counter=0;
 		for(int i=0;i<shapes.size();i++) {
@@ -93,21 +118,31 @@ public class Model implements Observable,Serializable{
 		return counter;
 	}
 
-	public Shape getSelectedShape() {
-	//	Shape shape; 
-		for(int i=0;i<shapes.size();i++) {
-			if(shapes.get(i).isSelected())
-				return shapes.get(i);
-		}
-		return null;
+	public void addToLogList(String string) {
+		logList.add(string);
+		notifyLog();
 	}
 
-	public void removeByIndex(int index) {
-		shapes.remove(index);
+	public void add(Shape o) {
+		shapes.add(o);
+		notifyMenu();
+	}
+
+	public void change(int i, Shape shape) {
+		shapes.remove(i);
+		shapes.add(i, shape);
+		notifyMenu();
+	}
+
+	public void addObserver(Observer addObserver) {
+		observers.add(addObserver);
+	}
+
+	public int listSize() {
+		return shapes.size();
 	}
 
 	public int getIndex(Shape shape) {
-
 		for(int i=0;i<shapes.size();i++) {
 			if(shapes.get(i).equals(shape)) {
 				return i;
@@ -115,27 +150,6 @@ public class Model implements Observable,Serializable{
 		}
 
 		return -1;
-	}
-
-	public void notifyLog() {
-		String logList=getLogList().get(getLogList().size()-1);
-		for(Observer observer:observers) {
-			observer.updateLog(logList);
-		}
-	}
-
-	public ArrayList<Shape> getShapes() {
-		return shapes;
-	}
-
-	public void setShapes(ArrayList<Shape> shapes) {
-		this.shapes = shapes;
-	}
-
-	public void change(int i, Shape shape) {
-		shapes.remove(i);
-		shapes.add(i, shape);
-		notifyMenu();
 	}
 
 	public void addOnIndex(Shape shape,int index) {
@@ -168,9 +182,16 @@ public class Model implements Observable,Serializable{
 		}
 	}
 
-	public void addToLogList(String string) {
-		logList.add(string);
-		notifyLog();
+	/************************************************
+				Getters and Setters 
+	 ************************************************/
+
+	public ArrayList<Shape> getShapes() {
+		return shapes;
+	}
+
+	public void setShapes(ArrayList<Shape> shapes) {
+		this.shapes = shapes;
 	}
 
 	public ArrayList<Observer> getObservers() {
@@ -183,21 +204,5 @@ public class Model implements Observable,Serializable{
 
 	public ArrayList<String> getLogList() {
 		return logList;
-	}
-
-	public Stack<Command> getExecuteCommand() {
-		return executeCommand;
-	}
-
-	public void setExecuteCommand(Stack<Command> executeCommand) {
-		this.executeCommand = executeCommand;
-	}
-
-	public Stack<Command> getUnexecuteCommand() {
-		return unexecuteCommand;
-	}
-
-	public void setUnexecuteCommand(Stack<Command> unexecuteCommand) {
-		this.unexecuteCommand = unexecuteCommand;
 	}
 }

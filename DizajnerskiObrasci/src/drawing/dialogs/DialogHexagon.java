@@ -16,6 +16,8 @@ import geometry.Point;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JTextField;
@@ -206,15 +208,16 @@ public class DialogHexagon extends JDialog {
 			});
 			btnAccept.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
-				
-					
+					try {
 					int x=Integer.parseInt(getTxtXCenter().getText());
 					int y=Integer.parseInt(getTxtYCenter().getText());
 					int r=Integer.parseInt(getTxtRadius().getText());
 					hexagon = new HexagonAdapter(x,y,r,getBtnEdgeColor().getBackground(),getBtnInsideColor().getBackground());
 					setVisible(false);
 					setAccept(true);
+					}catch(Exception exc) {
+						JOptionPane.showMessageDialog(null, "You didn't input the number","Warning",JOptionPane.WARNING_MESSAGE);
+					}
 				}
 			});
 			btnDecline.addActionListener(new ActionListener() {

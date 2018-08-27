@@ -206,8 +206,6 @@ public class DialogSquare extends JDialog {
 			btnAccept.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						
-						
 						squareDialog = new Square();
 						Point goreLevo = new Point(Integer.parseInt(getTxtXCoordinate().getText()),
 								Integer.parseInt(getTxtYCoordinate().getText()));
@@ -219,7 +217,7 @@ public class DialogSquare extends JDialog {
 						setVisible(false);
 
 					} catch (Exception g) {
-						JOptionPane.showMessageDialog(null, "Title");
+						JOptionPane.showMessageDialog(null, "You didn't input the number","Warning",JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			});

@@ -235,7 +235,7 @@ public class DialogRectangle extends JDialog {
 						setAccept(true);
 						setVisible(false);
 					} catch (Exception h) {
-						JOptionPane.showMessageDialog(null, "Title");
+						JOptionPane.showMessageDialog(null, "You didn't input the number","Warning",JOptionPane.WARNING_MESSAGE);
 					}
 				}
 			});
