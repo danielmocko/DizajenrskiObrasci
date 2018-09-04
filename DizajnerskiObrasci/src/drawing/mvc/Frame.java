@@ -29,6 +29,8 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
@@ -88,41 +90,41 @@ public class Frame extends JFrame implements Observer{
 		gbc_panelNorth.gridy = 0;
 		getContentPane().add(panelNorth, gbc_panelNorth);
 
-		Icon open = new ImageIcon("Icons/open.png");
+		Icon open = new ImageIcon("res/Icons/open.png");
+		
+		Icon save = new ImageIcon("res/Icons/save.png");
 
-		Icon save = new ImageIcon("Icons/save.png");
+		Icon load = new ImageIcon("res/Icons/load.png");
 
-		Icon load = new ImageIcon("Icons/load.png");
+		Icon undo = new ImageIcon("res/Icons/undo.png");
 
-		Icon undo = new ImageIcon("Icons/undo.png");
+		Icon redo = new ImageIcon("res/Icons/redo.png");
 
-		Icon redo = new ImageIcon("Icons/redo.png");
+		Icon select = new ImageIcon("res/Icons/select.png");
 
-		Icon select = new ImageIcon("Icons/select.png");
+		Icon toBack= new ImageIcon("res/Icons/goToBack.png");
 
-		Icon toBack= new ImageIcon("Icons/goToBack.png");
+		Icon toFront = new ImageIcon("res/Icons/goToFront.png");
 
-		Icon toFront = new ImageIcon("Icons/goToFront.png");
+		Icon bringToBack = new ImageIcon("res/Icons/bringToBack.png");
 
-		Icon bringToBack = new ImageIcon("Icons/bringToBack.png");
+		Icon bringToFront = new ImageIcon("res/Icons/bringToFront.png");
 
-		Icon bringToFront = new ImageIcon("Icons/bringToFront.png");
+		Icon modify = new ImageIcon("res/Icons/modify.png");
 
-		Icon modify = new ImageIcon("Icons/modify.png");
+		Icon delete = new ImageIcon("res/Icons/delete.png");
 
-		Icon delete = new ImageIcon("Icons/delete.png");
+		Icon point = new ImageIcon("res/Icons/point.png");
 
-		Icon point = new ImageIcon("Icons/point.png");
+		Icon line = new ImageIcon("res/Icons/line.png");
 
-		Icon line = new ImageIcon("Icons/line.png");
+		Icon square = new ImageIcon("res/Icons/square.png");
 
-		Icon square = new ImageIcon("Icons/square.png");
+		Icon rectangle = new ImageIcon("res/Icons/rectangle.png");
 
-		Icon rectangle = new ImageIcon("Icons/rectangle.png");
+		Icon circle = new ImageIcon("res/Icons/circle.png");
 
-		Icon circle = new ImageIcon("Icons/circle.png");
-
-		Icon hexagon = new ImageIcon("Icons/Hexagon.png");
+		Icon hexagon = new ImageIcon("res/Icons/Hexagon.png");
 
 		panelView = new JPanel();
 		view.setBackground(Color.WHITE);//panelView

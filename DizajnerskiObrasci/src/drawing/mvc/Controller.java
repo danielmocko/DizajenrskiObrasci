@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.ListIterator;
 import java.util.Stack;
 
@@ -83,7 +84,6 @@ public class Controller {
 
 	public void panelClick(MouseEvent e) {
 		if(frame.getTglbtnPoint().isSelected()) {
-			diselect();
 			x = e.getX();
 			y = e.getY();
 			Point t = new Point(x,y);
@@ -93,7 +93,6 @@ public class Controller {
 			addInStack(new CommandAdd(model, t));
 		}
 		else if(frame.getTglbtnLine().isSelected()) {
-			diselect();
 			if(click==0) {
 				int x=e.getX();
 				int y=e.getY();
@@ -113,7 +112,6 @@ public class Controller {
 			}
 		}
 		else if(frame.getTglbtnCircle().isSelected()) {
-			diselect();
 			x=e.getX();
 			y=e.getY();
 			dlgCircle= new DialogCircle();
@@ -135,7 +133,6 @@ public class Controller {
 			}
 		}
 		else if(frame.getTglbtnSquare().isSelected()) {
-			diselect();
 			x=e.getX();
 			y=e.getY();
 			dlgSquare= new DialogSquare();
@@ -157,7 +154,6 @@ public class Controller {
 			}
 		}
 		else if(frame.getTglbtnRectangle().isSelected()) {
-			diselect();
 			x=e.getX();
 			y=e.getY();
 
@@ -179,7 +175,6 @@ public class Controller {
 				addInStack(new CommandAdd(model, rectangle));
 			}
 		}else if(frame.getTglbtnHexagon().isSelected()) {
-			diselect();
 			x=e.getX();
 			y=e.getY();
 			dlgHexagon= new DialogHexagon();
@@ -201,7 +196,6 @@ public class Controller {
 			}
 		}
 		else if(frame.getTglbtnSelect().isSelected()) {
-
 			x=e.getX();
 			y=e.getY();
 			selected = false;
@@ -223,25 +217,21 @@ public class Controller {
 			}
 
 			if(selected ==false) {
-				diselect();
-			}
-		}
-	}
-
-	public void diselect() {
-		if(model.numberSelectedObject()>1) {
-			for(int i=0;i<model.getShapes().size();i++) {
-				if(model.getShapes().get(i).isSelected())
-					addInStack(new CommandDiselect(model, model.getShapes().get(i)));
-			}
-			model.addToLogList("Diselected --> All selected objects");
-		}
-		else if(model.numberSelectedObject()==1) {
-			for(int i=0;i<model.getShapes().size();i++) {
-				if(model.getShapes().get(i).isSelected()) {
-					addInStack(new CommandDiselect(model, model.getShapes().get(i)));
-					model.addToLogList("Diselected --> "+model.getShapes().get(i));
-					return;
+				if(model.numberSelectedObject()>1) {
+					for(int i=0;i<model.getShapes().size();i++) {
+						if(model.getShapes().get(i).isSelected())
+							addInStack(new CommandDiselect(model, model.getShapes().get(i)));
+					}
+					model.addToLogList("Diselected --> All selected objects");
+				}
+				else if(model.numberSelectedObject()==1) {
+					for(int i=0;i<model.getShapes().size();i++) {
+						if(model.getShapes().get(i).isSelected()) {
+							addInStack(new CommandDiselect(model, model.getShapes().get(i)));
+							model.addToLogList("Diselected --> "+model.getShapes().get(i));
+							return;
+						}
+					}
 				}
 			}
 		}
@@ -510,11 +500,38 @@ public class Controller {
 		}
 	}
 
+	public boolean compare(Object o1) {
+		if(o1 instanceof CommandRemove) {
+			return true;	
+		}
+		else {
+			return false;
+		}
+
+	}
+
 	public void undo() {
 		try {
 			model.addToLogList("Undo command");
-			executeCommand.peek().unexecute();
-			unexecuteCommand.push(executeCommand.pop());
+			Command cmd = executeCommand.peek();
+
+			if(compare(cmd)) {
+				boolean commandRemove = true;
+				while(commandRemove) {
+					executeCommand.peek().unexecute();
+					unexecuteCommand.push(executeCommand.pop());
+					Command nextCommand=executeCommand.peek();
+
+					if(!compare(nextCommand)) {
+						commandRemove=false;
+					}			
+				}
+			}
+			else {
+				executeCommand.peek().unexecute();
+				unexecuteCommand.push(executeCommand.pop());
+			}
+
 			if(executeCommand.isEmpty() && !unexecuteCommand.isEmpty()) {
 				frame.getBtnUndo().setEnabled(false);
 				frame.getBtnRedo().setEnabled(true);
@@ -532,8 +549,28 @@ public class Controller {
 	public void redo() {
 		try {
 			model.addToLogList("Redo command");
-			unexecuteCommand.peek().execute();
-			executeCommand.push(unexecuteCommand.pop());
+			Command cmd = unexecuteCommand.peek();
+
+			if(compare(cmd)) {
+				boolean commandRemove = true;
+				while(commandRemove) {
+					unexecuteCommand.peek().execute();
+					executeCommand.push(unexecuteCommand.pop());
+					if(unexecuteCommand.isEmpty()) {
+							commandRemove=false;
+					}else {
+						Command nextCommand=unexecuteCommand.peek();
+						if(!compare(nextCommand)) {
+							commandRemove=false;
+						}
+					}			
+				}
+			}
+			else {
+				unexecuteCommand.peek().execute();
+				executeCommand.push(unexecuteCommand.pop());
+			}
+			
 			if(unexecuteCommand.isEmpty() && !executeCommand.isEmpty()) {
 				frame.getBtnUndo().setEnabled(true);
 				frame.getBtnRedo().setEnabled(false);
@@ -563,18 +600,18 @@ public class Controller {
 
 		BufferedReader bufferRead = null;
 		if(result == JFileChooser.APPROVE_OPTION) {
-			
+
 			model.removeLogList();
 			model.removeShapesList();
 			frame.getDlmList().removeAllElements();
-			
+
 			while(!executeCommand.isEmpty()){
 				executeCommand.pop();
 			}
 			while(!unexecuteCommand.isEmpty()) {
 				unexecuteCommand.pop();
 			}
-			
+
 			if(!fileChooser.getSelectedFile().getAbsolutePath().isEmpty()) {
 				if (selectedFile.getAbsolutePath().endsWith(".log")) {
 					try {

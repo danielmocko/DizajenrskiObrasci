@@ -1,5 +1,6 @@
 package drawing.command;
 
+
 import drawing.mvc.Model;
 import geometry.Shape;
 
@@ -10,6 +11,10 @@ public class CommandRemove implements Command{
 	private int index;
 	
 	
+	public CommandRemove() {
+		
+	}
+	
 	public CommandRemove(Model model, Shape shape,int index) {
 		this.model=model;
 		this.shape=shape;
@@ -19,9 +24,7 @@ public class CommandRemove implements Command{
 	
 	@Override
 	public void execute() {
-		//model.diselectObject(shape);
 		model.remove(shape);
-		
 	}
 
 	@Override
@@ -58,4 +61,5 @@ public class CommandRemove implements Command{
 		model.add(shape);
 	}
 
+	
 }
